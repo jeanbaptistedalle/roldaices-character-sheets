@@ -10,34 +10,39 @@ A React web app for creating characters for the **Mazes** tabletop RPG
 is also an experiment in "vibe coding" — building incrementally through
 conversational iteration.
 
-## The Mazes system (verified from the itch.io store page)
+## The Mazes system
 
-The core resolution mechanic is the **RESOLVER**: four stats, each governed
-by one polyhedral die.
+The full, verified rules now live in the **`mazes-rules` skill**
+(`.claude/skills/mazes-rules/SKILL.md`) — consult it as the source of truth for
+mechanics. Summary of what drives the character model:
 
-| Stat   | Used for                                  |
-|--------|-------------------------------------------|
-| BOOKS  | Using senses and knowledge                |
-| BOOTS  | Physical activity                         |
-| BLADES | Attacking and defending                   |
-| BONES  | Resisting, being brave, testing strength  |
+- A character has **one die**, set by their **Role**: Paragon (d4), Vanguard
+  (d6), Fighter (d8), Sentinel (d10). The role also sets **Hearts** and
+  **Stars** (d4→4/4, d6→6/3, d8→8/2, d10→10/1).
+- There are **fixed resolutions** (not per-character stats): KEY (1), BOOKS
+  (2–3), BOOTS (3–5), BLADES (4–7), BONES (5–9), and CROWN (die max). You roll
+  your die and succeed if you hit the resolution's target numbers.
+- **Aspect** (Sword / Shadow / Sorcery) is the fiction of how you solve
+  problems and gates the available classes.
+- **Class** = a name (Adjective + Noun) that is itself an edge, plus **3 edges**
+  (fixed + player choices).
+- **Edges** are adjective-like descriptors grouped into 7 types (Attributes,
+  Combat, Magic, Society, 'Wises, Lineages, Advances); invoking one grants
+  Advantage or information.
 
-- The dice in play are **d4, d6, d8, d10**. Each character assigns these four
-  dice across the four stats.
-- The die arrangement is **role-specific** — a character's role (class)
-  determines which die sits on which stat, plus a special power.
-- **Exploding dice**: rolling the maximum value on a die causes it to
-  "explode" (roll again and add).
+> **Correction from the earlier draft:** the initial reading (each character
+> assigns four dice across four stats) was wrong. A character has a *single*
+> die; the four resolutions are *fixed* target-number sets shared by all dice.
 
-### Known gaps (not on the store page — to be filled from the rulebook)
+### Character model implications
 
-- The full list of **roles** and their die arrangements.
-- Each role's **special power(s)**.
-- **Hit points** / health rules.
-- **Equipment**, advancement, and any other sheet fields.
+- `Role` enum → derives die, Hearts, Stars (don't store them loosely).
+- Resolutions modeled as **constants**, not character data.
+- `Aspect` enum gates the class list.
+- Classes and edges kept **data-driven** so stock content is encodable and
+  custom classes/edges can be added.
 
-These will be captured in the `mazes-rules` skill as the user provides the
-rulebook content.
+See the skill for the full edge list, example classes, and modeling notes.
 
 ## Architecture
 
@@ -77,5 +82,8 @@ makes this a localized change.
 
 - The character-creation flow and the character data model.
 - Actual RestDB wiring (create/read/list characters).
-- Role/power/HP rules (pending rulebook).
 - Deployment.
+
+*(Update 2026-07-06: the Mazes rules are now fully captured in the `mazes-rules`
+skill, so they are no longer a gap — the next step is implementing character
+creation on top of them.)*

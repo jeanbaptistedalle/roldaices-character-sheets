@@ -1,3 +1,6 @@
+import { useState } from 'react'
+import { CharacterWizard } from './components/wizard/CharacterWizard'
+
 const STATS = [
   { name: 'BOOKS', die: 'd?', blurb: 'Senses & knowledge' },
   { name: 'BOOTS', die: 'd?', blurb: 'Physical activity' },
@@ -6,6 +9,12 @@ const STATS = [
 ] as const
 
 function App() {
+  const [view, setView] = useState<'landing' | 'wizard'>('landing')
+
+  if (view === 'wizard') {
+    return <CharacterWizard onExit={() => setView('landing')} />
+  }
+
   return (
     <div className="min-h-screen bg-stone-950 text-stone-100">
       <main className="mx-auto flex max-w-3xl flex-col items-center px-6 py-20 text-center">
@@ -38,15 +47,11 @@ function App() {
 
         <button
           type="button"
-          disabled
-          className="mt-14 cursor-not-allowed rounded-lg bg-amber-600/40 px-8 py-3 text-lg font-semibold text-amber-100/60"
-          title="Coming soon"
+          onClick={() => setView('wizard')}
+          className="mt-14 rounded-lg bg-amber-600 px-8 py-3 text-lg font-semibold text-stone-950 transition-colors hover:bg-amber-500"
         >
           Create a Character
         </button>
-        <p className="mt-3 text-xs text-stone-600">
-          Character creation is coming in a later step.
-        </p>
       </main>
     </div>
   )

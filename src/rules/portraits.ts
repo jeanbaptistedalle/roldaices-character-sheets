@@ -8,7 +8,7 @@ import { createAvatar } from '@dicebear/core'
 import { adventurer } from '@dicebear/collection'
 
 /** How many portraits a gallery always contains. */
-export const PORTRAIT_COUNT = 9
+export const PORTRAIT_COUNT = 16
 
 /** Fixed seeds that produce a stable, repeatable gallery of PORTRAIT_COUNT. */
 export const PORTRAIT_SEEDS: string[] = [
@@ -21,6 +21,13 @@ export const PORTRAIT_SEEDS: string[] = [
   'Grey Wolf',
   'Halza',
   'Ione',
+  'Jorah',
+  'Kestrel',
+  'Lyra',
+  'Mordecai',
+  'Nyx',
+  'Orin',
+  'Perrin',
 ]
 
 /** Build a deterministic DiceBear SVG data URI for a seed. */

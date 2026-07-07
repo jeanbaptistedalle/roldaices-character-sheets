@@ -111,7 +111,6 @@ export function IdentityStep({
                   <img
                     src={portrait.url}
                     alt={`Portrait ${portrait.seed}`}
-                    loading="lazy"
                     className="h-full w-full object-cover"
                   />
                 </button>

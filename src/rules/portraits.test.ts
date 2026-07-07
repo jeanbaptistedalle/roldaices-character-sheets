@@ -8,22 +8,22 @@ import {
 } from './portraits'
 
 describe('portraits', () => {
-  it('always offers exactly 9 seeds, all unique', () => {
-    expect(PORTRAIT_COUNT).toBe(9)
-    expect(PORTRAIT_SEEDS).toHaveLength(9)
+  it('always offers exactly 16 seeds, all unique', () => {
+    expect(PORTRAIT_COUNT).toBe(16)
+    expect(PORTRAIT_SEEDS).toHaveLength(16)
     expect(new Set(PORTRAIT_SEEDS).size).toBe(PORTRAIT_SEEDS.length)
   })
 
-  it('always exposes exactly 9 portraits, one per seed, all unique', () => {
-    expect(PORTRAITS).toHaveLength(9)
+  it('always exposes exactly 16 portraits, one per seed, all unique', () => {
+    expect(PORTRAITS).toHaveLength(16)
     expect(PORTRAITS).toHaveLength(PORTRAIT_COUNT)
     expect(PORTRAITS).toHaveLength(PORTRAIT_SEEDS.length)
-    expect(new Set(PORTRAITS.map((p) => p.url)).size).toBe(9)
+    expect(new Set(PORTRAITS.map((p) => p.url)).size).toBe(16)
   })
 
-  it('draws a random bucket of exactly 9 portraits', () => {
-    expect(randomPortraits()).toHaveLength(9)
-    expect(new Set(randomPortraits().map((p) => p.seed)).size).toBe(9)
+  it('draws a random bucket of exactly 16 portraits', () => {
+    expect(randomPortraits()).toHaveLength(16)
+    expect(new Set(randomPortraits().map((p) => p.seed)).size).toBe(16)
   })
 
   it('builds a deterministic SVG data URI for a seed', () => {

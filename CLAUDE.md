@@ -41,8 +41,9 @@ npm run preview  # preview the production build
   and is **publicly visible** — only ever use a **restricted** RestDB API key
   (scoped to the character collection, minimal permissions). Never commit
   `.env`. Never hard-code keys in source.
-- **TypeScript:** model the Mazes domain (stats, dice, roles, characters) with
-  explicit types. Prefer typed data over loose objects.
+- **TypeScript:** model each system's domain (stats, dice, roles, characters)
+  with explicit types, kept inside that system's `src/<id>/` slice. Prefer
+  typed data over loose objects.
 - **Styling:** Tailwind utility classes. Keep the dark fantasy theme
   established on the landing page (stone/amber palette) unless we decide
   otherwise.

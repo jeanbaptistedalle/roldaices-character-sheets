@@ -3,6 +3,8 @@
 // Avatars are rendered to deterministic data URIs — no network request, no
 // API key. We store the selected data URI on the character (ready for RestDB);
 // we host nothing ourselves.
+//
+// System-agnostic: any TTRPG system can reuse this and the PortraitPicker.
 
 import { createAvatar } from '@dicebear/core'
 import { adventurer } from '@dicebear/collection'

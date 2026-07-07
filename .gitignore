@@ -50,3 +50,6 @@ coverage/
 # Misc
 *.local
 .tanstack
+
+# Implementation plans (kept local, not tracked)
+docs

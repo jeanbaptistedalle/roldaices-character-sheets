@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CharacterWizard } from './components/wizard/CharacterWizard'
+import { CharacterWizard } from '../mazes/components/wizard/CharacterWizard'
 
 const STATS = [
   { name: 'BOOKS', die: 'd?', blurb: 'Senses & knowledge' },

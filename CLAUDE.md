@@ -1,10 +1,11 @@
-# Mazes Character Sheets
+# TTRPG Character Sheets
 
-A React web app for creating characters for the **Mazes** tabletop RPG
-(9th Level Games). Created characters are stored in **RestDB**. This project
-is also an experiment in incremental "vibe coding".
+A React web app for creating characters for **multiple tabletop RPG systems**.
+Each system is a self-contained vertical slice; **Mazes** (9th Level Games) is
+the first. Created characters are stored in **RestDB**. This project is also an
+experiment in incremental "vibe coding".
 
-Reference (game): https://9thlevelgames.itch.io/mazes-zero-prep-introduction-to-fantasy-roleplaying
+Reference (first system — Mazes): https://9thlevelgames.itch.io/mazes-zero-prep-introduction-to-fantasy-roleplaying
 
 ## Stack
 
@@ -25,6 +26,12 @@ npm run preview  # preview the production build
 
 ## Architecture & conventions
 
+- **System vertical slices:** each TTRPG system lives in its own folder under
+  `src/<id>/` (feature-first) — e.g. `src/mazes/` holds `rules/`,
+  `components/`, and `index.ts` exporting a `SystemDefinition`. The shared shell
+  lives in `src/app/` (`system.ts` type, `registry.ts` list, `SystemPicker`,
+  and `App` which mounts the selected system's `Entry`). Add a system: create
+  `src/<id>/` and append it to `SYSTEMS` in `src/app/registry.ts`.
 - **Data-layer seam:** all RestDB access goes through a single module under
   `src/api/`. Components MUST NOT call `fetch` directly. This isolates the
   persistence layer so we can later swap the direct-from-browser calls for a
@@ -40,18 +47,21 @@ npm run preview  # preview the production build
   established on the landing page (stone/amber palette) unless we decide
   otherwise.
 
-## The Mazes system
+## Game systems
 
-The mechanical rules live in the `mazes-rules` skill
-(`.claude/skills/mazes-rules/SKILL.md`). Consult it before building anything
-that touches game mechanics (stats, dice, roles, character creation).
-Its current state records the verified core mechanic and flags the parts still
-pending the rulebook — keep it updated as we learn more.
+Each system's mechanical rules live in a dedicated skill. **Mazes** rules are in
+the `mazes-rules` skill (`.claude/skills/mazes-rules/SKILL.md`) — consult it
+before building anything that touches Mazes mechanics (stats, dice, roles,
+character creation). Future systems get their own rules skills. Keep skills
+updated as we learn more.
 
 ## Status
 
-- **Done:** project scaffold, landing page, docs, `mazes-rules` skill seed.
-- **Next (not yet built):** character-creation flow, character data model,
-  and RestDB wiring under `src/api/`.
+- **Done:** project scaffold, system seam (`src/app/`), system picker, Mazes
+  vertical slice (`src/mazes/` — rules, character-creation wizard, identity
+  step), docs, `mazes-rules` skill.
+- **Next (not yet built):** RestDB wiring under `src/api/` (character records
+  carry a `systemId` discriminator), and a second TTRPG system.
 
-See `docs/superpowers/specs/` for design docs.
+See `docs/superpowers/specs/` for design docs (per-system specs under
+`docs/superpowers/specs/<system>/`).

@@ -5,6 +5,9 @@ description: Use when building or reasoning about anything touching the Mazes TT
 
 # Mazes Rules
 
+> **Scope:** This skill covers the **Mazes** system (9th Level Games) only. In
+> this multi-system repo, other TTRPG systems have their own rules skills.
+
 Mechanical reference for the **Mazes** tabletop RPG by 9th Level Games, used to
 build the character-sheet app. This is the source of truth for game mechanics
 in this project. It intentionally covers **rules only** (no setting/lore).

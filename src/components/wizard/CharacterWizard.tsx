@@ -2,12 +2,12 @@ import { useReducer } from 'react'
 import { canAdvance } from '../../rules/character'
 import { STEPS, initialWizardState, wizardReducer } from './wizardReducer'
 import { ProgressSteps, cn } from './ui'
-import { RoleStep } from './RoleStep'
-import { AspectStep } from './AspectStep'
-import { ClassStep } from './ClassStep'
-import { EdgesStep } from './EdgesStep'
-import { IdentityStep } from './IdentityStep'
-import { RecapStep } from './RecapStep'
+import { RoleStep } from './steps/RoleStep'
+import { AspectStep } from './steps/AspectStep'
+import { ClassStep } from './steps/ClassStep'
+import { EdgesStep } from './steps/EdgesStep'
+import { IdentityStep } from './steps/IdentityStep'
+import { RecapStep } from './steps/RecapStep'
 
 export function CharacterWizard({ onExit }: { onExit: () => void }) {
   const [state, dispatch] = useReducer(wizardReducer, initialWizardState)

@@ -1,8 +1,8 @@
 import type { Dispatch } from 'react'
-import { ASPECTS } from '../../rules/aspects'
-import type { CharacterDraft } from '../../rules/character'
-import type { WizardAction } from './wizardReducer'
-import { SelectableCard, StepShell } from './ui'
+import { ASPECTS } from '../../../rules/aspects'
+import type { CharacterDraft } from '../../../rules/character'
+import type { WizardAction } from '../wizardReducer'
+import { SelectableCard, StepShell } from '../ui'
 
 export function AspectStep({
   draft,

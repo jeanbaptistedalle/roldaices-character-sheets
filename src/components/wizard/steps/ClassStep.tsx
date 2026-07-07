@@ -1,9 +1,9 @@
 import type { Dispatch } from 'react'
-import { classesByAspect } from '../../rules/classes'
-import { getEdge } from '../../rules/edges'
-import type { CharacterDraft } from '../../rules/character'
-import type { WizardAction } from './wizardReducer'
-import { SelectableCard, StepShell } from './ui'
+import { classesByAspect } from '../../../rules/classes'
+import { getEdge } from '../../../rules/edges'
+import type { CharacterDraft } from '../../../rules/character'
+import type { WizardAction } from '../wizardReducer'
+import { SelectableCard, StepShell } from '../ui'
 
 export function ClassStep({
   draft,

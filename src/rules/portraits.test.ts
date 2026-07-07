@@ -1,22 +1,39 @@
 import { describe, it, expect } from 'vitest'
-import { PORTRAIT_SEEDS, portraitUrl, PORTRAITS } from './portraits'
+import {
+  PORTRAIT_SEEDS,
+  portraitUrl,
+  PORTRAITS,
+  PORTRAIT_COUNT,
+  randomPortraits,
+} from './portraits'
 
 describe('portraits', () => {
-  it('offers a gallery of at least a dozen seeds', () => {
-    expect(PORTRAIT_SEEDS.length).toBeGreaterThanOrEqual(12)
+  it('always offers exactly 9 seeds, all unique', () => {
+    expect(PORTRAIT_COUNT).toBe(9)
+    expect(PORTRAIT_SEEDS).toHaveLength(9)
     expect(new Set(PORTRAIT_SEEDS).size).toBe(PORTRAIT_SEEDS.length)
   })
 
-  it('builds a deterministic https DiceBear URL that encodes the seed', () => {
-    const url = portraitUrl('Aldric')
-    expect(url).toBe(portraitUrl('Aldric'))
-    expect(url.startsWith('https://')).toBe(true)
-    expect(url).toContain('dicebear.com')
-    expect(url).toContain('seed=Aldric')
+  it('always exposes exactly 9 portraits, one per seed, all unique', () => {
+    expect(PORTRAITS).toHaveLength(9)
+    expect(PORTRAITS).toHaveLength(PORTRAIT_COUNT)
+    expect(PORTRAITS).toHaveLength(PORTRAIT_SEEDS.length)
+    expect(new Set(PORTRAITS.map((p) => p.url)).size).toBe(9)
   })
 
-  it('url-encodes seeds with spaces', () => {
-    expect(portraitUrl('Grey Wolf')).toContain('seed=Grey%20Wolf')
+  it('draws a random bucket of exactly 9 portraits', () => {
+    expect(randomPortraits()).toHaveLength(9)
+    expect(new Set(randomPortraits().map((p) => p.seed)).size).toBe(9)
+  })
+
+  it('builds a deterministic SVG data URI for a seed', () => {
+    const url = portraitUrl('Aldric')
+    expect(url).toBe(portraitUrl('Aldric'))
+    expect(url.startsWith('data:image/svg+xml')).toBe(true)
+  })
+
+  it('produces distinct portraits for distinct seeds', () => {
+    expect(portraitUrl('Aldric')).not.toBe(portraitUrl('Brenna'))
   })
 
   it('exposes a PORTRAITS list matching the seeds, with unique urls', () => {

@@ -1,8 +1,8 @@
 import type { Dispatch } from 'react'
-import { ROLES } from '../../rules/roles'
-import type { CharacterDraft } from '../../rules/character'
-import type { WizardAction } from './wizardReducer'
-import { SelectableCard, StepShell } from './ui'
+import { ROLES } from '../../../rules/roles'
+import type { CharacterDraft } from '../../../rules/character'
+import type { WizardAction } from '../wizardReducer'
+import { SelectableCard, StepShell } from '../ui'
 
 export function RoleStep({
   draft,

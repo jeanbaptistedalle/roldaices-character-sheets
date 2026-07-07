@@ -1,9 +1,9 @@
 import type { Dispatch } from 'react'
-import { getClass, type ClassEdge } from '../../rules/classes'
-import { getEdge, DOMAINS, FRIENDS_PLACES } from '../../rules/edges'
-import type { CharacterDraft, EdgeSlot } from '../../rules/character'
-import type { WizardAction } from './wizardReducer'
-import { OptionChip, StepShell, cn } from './ui'
+import { getClass, type ClassEdge } from '../../../rules/classes'
+import { getEdge, DOMAINS, FRIENDS_PLACES } from '../../../rules/edges'
+import type { CharacterDraft, EdgeSlot } from '../../../rules/character'
+import type { WizardAction } from '../wizardReducer'
+import { OptionChip, StepShell, cn } from '../ui'
 
 export function EdgesStep({
   draft,

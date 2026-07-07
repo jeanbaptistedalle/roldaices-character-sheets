@@ -1,8 +1,16 @@
-import type { Dispatch } from 'react'
-import { PORTRAITS } from '../../rules/portraits'
-import type { CharacterDraft } from '../../rules/character'
-import type { WizardAction } from './wizardReducer'
-import { StepShell, cn } from './ui'
+import { useState, type Dispatch } from 'react'
+import {
+  PORTRAITS,
+  randomPortraits,
+  PORTRAIT_COUNT,
+  type Portrait,
+} from '../../../rules/portraits'
+import type { CharacterDraft } from '../../../rules/character'
+import type { WizardAction } from '../wizardReducer'
+import { StepShell, cn } from '../ui'
+
+/** The gallery always shows exactly this many portraits to choose from. */
+const GALLERY_SIZE = PORTRAIT_COUNT
 
 export function IdentityStep({
   draft,
@@ -11,6 +19,26 @@ export function IdentityStep({
   draft: CharacterDraft
   dispatch: Dispatch<WizardAction>
 }) {
+  const [bucket, setBucket] = useState<Portrait[]>(PORTRAITS)
+  // Portraits pinned to the front of the gallery: these survive a refresh so a
+  // picked portrait is never lost. `kept` holds its own Portrait objects rather
+  // than being derived from `draft.imageUri`, so selecting a *new* portrait does
+  // not wipe the previously-kept one.
+  const [kept, setKept] = useState<Portrait[]>([])
+
+  // Always exactly GALLERY_SIZE tiles: dedupe pinned + bucket, then trim. The
+  // bucket alone always holds GALLERY_SIZE fresh portraits, so slicing here can
+  // never leave fewer — a pinned portrait just pushes out the last bucket tile.
+  const gallery = dedupeByUrl([...kept, ...bucket]).slice(0, GALLERY_SIZE)
+
+  // On refresh, pin the currently-selected portrait (if any) and draw a full
+  // fresh bucket, so the grid stays exactly GALLERY_SIZE tiles either way.
+  const drawNewPortraits = () => {
+    const selected = gallery.find((p) => p.url === draft.imageUri)
+    setKept(selected ? [selected] : [])
+    setBucket(randomPortraits(GALLERY_SIZE))
+  }
+
   return (
     <StepShell
       eyebrow="Step 5"
@@ -47,10 +75,19 @@ export function IdentityStep({
 
         {/* Portrait gallery */}
         <div>
-          <p className="text-sm font-semibold text-stone-200">Portrait</p>
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold text-stone-200">Portrait</p>
+            <button
+              type="button"
+              onClick={drawNewPortraits}
+              className="rounded-lg border border-stone-700 px-3 py-1 text-xs font-semibold text-stone-300 transition-colors hover:border-amber-600/50 hover:text-amber-400"
+            >
+              New portraits
+            </button>
+          </div>
           <p className="mb-3 text-xs text-stone-500">Pick a portrait, or leave it blank.</p>
           <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
-            {PORTRAITS.map((portrait) => {
+            {gallery.map((portrait) => {
               const selected = draft.imageUri === portrait.url
               return (
                 <button
@@ -85,4 +122,10 @@ export function IdentityStep({
       </div>
     </StepShell>
   )
+}
+
+/** Merge portrait lists, keeping the first occurrence of each url. */
+function dedupeByUrl(portraits: Portrait[]): Portrait[] {
+  const seen = new Set<string>()
+  return portraits.filter((p) => (seen.has(p.url) ? false : seen.add(p.url)))
 }

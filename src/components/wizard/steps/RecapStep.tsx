@@ -1,8 +1,8 @@
 import type { Dispatch } from 'react'
-import { buildCharacter, type CharacterDraft } from '../../rules/character'
-import { RESOLUTIONS, hittableTargets } from '../../rules/resolutions'
-import type { WizardAction } from './wizardReducer'
-import { StepShell } from './ui'
+import { buildCharacter, type CharacterDraft } from '../../../rules/character'
+import { RESOLUTIONS, hittableTargets } from '../../../rules/resolutions'
+import type { WizardAction } from '../wizardReducer'
+import { StepShell } from '../ui'
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (

@@ -6,7 +6,7 @@ import type { Aspect } from '../../rules/aspects'
 import type { EdgeSlot } from '../../rules/character'
 import { emptyDraft, canAdvance, type CharacterDraft } from '../../rules/character'
 
-export const STEPS = ['role', 'aspect', 'class', 'edges', 'recap'] as const
+export const STEPS = ['role', 'aspect', 'class', 'edges', 'identity', 'recap'] as const
 export type Step = (typeof STEPS)[number]
 
 export interface WizardState {
@@ -25,6 +25,9 @@ export type WizardAction =
   | { type: 'setClass'; classId: string }
   | { type: 'setAnswer'; index: 0 | 1; option: number }
   | { type: 'setSubChoice'; slot: EdgeSlot; value: string }
+  | { type: 'setName'; name: string }
+  | { type: 'setDescription'; description: string }
+  | { type: 'setImage'; imageUri: string }
   | { type: 'next' }
   | { type: 'back' }
   | { type: 'goto'; stepIndex: number }
@@ -83,6 +86,15 @@ export function wizardReducer(state: WizardState, action: WizardAction): WizardS
           subChoices: { ...draft.subChoices, [action.slot]: action.value },
         },
       }
+
+    case 'setName':
+      return { ...state, draft: { ...draft, name: action.name } }
+
+    case 'setDescription':
+      return { ...state, draft: { ...draft, description: action.description } }
+
+    case 'setImage':
+      return { ...state, draft: { ...draft, imageUri: action.imageUri } }
 
     case 'next': {
       const step = STEPS[state.stepIndex]

@@ -26,8 +26,27 @@ export function RecapStep({
   const { role } = character
 
   return (
-    <StepShell eyebrow="Step 5" title="Your character" intro={`${character.aspect.id} · ${character.className}`}>
+    <StepShell
+      eyebrow="Step 6"
+      title={character.name || 'Your character'}
+      intro={`${character.aspect.id} · ${character.className}`}
+    >
       <div className="mx-auto max-w-2xl space-y-6">
+        {(character.imageUri || character.description) && (
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
+            {character.imageUri && (
+              <img
+                src={character.imageUri}
+                alt={`Portrait of ${character.name || 'the character'}`}
+                className="h-28 w-28 shrink-0 rounded-xl border border-stone-800 bg-stone-900 object-cover"
+              />
+            )}
+            {character.description && (
+              <p className="text-center text-stone-300 sm:text-left">{character.description}</p>
+            )}
+          </div>
+        )}
+
         <div className="grid grid-cols-3 gap-4">
           <Stat label="Die" value={role.dieLabel} />
           <Stat label="Hearts" value={role.hearts} />

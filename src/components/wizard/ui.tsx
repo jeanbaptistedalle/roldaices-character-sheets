@@ -11,6 +11,7 @@ const STEP_LABELS: Record<Step, string> = {
   aspect: 'Aspect',
   class: 'Class',
   edges: 'Edges',
+  identity: 'Identity',
   recap: 'Recap',
 }
 

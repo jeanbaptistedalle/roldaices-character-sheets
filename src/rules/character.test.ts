@@ -97,6 +97,43 @@ describe('step validation', () => {
     expect(canAdvance(d3, 'edges')).toBe(false)
     const d4: CharacterDraft = { ...d3, answers: [0, 2] }
     expect(canAdvance(d4, 'edges')).toBe(true)
-    expect(isDraftComplete(d4)).toBe(true)
+    // Identity gates on a name.
+    expect(canAdvance(d4, 'identity')).toBe(false)
+    expect(isDraftComplete(d4)).toBe(false)
+    const d5: CharacterDraft = { ...d4, name: 'Ironwolf' }
+    expect(canAdvance(d5, 'identity')).toBe(true)
+    expect(isDraftComplete(d5)).toBe(true)
+  })
+
+  it('treats a whitespace-only name as no name', () => {
+    const draft: CharacterDraft = {
+      ...emptyDraft(),
+      role: 'Fighter',
+      aspect: 'Sword',
+      classId: 'monster-slayer',
+      answers: [0, 2],
+      name: '   ',
+    }
+    expect(canAdvance(draft, 'identity')).toBe(false)
+    expect(isDraftComplete(draft)).toBe(false)
+  })
+})
+
+describe('identity', () => {
+  it('carries name, description, and portrait into the built character', () => {
+    const draft: CharacterDraft = {
+      ...emptyDraft(),
+      role: 'Fighter',
+      aspect: 'Sword',
+      classId: 'monster-slayer',
+      answers: [0, 2],
+      name: 'Ironwolf',
+      description: 'A grizzled hunter of the deep mazes.',
+      imageUri: 'https://example.test/portrait.svg',
+    }
+    const character = buildCharacter(draft)
+    expect(character.name).toBe('Ironwolf')
+    expect(character.description).toBe('A grizzled hunter of the deep mazes.')
+    expect(character.imageUri).toBe('https://example.test/portrait.svg')
   })
 })

@@ -6,6 +6,7 @@ import { RoleStep } from './RoleStep'
 import { AspectStep } from './AspectStep'
 import { ClassStep } from './ClassStep'
 import { EdgesStep } from './EdgesStep'
+import { IdentityStep } from './IdentityStep'
 import { RecapStep } from './RecapStep'
 
 export function CharacterWizard({ onExit }: { onExit: () => void }) {
@@ -41,6 +42,7 @@ export function CharacterWizard({ onExit }: { onExit: () => void }) {
         {step === 'aspect' && <AspectStep draft={state.draft} dispatch={dispatch} />}
         {step === 'class' && <ClassStep draft={state.draft} dispatch={dispatch} />}
         {step === 'edges' && <EdgesStep draft={state.draft} dispatch={dispatch} />}
+        {step === 'identity' && <IdentityStep draft={state.draft} dispatch={dispatch} />}
         {step === 'recap' && <RecapStep draft={state.draft} dispatch={dispatch} />}
 
         {/* Nav (recap has its own actions) */}

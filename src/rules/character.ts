@@ -17,6 +17,10 @@ export interface CharacterDraft {
   answers: [number | undefined, number | undefined]
   /** Player-supplied sub-choice values, keyed by slot. */
   subChoices: Partial<Record<EdgeSlot, string>>
+  // Identity — independent of the mechanical choices.
+  name?: string
+  description?: string
+  imageUri?: string
 }
 
 export interface ResolvedEdge {
@@ -36,9 +40,12 @@ export interface BuiltCharacter {
   classId: string
   className: string
   edges: ResolvedEdge[]
+  name?: string
+  description?: string
+  imageUri?: string
 }
 
-export type WizardStep = 'role' | 'aspect' | 'class' | 'edges' | 'recap'
+export type WizardStep = 'role' | 'aspect' | 'class' | 'edges' | 'identity' | 'recap'
 
 export function emptyDraft(): CharacterDraft {
   return { answers: [undefined, undefined], subChoices: {} }
@@ -84,8 +91,17 @@ export function edgesComplete(draft: CharacterDraft): boolean {
   return resolveEdges(draft).every((r) => !r.needsSubChoice)
 }
 
+/** A name with at least one non-whitespace character. */
+export function hasName(draft: CharacterDraft): boolean {
+  return Boolean(draft.name?.trim())
+}
+
 export function isDraftComplete(draft: CharacterDraft): boolean {
-  return Boolean(draft.role && draft.aspect && draft.classId) && edgesComplete(draft)
+  return (
+    Boolean(draft.role && draft.aspect && draft.classId) &&
+    edgesComplete(draft) &&
+    hasName(draft)
+  )
 }
 
 /** Whether the wizard may advance past the given step. */
@@ -99,6 +115,8 @@ export function canAdvance(draft: CharacterDraft, step: WizardStep): boolean {
       return Boolean(draft.classId)
     case 'edges':
       return edgesComplete(draft)
+    case 'identity':
+      return hasName(draft)
     case 'recap':
       return true
   }
@@ -116,5 +134,8 @@ export function buildCharacter(draft: CharacterDraft): BuiltCharacter {
     classId: def.id,
     className: def.name,
     edges: resolveEdges(draft),
+    name: draft.name,
+    description: draft.description,
+    imageUri: draft.imageUri,
   }
 }

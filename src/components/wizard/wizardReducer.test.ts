@@ -67,7 +67,34 @@ describe('wizardReducer', () => {
     expect(s).toEqual(initialWizardState)
   })
 
-  it('exposes the five steps in order', () => {
-    expect(STEPS).toEqual(['role', 'aspect', 'class', 'edges', 'recap'])
+  it('exposes the six steps in order, with identity before recap', () => {
+    expect(STEPS).toEqual(['role', 'aspect', 'class', 'edges', 'identity', 'recap'])
+  })
+
+  it('sets identity fields', () => {
+    let s = wizardReducer(initialWizardState, { type: 'setName', name: 'Ironwolf' })
+    expect(s.draft.name).toBe('Ironwolf')
+    s = wizardReducer(s, { type: 'setDescription', description: 'A grizzled hunter.' })
+    expect(s.draft.description).toBe('A grizzled hunter.')
+    s = wizardReducer(s, { type: 'setImage', imageUri: 'https://example.test/p.svg' })
+    expect(s.draft.imageUri).toBe('https://example.test/p.svg')
+  })
+
+  it('keeps identity fields when the aspect or class changes', () => {
+    const start = stateAt({
+      aspect: 'Sword',
+      classId: 'monster-slayer',
+      answers: [0, 1],
+      name: 'Ironwolf',
+      description: 'A grizzled hunter.',
+      imageUri: 'https://example.test/p.svg',
+    })
+    const afterAspect = wizardReducer(start, { type: 'setAspect', aspect: 'Sorcery' })
+    expect(afterAspect.draft.name).toBe('Ironwolf')
+    expect(afterAspect.draft.description).toBe('A grizzled hunter.')
+    expect(afterAspect.draft.imageUri).toBe('https://example.test/p.svg')
+
+    const afterClass = wizardReducer(start, { type: 'setClass', classId: 'jaded-sellsword' })
+    expect(afterClass.draft.name).toBe('Ironwolf')
   })
 })

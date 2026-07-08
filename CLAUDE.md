@@ -2,7 +2,7 @@
 
 A React web app for creating characters for **multiple tabletop RPG systems**.
 Each system is a self-contained vertical slice; **Mazes** (9th Level Games) is
-the first. Created characters are stored in **RestDB**. This project is also an
+the first. Created characters are stored in **Supabase**. This project is also an
 experiment in incremental "vibe coding".
 
 Reference (first system — Mazes): https://9thlevelgames.itch.io/mazes-zero-prep-introduction-to-fantasy-roleplaying
@@ -13,7 +13,7 @@ Reference (first system — Mazes): https://9thlevelgames.itch.io/mazes-zero-pre
 - **Tailwind CSS v4** (via the `@tailwindcss/vite` plugin — styles are imported
   in `src/index.css` with `@import "tailwindcss";`; there is no
   `tailwind.config.js` and no PostCSS config).
-- **RestDB** for persistence (see below).
+- **Supabase** for persistence and authentication (see below).
 
 ## Commands
 
@@ -32,14 +32,15 @@ npm run preview  # preview the production build
   lives in `src/app/` (`system.ts` type, `registry.ts` list, `SystemPicker`,
   and `App` which mounts the selected system's `Entry`). Add a system: create
   `src/<id>/` and append it to `SYSTEMS` in `src/app/registry.ts`.
-- **Data-layer seam:** all RestDB access goes through a single module under
-  `src/api/`. Components MUST NOT call `fetch` directly. This isolates the
-  persistence layer so we can later swap the direct-from-browser calls for a
-  backend proxy without touching components.
-- **Secrets:** the RestDB URL and API key come from `VITE_`-prefixed env vars
-  (see `.env.example`). Anything `VITE_`-prefixed is bundled into the client
-  and is **publicly visible** — only ever use a **restricted** RestDB API key
-  (scoped to the character collection, minimal permissions). Never commit
+- **Data-layer seam:** all Supabase access goes through a single module under
+  `src/api/`. Components MUST NOT call the Supabase client directly. This
+  isolates the persistence layer so we can later change the backend without
+  touching components.
+- **Secrets:** the Supabase URL and publishable key come from `VITE_`-prefixed
+  env vars (see `.env.example`). Anything `VITE_`-prefixed is bundled into the
+  client and is **publicly visible** — the publishable key
+  (`sb_publishable_...`) is public by design; data is protected by Row Level
+  Security, not key secrecy. Never use a secret key in the client. Never commit
   `.env`. Never hard-code keys in source.
 - **TypeScript:** model each system's domain (stats, dice, roles, characters)
   with explicit types, kept inside that system's `src/<id>/` slice. Prefer
@@ -61,8 +62,9 @@ updated as we learn more.
 - **Done:** project scaffold, system seam (`src/app/`), system picker, Mazes
   vertical slice (`src/mazes/` — rules, character-creation wizard, identity
   step), docs, `mazes-rules` skill.
-- **Next (not yet built):** RestDB wiring under `src/api/` (character records
-  carry a `systemId` discriminator), and a second TTRPG system.
+- **Next (not yet built):** Supabase persistence wiring under `src/api/`
+  (character records carry a `systemId` discriminator), and a second TTRPG
+  system.
 
 See `docs/superpowers/specs/` for design docs (per-system specs under
 `docs/superpowers/specs/<system>/`).

@@ -53,3 +53,4 @@ coverage/
 
 # Implementation plans (kept local, not tracked)
 docs
+supabase/.temp

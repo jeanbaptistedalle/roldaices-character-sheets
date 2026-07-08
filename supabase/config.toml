@@ -1,0 +1,9 @@
+# Supabase CLI project config. Hand-written and intentionally minimal — enough
+# to `supabase link` this folder to the cloud project and `supabase db push`
+# the migrations. Run `supabase init` if you want the full, CLI-version-matched
+# config with local-dev ports, studio, auth providers, etc.
+project_id = "roldaices-character-sheets"
+
+[db]
+# Postgres major version of the linked project.
+major_version = 15

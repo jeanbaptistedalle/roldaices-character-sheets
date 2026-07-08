@@ -1,7 +1,7 @@
 // A small gallery of portrait options generated locally with the DiceBear
 // library (@dicebear/core + the adventurer style from @dicebear/collection).
 // Avatars are rendered to deterministic data URIs — no network request, no
-// API key. We store the selected data URI on the character (ready for RestDB);
+// API key. We store the selected data URI on the character (ready for Supabase);
 // we host nothing ourselves.
 //
 // System-agnostic: any TTRPG system can reuse this and the PortraitPicker.

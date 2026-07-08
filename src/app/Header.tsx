@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../auth'
-import { LoginModal } from './LoginModal'
+import { LoginModal } from '../shared/LoginModal'
 
 export function Header() {
   const { user, loading, signOut } = useAuth()

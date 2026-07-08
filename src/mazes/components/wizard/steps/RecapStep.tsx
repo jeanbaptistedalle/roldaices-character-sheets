@@ -1,8 +1,12 @@
-import type { Dispatch } from 'react'
+import { useState, type Dispatch } from 'react'
 import { buildCharacter, type CharacterDraft } from '../../../rules/character'
 import { RESOLUTIONS, hittableTargets } from '../../../rules/resolutions'
+import { draftToData } from '../../../persistence'
 import type { WizardAction } from '../wizardReducer'
 import { StepShell } from '../ui'
+import { useAuth } from '../../../../auth'
+import { saveCharacter } from '../../../../api'
+import { LoginModal } from '../../../../shared/LoginModal'
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
@@ -18,12 +22,40 @@ function Stat({ label, value }: { label: string; value: string | number }) {
 export function RecapStep({
   draft,
   dispatch,
+  onSaved,
 }: {
   draft: CharacterDraft
   dispatch: Dispatch<WizardAction>
+  onSaved: () => void
 }) {
   const character = buildCharacter(draft)
   const { role } = character
+
+  const { user } = useAuth()
+  const [saveStatus, setSaveStatus] = useState<
+    'idle' | 'saving' | 'error'
+  >('idle')
+  const [showLogin, setShowLogin] = useState(false)
+
+  async function onSave() {
+    if (!user) {
+      setShowLogin(true)
+      return
+    }
+    setSaveStatus('saving')
+    try {
+      await saveCharacter({
+        systemId: 'mazes',
+        name: character.name ?? '',
+        description: character.description,
+        imageUri: character.imageUri,
+        data: draftToData(draft),
+      })
+      onSaved()
+    } catch {
+      setSaveStatus('error')
+    }
+  }
 
   return (
     <StepShell
@@ -98,11 +130,15 @@ export function RecapStep({
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
           <button
             type="button"
-            disabled
-            title="Saving to RestDB is coming in a later step"
-            className="cursor-not-allowed rounded-lg bg-amber-600/40 px-6 py-2.5 font-semibold text-amber-100/60"
+            onClick={onSave}
+            disabled={saveStatus === 'saving'}
+            className="rounded-lg bg-amber-600 px-6 py-2.5 font-semibold text-stone-950 transition-colors hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Save character
+            {saveStatus === 'saving'
+              ? 'Saving…'
+              : user
+                ? 'Save character'
+                : 'Log in to save'}
           </button>
           <button
             type="button"
@@ -112,10 +148,14 @@ export function RecapStep({
             Start over
           </button>
         </div>
-        <p className="text-center text-xs text-stone-600">
-          Saving to RestDB is coming in a later step.
-        </p>
+        {saveStatus === 'error' && (
+          <p className="text-center text-sm text-red-400">
+            Couldn't save your character. Try again.
+          </p>
+        )}
       </div>
+
+      {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
     </StepShell>
   )
 }

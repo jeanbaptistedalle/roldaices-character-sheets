@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
-import { supabase } from './client'
+import { supabase } from '../shared/supabase'
 import * as actions from './actions'
 
 interface AuthValue {

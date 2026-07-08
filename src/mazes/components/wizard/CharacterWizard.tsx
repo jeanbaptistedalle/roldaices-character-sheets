@@ -9,7 +9,13 @@ import { EdgesStep } from './steps/EdgesStep'
 import { IdentityStep } from './steps/IdentityStep'
 import { RecapStep } from './steps/RecapStep'
 
-export function CharacterWizard({ onExit }: { onExit: () => void }) {
+export function CharacterWizard({
+  onExit,
+  onSaved,
+}: {
+  onExit: () => void
+  onSaved: () => void
+}) {
   const [state, dispatch] = useReducer(wizardReducer, initialWizardState)
   const step = STEPS[state.stepIndex]
   const isFirst = state.stepIndex === 0
@@ -43,7 +49,9 @@ export function CharacterWizard({ onExit }: { onExit: () => void }) {
         {step === 'class' && <ClassStep draft={state.draft} dispatch={dispatch} />}
         {step === 'edges' && <EdgesStep draft={state.draft} dispatch={dispatch} />}
         {step === 'identity' && <IdentityStep draft={state.draft} dispatch={dispatch} />}
-        {step === 'recap' && <RecapStep draft={state.draft} dispatch={dispatch} />}
+        {step === 'recap' && (
+          <RecapStep draft={state.draft} dispatch={dispatch} onSaved={onSaved} />
+        )}
 
         {/* Nav (recap has its own actions) */}
         {!isRecap && (

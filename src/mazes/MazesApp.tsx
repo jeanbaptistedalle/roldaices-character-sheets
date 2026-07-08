@@ -6,7 +6,12 @@ export function MazesApp({ onExit }: { onExit: () => void }) {
   const [view, setView] = useState<'home' | 'wizard'>('home')
 
   if (view === 'wizard') {
-    return <CharacterWizard onExit={() => setView('home')} />
+    return (
+      <CharacterWizard
+        onExit={() => setView('home')}
+        onSaved={() => setView('home')}
+      />
+    )
   }
 
   return <MazesHome onCreate={() => setView('wizard')} onExit={onExit} />

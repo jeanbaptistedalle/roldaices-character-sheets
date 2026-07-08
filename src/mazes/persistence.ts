@@ -3,10 +3,11 @@
 // label later never rewrites saved rows. Identity (name/description/imageUri)
 // is stored in table columns, not here.
 
-import type { CharacterDraft, EdgeSlot } from './rules/character'
+import type { CharacterRecord } from '../api'
+import { emptyDraft, type CharacterDraft, type EdgeSlot } from './rules/character'
 import type { Role } from './rules/roles'
 import { getAspect, type Aspect } from './rules/aspects'
-import { getClass } from './rules/classes'
+import { getClass, type ClassEdge, type ClassOption } from './rules/classes'
 
 /** A stored edge: its stable id plus its sub-choice (domain, name, …) if any. */
 export interface StoredEdge {
@@ -70,4 +71,61 @@ export function summarize(data: MazesData): string {
     parts.push(getClass(data.classId).name)
   }
   return parts.join(' · ')
+}
+
+/**
+ * Inverse of `draftToData`: rebuild a wizard draft from a stored record so a
+ * saved character can be reopened for editing. Identity comes from the record's
+ * columns; the mechanical ids come from `record.data`.
+ */
+export function dataToDraft(record: CharacterRecord): CharacterDraft {
+  const data = record.data as MazesData
+  const draft: CharacterDraft = {
+    ...emptyDraft(),
+    role: data.role,
+    aspect: data.aspect,
+    classId: data.classId,
+    name: record.name,
+    description: record.description ?? undefined,
+    imageUri: record.imageUri ?? undefined,
+  }
+  if (!data.classId) return draft
+
+  const def = getClass(data.classId)
+  const [always, q0, q1] = data.edges
+
+  if (always.edgeId !== def.always.edgeId) {
+    throw new Error(`No option with edgeId "${always.edgeId}" in class ${def.id}`)
+  }
+  restoreSubChoice(draft, 'always', def.always, always)
+
+  const answers: CharacterDraft['answers'] = [undefined, undefined]
+  const stored: [StoredEdge, StoredEdge] = [q0, q1]
+  const slots: EdgeSlot[] = ['q0', 'q1']
+  def.questions.forEach((question, i) => {
+    const index = question.options.findIndex((o) => o.edgeId === stored[i].edgeId)
+    if (index === -1) {
+      throw new Error(`No option with edgeId "${stored[i].edgeId}" in class ${def.id}`)
+    }
+    answers[i] = index
+    restoreSubChoice(draft, slots[i], question.options[index], stored[i])
+  })
+  draft.answers = answers
+  return draft
+}
+
+/**
+ * Put a stored sub-choice back into the draft only when the class option does
+ * not preset one — preset sub-choices are re-derived by `resolveSlot`, so
+ * storing them in the draft would be redundant (and drift on a label rename).
+ */
+function restoreSubChoice(
+  draft: CharacterDraft,
+  slot: EdgeSlot,
+  option: ClassEdge | ClassOption,
+  stored: StoredEdge,
+): void {
+  if (!option.presetSubChoice && stored.subChoice) {
+    draft.subChoices[slot] = stored.subChoice
+  }
 }

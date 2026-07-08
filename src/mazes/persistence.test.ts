@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { emptyDraft, type CharacterDraft } from './rules/character'
-import { draftToData, summarize } from './persistence'
+import { draftToData, dataToDraft, summarize } from './persistence'
+import type { CharacterRecord } from '../api'
 
 function fullDraft(): CharacterDraft {
   return {
@@ -84,5 +85,72 @@ describe('summarize', () => {
 
   it('returns an empty string when role, aspect and class are absent', () => {
     expect(summarize({ edges: [...edges] })).toBe('')
+  })
+})
+
+function record(data: unknown): CharacterRecord {
+  return {
+    id: 'char-1',
+    systemId: 'mazes',
+    name: 'Grit',
+    description: 'A tired mercenary.',
+    imageUri: 'data:image/svg+xml,portrait',
+    data,
+    createdAt: '2026-07-08T00:00:00Z',
+  }
+}
+
+describe('dataToDraft', () => {
+  it('round-trips a plain character (draftToData ∘ dataToDraft is stable)', () => {
+    const data = draftToData(fullDraft())
+    expect(draftToData(dataToDraft(record(data)))).toEqual(data)
+  })
+
+  it('restores identity from the record columns, not from data', () => {
+    const data = draftToData(fullDraft())
+    const draft = dataToDraft(record(data))
+    expect(draft.name).toBe('Grit')
+    expect(draft.description).toBe('A tired mercenary.')
+    expect(draft.imageUri).toBe('data:image/svg+xml,portrait')
+  })
+
+  it('recovers role, aspect, class and answer indices', () => {
+    // jaded-sellsword: always well-armed, q0[0] rank, q1[1] veteran
+    const draft = dataToDraft(record(draftToData(fullDraft())))
+    expect(draft.role).toBe('Fighter')
+    expect(draft.aspect).toBe('Sword')
+    expect(draft.classId).toBe('jaded-sellsword')
+    expect(draft.answers).toEqual([0, 1])
+  })
+
+  it('restores a player sub-choice but not a class preset', () => {
+    // infernal-summoner: always magic PRESET "Summoning"; q1[options] include familiar with player sub-choice? use blazing-magician for player choice.
+    const preset = dataToDraft(
+      record(draftToData({ ...fullDraft(), classId: 'infernal-summoner', answers: [0, 0] })),
+    )
+    expect(preset.subChoices.always).toBeUndefined()
+
+    const player = dataToDraft(
+      record(
+        draftToData({
+          ...fullDraft(),
+          classId: 'blazing-magician',
+          answers: [0, 0],
+          subChoices: { always: 'Night' },
+        }),
+      ),
+    )
+    expect(player.subChoices.always).toBe('Night')
+  })
+
+  it('round-trips a preset-bearing class', () => {
+    const data = draftToData({ ...fullDraft(), classId: 'infernal-summoner', answers: [0, 0] })
+    expect(draftToData(dataToDraft(record(data)))).toEqual(data)
+  })
+
+  it('throws when a stored edgeId matches no option in the class', () => {
+    const data = draftToData(fullDraft()) as ReturnType<typeof draftToData>
+    const broken = { ...data, edges: [{ edgeId: 'nonexistent' }, data.edges[1], data.edges[2]] }
+    expect(() => dataToDraft(record(broken))).toThrow(/edgeId/)
   })
 })

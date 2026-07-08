@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { saveCharacter, listCharacters, deleteCharacter } from './characters'
+import { saveCharacter, listCharacters, deleteCharacter, updateCharacter } from './characters'
 
 const ROW = {
   id: 'char-1',
@@ -19,6 +19,8 @@ function mockClient(opts: {
   listRows?: unknown[]
   listError?: unknown
   deleteError?: unknown
+  updateRow?: unknown
+  updateError?: unknown
 }) {
   const single = vi
     .fn()
@@ -35,14 +37,21 @@ function mockClient(opts: {
   const deleteEq = vi.fn().mockResolvedValue({ error: opts.deleteError ?? null })
   const del = vi.fn(() => ({ eq: deleteEq }))
 
-  const from = vi.fn(() => ({ insert, select: selectForList, delete: del }))
+  const updateSingle = vi
+    .fn()
+    .mockResolvedValue({ data: opts.updateRow ?? ROW, error: opts.updateError ?? null })
+  const updateSelect = vi.fn(() => ({ single: updateSingle }))
+  const updateEq = vi.fn(() => ({ select: updateSelect }))
+  const update = vi.fn(() => ({ eq: updateEq }))
+
+  const from = vi.fn(() => ({ insert, select: selectForList, delete: del, update }))
   const user = 'user' in opts ? opts.user : { id: 'user-1' }
   const auth = {
     getUser: vi.fn().mockResolvedValue({ data: { user }, error: null }),
   }
 
   const client = { from, auth } as unknown as SupabaseClient
-  return { client, from, insert, eq, order, del, deleteEq, auth }
+  return { client, from, insert, eq, order, del, deleteEq, auth, update, updateEq }
 }
 
 describe('saveCharacter', () => {
@@ -142,5 +151,54 @@ describe('deleteCharacter', () => {
   it('throws when the delete fails', async () => {
     const { client } = mockClient({ deleteError: new Error('denied') })
     await expect(deleteCharacter('char-1', client)).rejects.toThrow('denied')
+  })
+})
+
+describe('updateCharacter', () => {
+  it('updates the row by id with the payload and returns a mapped record', async () => {
+    const { client, from, update, updateEq } = mockClient({})
+    const record = await updateCharacter(
+      'char-1',
+      {
+        name: 'Grit',
+        description: 'A tired mercenary.',
+        imageUri: 'data:image/svg+xml,portrait',
+        data: { role: 'Fighter' },
+      },
+      client,
+    )
+
+    expect(from).toHaveBeenCalledWith('characters')
+    expect(update).toHaveBeenCalledWith({
+      name: 'Grit',
+      description: 'A tired mercenary.',
+      image_uri: 'data:image/svg+xml,portrait',
+      data: { role: 'Fighter' },
+    })
+    expect(updateEq).toHaveBeenCalledWith('id', 'char-1')
+    expect(record).toEqual({
+      id: 'char-1',
+      systemId: 'mazes',
+      name: 'Grit',
+      description: 'A tired mercenary.',
+      imageUri: 'data:image/svg+xml,portrait',
+      data: { role: 'Fighter' },
+      createdAt: '2026-07-08T00:00:00Z',
+    })
+  })
+
+  it('defaults optional fields to null', async () => {
+    const { client, update } = mockClient({})
+    await updateCharacter('char-1', { name: 'Grit', data: {} }, client)
+    expect(update).toHaveBeenCalledWith(
+      expect.objectContaining({ description: null, image_uri: null }),
+    )
+  })
+
+  it('throws when the update fails', async () => {
+    const { client } = mockClient({ updateError: new Error('denied') })
+    await expect(
+      updateCharacter('char-1', { name: 'Grit', data: {} }, client),
+    ).rejects.toThrow('denied')
   })
 })

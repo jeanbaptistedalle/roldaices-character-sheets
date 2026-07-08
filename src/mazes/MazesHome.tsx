@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../auth'
-import { listCharacters, type CharacterRecord } from '../api'
+import { listCharacters, deleteCharacter, type CharacterRecord } from '../api'
+import { ConfirmDialog } from '../shared/ConfirmDialog'
 import { summarize, type MazesData } from './persistence'
 
 export function MazesHome({
@@ -64,6 +65,9 @@ function Characters({ onCreate }: { onCreate: () => void }) {
 function CharacterList({ onCreate }: { onCreate: () => void }) {
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const [characters, setCharacters] = useState<CharacterRecord[]>([])
+  const [confirmTarget, setConfirmTarget] = useState<CharacterRecord | null>(null)
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
 
   useEffect(() => {
     let active = true
@@ -80,6 +84,26 @@ function CharacterList({ onCreate }: { onCreate: () => void }) {
       active = false
     }
   }, [])
+
+  function cancelDelete() {
+    setConfirmTarget(null)
+    setDeleteError(null)
+  }
+
+  async function confirmDelete() {
+    if (!confirmTarget) return
+    setDeleting(true)
+    setDeleteError(null)
+    try {
+      await deleteCharacter(confirmTarget.id)
+      setCharacters((prev) => prev.filter((c) => c.id !== confirmTarget.id))
+      setConfirmTarget(null)
+    } catch {
+      setDeleteError("Couldn't delete this character. Try again.")
+    } finally {
+      setDeleting(false)
+    }
+  }
 
   return (
     <section className="mt-14 w-full">
@@ -115,15 +139,47 @@ function CharacterList({ onCreate }: { onCreate: () => void }) {
       {status === 'ready' && characters.length > 0 && (
         <ul className="space-y-3 text-left">
           {characters.map((c) => (
-            <CharacterRow key={c.id} character={c} />
+            <CharacterRow
+              key={c.id}
+              character={c}
+              onRequestDelete={() => setConfirmTarget(c)}
+            />
           ))}
         </ul>
+      )}
+
+      {confirmTarget && (
+        <ConfirmDialog
+          title="Delete character"
+          message={
+            <>
+              Delete{' '}
+              <span className="font-semibold text-stone-100">
+                {confirmTarget.name}
+              </span>
+              ? This can't be undone.
+            </>
+          }
+          confirmLabel="Delete"
+          busyLabel="Deleting…"
+          destructive
+          busy={deleting}
+          error={deleteError}
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
       )}
     </section>
   )
 }
 
-function CharacterRow({ character }: { character: CharacterRecord }) {
+function CharacterRow({
+  character,
+  onRequestDelete,
+}: {
+  character: CharacterRecord
+  onRequestDelete: () => void
+}) {
   const summary = summarize(character.data as MazesData)
   return (
     <li className="flex items-center gap-4 rounded-xl border border-stone-800 bg-stone-900/60 p-4">
@@ -136,7 +192,7 @@ function CharacterRow({ character }: { character: CharacterRecord }) {
       ) : (
         <div className="h-14 w-14 shrink-0 rounded-lg border border-stone-800 bg-stone-900" />
       )}
-      <div className="min-w-0">
+      <div className="min-w-0 flex-1">
         <div className="truncate font-semibold text-stone-100">
           {character.name}
         </div>
@@ -144,6 +200,25 @@ function CharacterRow({ character }: { character: CharacterRecord }) {
           <div className="truncate text-sm text-stone-500">{summary}</div>
         )}
       </div>
+      <button
+        type="button"
+        onClick={onRequestDelete}
+        aria-label={`Delete ${character.name}`}
+        className="shrink-0 rounded-lg p-2 text-stone-500 transition-colors hover:bg-stone-800 hover:text-red-400"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-5 w-5"
+        >
+          <path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6M10 11v6M14 11v6" />
+        </svg>
+      </button>
     </li>
   )
 }

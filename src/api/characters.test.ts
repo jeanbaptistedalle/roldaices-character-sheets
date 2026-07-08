@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { saveCharacter, listCharacters } from './characters'
+import { saveCharacter, listCharacters, deleteCharacter } from './characters'
 
 const ROW = {
   id: 'char-1',
@@ -18,6 +18,7 @@ function mockClient(opts: {
   insertError?: unknown
   listRows?: unknown[]
   listError?: unknown
+  deleteError?: unknown
 }) {
   const single = vi
     .fn()
@@ -31,14 +32,17 @@ function mockClient(opts: {
   const eq = vi.fn(() => ({ order }))
   const selectForList = vi.fn(() => ({ eq }))
 
-  const from = vi.fn(() => ({ insert, select: selectForList }))
+  const deleteEq = vi.fn().mockResolvedValue({ error: opts.deleteError ?? null })
+  const del = vi.fn(() => ({ eq: deleteEq }))
+
+  const from = vi.fn(() => ({ insert, select: selectForList, delete: del }))
   const user = 'user' in opts ? opts.user : { id: 'user-1' }
   const auth = {
     getUser: vi.fn().mockResolvedValue({ data: { user }, error: null }),
   }
 
   const client = { from, auth } as unknown as SupabaseClient
-  return { client, from, insert, eq, order, auth }
+  return { client, from, insert, eq, order, del, deleteEq, auth }
 }
 
 describe('saveCharacter', () => {
@@ -122,5 +126,21 @@ describe('listCharacters', () => {
   it('throws when the query fails', async () => {
     const { client } = mockClient({ listError: new Error('nope') })
     await expect(listCharacters('mazes', client)).rejects.toThrow('nope')
+  })
+})
+
+describe('deleteCharacter', () => {
+  it('deletes the row by id', async () => {
+    const { client, from, del, deleteEq } = mockClient({})
+    await deleteCharacter('char-1', client)
+
+    expect(from).toHaveBeenCalledWith('characters')
+    expect(del).toHaveBeenCalled()
+    expect(deleteEq).toHaveBeenCalledWith('id', 'char-1')
+  })
+
+  it('throws when the delete fails', async () => {
+    const { client } = mockClient({ deleteError: new Error('denied') })
+    await expect(deleteCharacter('char-1', client)).rejects.toThrow('denied')
   })
 })

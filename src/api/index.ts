@@ -2,6 +2,7 @@
 export {
   saveCharacter,
   listCharacters,
+  deleteCharacter,
   type CharacterRecord,
   type NewCharacter,
 } from './characters'

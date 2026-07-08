@@ -78,6 +78,18 @@ export async function saveCharacter(
   return toRecord(data as CharacterRow)
 }
 
+/**
+ * Delete a character by id. Ownership is enforced server-side by Row Level
+ * Security — a user can only delete their own rows. Throws if the delete fails.
+ */
+export async function deleteCharacter(
+  id: string,
+  client: SupabaseClient = supabase,
+): Promise<void> {
+  const { error } = await client.from('characters').delete().eq('id', id)
+  if (error) throw error
+}
+
 /** The current user's characters for one system, newest first. */
 export async function listCharacters(
   systemId: string,

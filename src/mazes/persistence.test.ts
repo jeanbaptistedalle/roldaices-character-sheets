@@ -9,7 +9,7 @@ function fullDraft(): CharacterDraft {
     aspect: 'Sword',
     classId: 'jaded-sellsword',
     answers: [0, 1],
-    subChoices: { always: 'Sworn Swords' },
+    subChoices: {},
     name: 'Grit',
     description: 'A tired mercenary.',
     imageUri: 'data:image/svg+xml,portrait',
@@ -17,15 +17,32 @@ function fullDraft(): CharacterDraft {
 }
 
 describe('draftToData', () => {
-  it('keeps the mechanical ids', () => {
+  it('maps the class to three ordered edges: always, question 1, question 2', () => {
     const data = draftToData(fullDraft())
     expect(data).toEqual({
       role: 'Fighter',
       aspect: 'Sword',
       classId: 'jaded-sellsword',
-      answers: [0, 1],
-      subChoices: { always: 'Sworn Swords' },
+      // jaded-sellsword: always = well-armed, q0[0] = rank, q1[1] = veteran
+      edges: [{ edgeId: 'well-armed' }, { edgeId: 'rank' }, { edgeId: 'veteran' }],
     })
+  })
+
+  it('folds a class preset sub-choice into its edge', () => {
+    // infernal-summoner: always = magic, preset "Summoning".
+    const data = draftToData({ ...fullDraft(), classId: 'infernal-summoner', answers: [0, 0] })
+    expect(data.edges[0]).toEqual({ edgeId: 'magic', subChoice: 'Summoning' })
+  })
+
+  it('folds a player sub-choice into the referring edge', () => {
+    // blazing-magician: always = magic (needs a domain the player supplies).
+    const data = draftToData({
+      ...fullDraft(),
+      classId: 'blazing-magician',
+      answers: [0, 0],
+      subChoices: { always: 'Night' },
+    })
+    expect(data.edges[0]).toEqual({ edgeId: 'magic', subChoice: 'Night' })
   })
 
   it('drops identity fields (they live in table columns)', () => {
@@ -34,22 +51,38 @@ describe('draftToData', () => {
     expect(data).not.toHaveProperty('description')
     expect(data).not.toHaveProperty('imageUri')
   })
+
+  it('throws when no class is chosen', () => {
+    expect(() => draftToData({ ...fullDraft(), classId: undefined })).toThrow(
+      /without a class/,
+    )
+  })
+
+  it('throws when a class question is unanswered', () => {
+    expect(() => draftToData({ ...fullDraft(), answers: [0, undefined] })).toThrow(
+      /unanswered/,
+    )
+  })
 })
 
 describe('summarize', () => {
+  const edges = [
+    { edgeId: 'well-armed' },
+    { edgeId: 'rank' },
+    { edgeId: 'veteran' },
+  ] as const
+
   it('renders role, aspect and class from ids', () => {
     expect(summarize(draftToData(fullDraft()))).toBe(
-      'd8 Fighter · Sword · The Jaded Sellsword',
+      'Fighter · Sword · The Jaded Sellsword',
     )
   })
 
   it('tolerates partial data', () => {
-    expect(summarize({ role: 'Fighter', answers: [undefined, undefined], subChoices: {} })).toBe(
-      'd8 Fighter',
-    )
+    expect(summarize({ role: 'Fighter', edges: [...edges] })).toBe('Fighter')
   })
 
-  it('returns an empty string for empty data', () => {
-    expect(summarize({ answers: [undefined, undefined], subChoices: {} })).toBe('')
+  it('returns an empty string when role, aspect and class are absent', () => {
+    expect(summarize({ edges: [...edges] })).toBe('')
   })
 })

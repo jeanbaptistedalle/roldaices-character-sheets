@@ -1,12 +1,13 @@
-import { useState, type Dispatch } from 'react'
+import { useEffect, useState, type Dispatch } from 'react'
 import { buildCharacter, type CharacterDraft } from '../../../rules/character'
 import { RESOLUTIONS, hittableTargets } from '../../../rules/resolutions'
 import { draftToData } from '../../../persistence'
 import type { WizardAction } from '../wizardReducer'
 import { StepShell } from '../ui'
 import { useAuth } from '../../../../auth'
-import { saveCharacter, updateCharacter } from '../../../../api'
+import { saveCharacter, updateCharacter, listCharacters } from '../../../../api'
 import { LoginModal } from '../../../../shared/LoginModal'
+import { isAtLimit, MAX_CHARACTERS_PER_SYSTEM } from '../../../../app/limits'
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
@@ -41,11 +42,35 @@ export function RecapStep({
   >('idle')
   const [showLogin, setShowLogin] = useState(false)
 
+  // Re-check the server count once a user is present (e.g. after logging in
+  // from this step). The seeded count can be stale — it is 0 for users who
+  // started logged out. Edits are never blocked.
+  const [limitReached, setLimitReached] = useState(false)
+
+  useEffect(() => {
+    if (!user || editId) return
+    let active = true
+    listCharacters('mazes')
+      .then((rows) => {
+        if (active) setLimitReached(isAtLimit(rows.length, false))
+      })
+      .catch(() => {
+        // On failure, don't optimistically block — the save call itself will
+        // surface any error.
+      })
+    return () => {
+      active = false
+    }
+  }, [user, editId])
+
+  const blocked = atLimit || limitReached
+
   async function onSave() {
     if (!user) {
       setShowLogin(true)
       return
     }
+    if (blocked) return
     setSaveStatus('saving')
     try {
       const payload = {
@@ -139,10 +164,10 @@ export function RecapStep({
           <button
             type="button"
             onClick={onSave}
-            disabled={saveStatus === 'saving' || atLimit}
+            disabled={saveStatus === 'saving' || blocked}
             className="rounded-lg bg-amber-600 px-6 py-2.5 font-semibold text-stone-950 transition-colors hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {atLimit
+            {blocked
               ? 'Character limit reached'
               : saveStatus === 'saving'
                 ? 'Saving…'
@@ -163,6 +188,12 @@ export function RecapStep({
         {saveStatus === 'error' && (
           <p className="text-center text-sm text-red-400">
             Couldn't save your character. Try again.
+          </p>
+        )}
+        {blocked && (
+          <p className="text-center text-sm text-red-300">
+            You've reached the limit of {MAX_CHARACTERS_PER_SYSTEM} characters. Delete
+            one before saving a new character.
           </p>
         )}
       </div>

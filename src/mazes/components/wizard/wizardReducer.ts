@@ -19,6 +19,14 @@ export const initialWizardState: WizardState = {
   stepIndex: 0,
 }
 
+/** Build a starting state, optionally seeded from an existing draft (edit mode). */
+export function initWizardState(
+  draft: CharacterDraft = emptyDraft(),
+  stepIndex = 0,
+): WizardState {
+  return { draft, stepIndex }
+}
+
 export type WizardAction =
   | { type: 'setRole'; role: Role }
   | { type: 'setAspect'; aspect: Aspect }

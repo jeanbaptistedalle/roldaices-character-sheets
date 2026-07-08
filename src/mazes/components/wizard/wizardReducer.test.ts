@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { STEPS, initialWizardState, wizardReducer, type WizardState } from './wizardReducer'
+import { STEPS, initialWizardState, initWizardState, wizardReducer, type WizardState } from './wizardReducer'
+import { emptyDraft } from '../../rules/character'
 
 function stateAt(partial: Partial<WizardState['draft']>, stepIndex = 0): WizardState {
   return { draft: { ...initialWizardState.draft, ...partial }, stepIndex }
@@ -96,5 +97,18 @@ describe('wizardReducer', () => {
 
     const afterClass = wizardReducer(start, { type: 'setClass', classId: 'jaded-sellsword' })
     expect(afterClass.draft.name).toBe('Ironwolf')
+  })
+})
+
+describe('initWizardState', () => {
+  it('returns the empty initial state by default', () => {
+    expect(initWizardState()).toEqual(initialWizardState)
+  })
+
+  it('seeds a supplied draft and opens on the recap step', () => {
+    const draft = { ...emptyDraft(), role: 'Fighter' as const }
+    const state = initWizardState(draft, STEPS.indexOf('recap'))
+    expect(state.draft).toEqual(draft)
+    expect(state.stepIndex).toBe(STEPS.indexOf('recap'))
   })
 })

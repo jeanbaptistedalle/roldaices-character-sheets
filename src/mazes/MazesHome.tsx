@@ -3,13 +3,14 @@ import { useAuth } from '../auth'
 import { listCharacters, deleteCharacter, type CharacterRecord } from '../api'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
 import { summarize, type MazesData } from './persistence'
+import { MAX_CHARACTERS_PER_SYSTEM } from '../app/limits'
 
 export function MazesHome({
   onCreate,
   onEdit,
   onExit,
 }: {
-  onCreate: () => void
+  onCreate: (count: number) => void
   onEdit: (character: CharacterRecord) => void
   onExit: () => void
 }) {
@@ -48,7 +49,7 @@ function Characters({
   onCreate,
   onEdit,
 }: {
-  onCreate: () => void
+  onCreate: (count: number) => void
   onEdit: (character: CharacterRecord) => void
 }) {
   const { user, loading } = useAuth()
@@ -59,7 +60,7 @@ function Characters({
     return (
       <button
         type="button"
-        onClick={onCreate}
+        onClick={() => onCreate(0)}
         className="mt-14 rounded-lg bg-amber-600 px-8 py-3 text-lg font-semibold text-stone-950 transition-colors hover:bg-amber-500"
       >
         Create a Character
@@ -74,7 +75,7 @@ function CharacterList({
   onCreate,
   onEdit,
 }: {
-  onCreate: () => void
+  onCreate: (count: number) => void
   onEdit: (character: CharacterRecord) => void
 }) {
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
@@ -122,12 +123,19 @@ function CharacterList({
   return (
     <section className="mt-14 w-full">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-sm font-semibold uppercase tracking-widest text-stone-400">
-          Your characters
-        </h2>
+        <div className="flex items-baseline gap-2">
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-stone-400">
+            Your characters
+          </h2>
+          {status === 'ready' && (
+            <span className="text-sm font-semibold text-stone-500">
+              {characters.length} / {MAX_CHARACTERS_PER_SYSTEM}
+            </span>
+          )}
+        </div>
         <button
           type="button"
-          onClick={onCreate}
+          onClick={() => onCreate(characters.length)}
           className="rounded-lg bg-amber-600 px-5 py-2 text-sm font-semibold text-stone-950 transition-colors hover:bg-amber-500"
         >
           Create a Character

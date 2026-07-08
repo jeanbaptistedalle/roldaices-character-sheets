@@ -14,7 +14,7 @@ export function MazesHome({
   onExit: () => void
 }) {
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100">
+    <div className="flex-1 bg-stone-950 text-stone-100">
       <div className="mx-auto max-w-3xl px-6 pt-8">
         <button
           type="button"

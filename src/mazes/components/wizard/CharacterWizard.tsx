@@ -33,7 +33,7 @@ export function CharacterWizard({
   const canNext = canAdvance(state.draft, step)
 
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100">
+    <div className="flex-1 bg-stone-950 text-stone-100">
       <div className="mx-auto max-w-3xl px-6 py-12">
         <div className="mb-8 flex items-center justify-between">
           <button

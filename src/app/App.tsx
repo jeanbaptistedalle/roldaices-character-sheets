@@ -12,12 +12,14 @@ function App() {
 
   return (
     <AuthProvider>
-      <Header />
-      {system ? (
-        <system.Entry onExit={() => setSelectedId(null)} />
-      ) : (
-        <SystemPicker onSelect={setSelectedId} />
-      )}
+      <div className="flex min-h-screen flex-col bg-stone-950 text-stone-100">
+        <Header />
+        {system ? (
+          <system.Entry onExit={() => setSelectedId(null)} />
+        ) : (
+          <SystemPicker onSelect={setSelectedId} />
+        )}
+      </div>
     </AuthProvider>
   )
 }

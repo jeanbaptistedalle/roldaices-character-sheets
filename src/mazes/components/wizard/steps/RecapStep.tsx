@@ -5,7 +5,7 @@ import { draftToData } from '../../../persistence'
 import type { WizardAction } from '../wizardReducer'
 import { StepShell } from '../ui'
 import { useAuth } from '../../../../auth'
-import { saveCharacter } from '../../../../api'
+import { saveCharacter, updateCharacter } from '../../../../api'
 import { LoginModal } from '../../../../shared/LoginModal'
 
 function Stat({ label, value }: { label: string; value: string | number }) {
@@ -23,10 +23,12 @@ export function RecapStep({
   draft,
   dispatch,
   onSaved,
+  editId,
 }: {
   draft: CharacterDraft
   dispatch: Dispatch<WizardAction>
   onSaved: () => void
+  editId?: string
 }) {
   const character = buildCharacter(draft)
   const { role } = character
@@ -44,13 +46,17 @@ export function RecapStep({
     }
     setSaveStatus('saving')
     try {
-      await saveCharacter({
-        systemId: 'mazes',
+      const payload = {
         name: character.name ?? '',
         description: character.description,
         imageUri: character.imageUri,
         data: draftToData(draft),
-      })
+      }
+      if (editId) {
+        await updateCharacter(editId, payload)
+      } else {
+        await saveCharacter({ systemId: 'mazes', ...payload })
+      }
       onSaved()
     } catch {
       setSaveStatus('error')
@@ -136,9 +142,11 @@ export function RecapStep({
           >
             {saveStatus === 'saving'
               ? 'Saving…'
-              : user
-                ? 'Save character'
-                : 'Log in to save'}
+              : !user
+                ? 'Log in to save'
+                : editId
+                  ? 'Save changes'
+                  : 'Save character'}
           </button>
           <button
             type="button"

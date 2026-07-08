@@ -1,6 +1,7 @@
 import { useReducer } from 'react'
+import type { CharacterDraft } from '../../rules/character'
 import { canAdvance } from '../../rules/character'
-import { STEPS, initialWizardState, wizardReducer } from './wizardReducer'
+import { STEPS, initWizardState, wizardReducer } from './wizardReducer'
 import { ProgressSteps, cn } from './ui'
 import { RoleStep } from './steps/RoleStep'
 import { AspectStep } from './steps/AspectStep'
@@ -12,11 +13,20 @@ import { RecapStep } from './steps/RecapStep'
 export function CharacterWizard({
   onExit,
   onSaved,
+  editing,
 }: {
   onExit: () => void
   onSaved: () => void
+  editing?: { id: string; draft: CharacterDraft }
 }) {
-  const [state, dispatch] = useReducer(wizardReducer, initialWizardState)
+  const [state, dispatch] = useReducer(
+    wizardReducer,
+    undefined,
+    () =>
+      editing
+        ? initWizardState(editing.draft, STEPS.indexOf('recap'))
+        : initWizardState(),
+  )
   const step = STEPS[state.stepIndex]
   const isFirst = state.stepIndex === 0
   const isRecap = step === 'recap'
@@ -50,7 +60,12 @@ export function CharacterWizard({
         {step === 'edges' && <EdgesStep draft={state.draft} dispatch={dispatch} />}
         {step === 'identity' && <IdentityStep draft={state.draft} dispatch={dispatch} />}
         {step === 'recap' && (
-          <RecapStep draft={state.draft} dispatch={dispatch} onSaved={onSaved} />
+          <RecapStep
+            draft={state.draft}
+            dispatch={dispatch}
+            onSaved={onSaved}
+            editId={editing?.id}
+          />
         )}
 
         {/* Nav (recap has its own actions) */}

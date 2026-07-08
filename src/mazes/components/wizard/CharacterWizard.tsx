@@ -1,6 +1,7 @@
 import { useReducer } from 'react'
 import type { CharacterDraft } from '../../rules/character'
 import { canAdvance } from '../../rules/character'
+import { isAtLimit, MAX_CHARACTERS_PER_SYSTEM } from '../../../app/limits'
 import { STEPS, initWizardState, wizardReducer } from './wizardReducer'
 import { ProgressSteps, cn } from './ui'
 import { RoleStep } from './steps/RoleStep'
@@ -14,10 +15,12 @@ export function CharacterWizard({
   onExit,
   onSaved,
   editing,
+  characterCount,
 }: {
   onExit: () => void
   onSaved: () => void
   editing?: { id: string; draft: CharacterDraft }
+  characterCount: number
 }) {
   const [state, dispatch] = useReducer(
     wizardReducer,
@@ -31,6 +34,7 @@ export function CharacterWizard({
   const isFirst = state.stepIndex === 0
   const isRecap = step === 'recap'
   const canNext = canAdvance(state.draft, step)
+  const atLimit = isAtLimit(characterCount, Boolean(editing))
 
   return (
     <div className="flex-1 bg-stone-950 text-stone-100">
@@ -54,6 +58,16 @@ export function CharacterWizard({
           onGoto={(stepIndex) => dispatch({ type: 'goto', stepIndex })}
         />
 
+        {atLimit && (
+          <div
+            role="alert"
+            className="mt-6 rounded-lg border border-red-800/60 bg-red-950/40 px-4 py-3 text-sm text-red-200"
+          >
+            You've reached the limit of {MAX_CHARACTERS_PER_SYSTEM} characters. You won't
+            be able to save this one — delete an existing character first.
+          </div>
+        )}
+
         {step === 'role' && <RoleStep draft={state.draft} dispatch={dispatch} />}
         {step === 'aspect' && <AspectStep draft={state.draft} dispatch={dispatch} />}
         {step === 'class' && <ClassStep draft={state.draft} dispatch={dispatch} />}
@@ -65,6 +79,7 @@ export function CharacterWizard({
             dispatch={dispatch}
             onSaved={onSaved}
             editId={editing?.id}
+            atLimit={atLimit}
           />
         )}
 

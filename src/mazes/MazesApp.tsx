@@ -7,6 +7,7 @@ import type { CharacterRecord } from '../api'
 export function MazesApp({ onExit }: { onExit: () => void }) {
   const [view, setView] = useState<'home' | 'wizard'>('home')
   const [editing, setEditing] = useState<CharacterRecord | null>(null)
+  const [characterCount, setCharacterCount] = useState(0)
 
   function goHome() {
     setEditing(null)
@@ -18,6 +19,7 @@ export function MazesApp({ onExit }: { onExit: () => void }) {
       <CharacterWizard
         key={editing?.id ?? 'new'}
         editing={editing ? { id: editing.id, draft: dataToDraft(editing) } : undefined}
+        characterCount={characterCount}
         onExit={goHome}
         onSaved={goHome}
       />
@@ -26,7 +28,8 @@ export function MazesApp({ onExit }: { onExit: () => void }) {
 
   return (
     <MazesHome
-      onCreate={() => {
+      onCreate={(count) => {
+        setCharacterCount(count)
         setEditing(null)
         setView('wizard')
       }}

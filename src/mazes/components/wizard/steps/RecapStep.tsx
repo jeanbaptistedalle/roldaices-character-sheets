@@ -24,11 +24,13 @@ export function RecapStep({
   dispatch,
   onSaved,
   editId,
+  atLimit,
 }: {
   draft: CharacterDraft
   dispatch: Dispatch<WizardAction>
   onSaved: () => void
   editId?: string
+  atLimit: boolean
 }) {
   const character = buildCharacter(draft)
   const { role } = character
@@ -137,16 +139,18 @@ export function RecapStep({
           <button
             type="button"
             onClick={onSave}
-            disabled={saveStatus === 'saving'}
+            disabled={saveStatus === 'saving' || atLimit}
             className="rounded-lg bg-amber-600 px-6 py-2.5 font-semibold text-stone-950 transition-colors hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {saveStatus === 'saving'
-              ? 'Saving…'
-              : !user
-                ? 'Log in to save'
-                : editId
-                  ? 'Save changes'
-                  : 'Save character'}
+            {atLimit
+              ? 'Character limit reached'
+              : saveStatus === 'saving'
+                ? 'Saving…'
+                : !user
+                  ? 'Log in to save'
+                  : editId
+                    ? 'Save changes'
+                    : 'Save character'}
           </button>
           <button
             type="button"

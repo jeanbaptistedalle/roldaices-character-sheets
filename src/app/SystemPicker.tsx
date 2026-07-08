@@ -8,7 +8,7 @@ export function SystemPicker({ onSelect }: { onSelect: (id: string) => void }) {
           Tabletop RPGs
         </p>
         <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
-          TTRPG Character Sheets
+          Roldaice's character sheets
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-stone-400">
           Build characters for tabletop roleplaying games. Pick a system to

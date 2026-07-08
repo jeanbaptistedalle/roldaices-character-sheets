@@ -1,4 +1,4 @@
-# TTRPG Character Sheets
+# Roldaice's character sheets
 
 A React web app for creating characters for **multiple tabletop RPG systems**.
 Each system is a self-contained vertical slice; **Mazes** (9th Level Games) is

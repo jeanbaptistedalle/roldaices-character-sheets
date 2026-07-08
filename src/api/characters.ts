@@ -24,6 +24,13 @@ export interface NewCharacter {
   data: unknown
 }
 
+export interface CharacterUpdate {
+  name: string
+  description?: string
+  imageUri?: string
+  data: unknown
+}
+
 // Row shape as stored in Postgres (snake_case).
 interface CharacterRow {
   id: string
@@ -71,6 +78,31 @@ export async function saveCharacter(
       image_uri: input.imageUri ?? null,
       data: input.data,
     })
+    .select()
+    .single()
+
+  if (error) throw error
+  return toRecord(data as CharacterRow)
+}
+
+/**
+ * Overwrite an existing character by id. `system_id` is immutable. Ownership is
+ * enforced server-side by Row Level Security. Throws if the update fails.
+ */
+export async function updateCharacter(
+  id: string,
+  input: CharacterUpdate,
+  client: SupabaseClient = supabase,
+): Promise<CharacterRecord> {
+  const { data, error } = await client
+    .from('characters')
+    .update({
+      name: input.name,
+      description: input.description ?? null,
+      image_uri: input.imageUri ?? null,
+      data: input.data,
+    })
+    .eq('id', id)
     .select()
     .single()
 

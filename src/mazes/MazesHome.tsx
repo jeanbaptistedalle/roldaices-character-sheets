@@ -6,9 +6,11 @@ import { summarize, type MazesData } from './persistence'
 
 export function MazesHome({
   onCreate,
+  onEdit,
   onExit,
 }: {
   onCreate: () => void
+  onEdit: (character: CharacterRecord) => void
   onExit: () => void
 }) {
   return (
@@ -35,14 +37,20 @@ export function MazesHome({
           and step into the maze.
         </p>
 
-        <Characters onCreate={onCreate} />
+        <Characters onCreate={onCreate} onEdit={onEdit} />
       </main>
     </div>
   )
 }
 
 /** Logged out: just the Create button. Logged in: the user's character list. */
-function Characters({ onCreate }: { onCreate: () => void }) {
+function Characters({
+  onCreate,
+  onEdit,
+}: {
+  onCreate: () => void
+  onEdit: (character: CharacterRecord) => void
+}) {
   const { user, loading } = useAuth()
 
   if (loading) return null
@@ -59,10 +67,16 @@ function Characters({ onCreate }: { onCreate: () => void }) {
     )
   }
 
-  return <CharacterList onCreate={onCreate} />
+  return <CharacterList onCreate={onCreate} onEdit={onEdit} />
 }
 
-function CharacterList({ onCreate }: { onCreate: () => void }) {
+function CharacterList({
+  onCreate,
+  onEdit,
+}: {
+  onCreate: () => void
+  onEdit: (character: CharacterRecord) => void
+}) {
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const [characters, setCharacters] = useState<CharacterRecord[]>([])
   const [confirmTarget, setConfirmTarget] = useState<CharacterRecord | null>(null)
@@ -142,6 +156,7 @@ function CharacterList({ onCreate }: { onCreate: () => void }) {
             <CharacterRow
               key={c.id}
               character={c}
+              onEdit={() => onEdit(c)}
               onRequestDelete={() => setConfirmTarget(c)}
             />
           ))}
@@ -175,9 +190,11 @@ function CharacterList({ onCreate }: { onCreate: () => void }) {
 
 function CharacterRow({
   character,
+  onEdit,
   onRequestDelete,
 }: {
   character: CharacterRecord
+  onEdit: () => void
   onRequestDelete: () => void
 }) {
   const summary = summarize(character.data as MazesData)
@@ -200,6 +217,25 @@ function CharacterRow({
           <div className="truncate text-sm text-stone-500">{summary}</div>
         )}
       </div>
+      <button
+        type="button"
+        onClick={onEdit}
+        aria-label={`Edit ${character.name}`}
+        className="shrink-0 rounded-lg p-2 text-stone-500 transition-colors hover:bg-stone-800 hover:text-amber-400"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-5 w-5"
+        >
+          <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
+        </svg>
+      </button>
       <button
         type="button"
         onClick={onRequestDelete}

@@ -153,4 +153,10 @@ describe('dataToDraft', () => {
     const broken = { ...data, edges: [{ edgeId: 'nonexistent' }, data.edges[1], data.edges[2]] }
     expect(() => dataToDraft(record(broken))).toThrow(/edgeId/)
   })
+
+  it('throws when a stored question edgeId matches no option', () => {
+    const data = draftToData(fullDraft()) as ReturnType<typeof draftToData>
+    const broken = { ...data, edges: [data.edges[0], { edgeId: 'nonexistent' }, data.edges[2]] }
+    expect(() => dataToDraft(record(broken))).toThrow(/edgeId/)
+  })
 })

@@ -1,3 +1,122 @@
+import { useEffect, useState } from 'react'
+import { Link, Navigate } from 'react-router-dom'
+import { useAuth } from '../auth'
+import {
+  getCurrentProfile,
+  countCharactersBySystem,
+  type ProfileRecord,
+  type UserRole,
+} from '../api'
+import { SYSTEMS } from './registry'
+import { MAX_CHARACTERS_PER_SYSTEM } from './limits'
+import { displayNameOf, avatarUrlOf } from './userDisplay'
+
+const ROLE_LABELS: Record<UserRole, string> = {
+  admin: 'Admin',
+  moderator: 'Moderator',
+  user: 'Member',
+  guest: 'Guest',
+}
+
 export function ProfilePage() {
-  return <div className="p-6">Profile (todo)</div>
+  const { user, loading: authLoading } = useAuth()
+  const [profile, setProfile] = useState<ProfileRecord | null>(null)
+  const [counts, setCounts] = useState<Record<string, number>>({})
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (authLoading || !user) return
+    let cancelled = false
+    setLoading(true)
+    setError(null)
+    Promise.all([getCurrentProfile(), countCharactersBySystem()])
+      .then(([p, c]) => {
+        if (cancelled) return
+        setProfile(p)
+        setCounts(c)
+      })
+      .catch((e) => {
+        if (!cancelled) setError(e instanceof Error ? e.message : 'Failed to load profile.')
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [authLoading, user])
+
+  if (authLoading) return null
+  if (!user) return <Navigate to="/" replace />
+
+  const displayName = displayNameOf(user)
+  const avatarUrl = avatarUrlOf(user)
+  const roleLabel = profile ? ROLE_LABELS[profile.role] : null
+
+  return (
+    <main className="mx-auto w-full max-w-2xl flex-1 px-6 py-12">
+      <Link to="/" className="text-sm text-stone-400 transition-colors hover:text-stone-200">
+        ← Back
+      </Link>
+
+      <section className="mt-6 flex items-center gap-4">
+        {avatarUrl ? (
+          <img
+            src={avatarUrl}
+            alt=""
+            className="h-16 w-16 rounded-full border border-stone-700"
+          />
+        ) : (
+          <div className="flex h-16 w-16 items-center justify-center rounded-full border border-stone-700 bg-stone-800 text-2xl font-bold text-stone-300">
+            {displayName.charAt(0).toUpperCase()}
+          </div>
+        )}
+        <div>
+          <h1 className="text-2xl font-bold text-stone-100">{displayName}</h1>
+          {roleLabel && (
+            <span className="mt-1 inline-block rounded-full border border-amber-600/40 bg-amber-600/10 px-3 py-0.5 text-xs font-semibold uppercase tracking-wide text-amber-300">
+              {roleLabel}
+            </span>
+          )}
+        </div>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-500/80">
+          Characters
+        </h2>
+
+        {error ? (
+          <p className="mt-4 text-sm text-red-400">{error}</p>
+        ) : loading ? (
+          <p className="mt-4 text-sm text-stone-400">Loading…</p>
+        ) : (
+          <ul className="mt-4 space-y-2">
+            {SYSTEMS.map((system) => {
+              const count = counts[system.id] ?? 0
+              const full = count >= MAX_CHARACTERS_PER_SYSTEM
+              return (
+                <li
+                  key={system.id}
+                  className="flex items-center justify-between rounded-lg border border-stone-800 bg-stone-900/50 px-4 py-3"
+                >
+                  <span className="text-stone-200">{system.name}</span>
+                  <span
+                    className={
+                      full
+                        ? 'text-sm font-semibold text-amber-400'
+                        : 'text-sm text-stone-400'
+                    }
+                  >
+                    {count} / {MAX_CHARACTERS_PER_SYSTEM}
+                  </span>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </section>
+    </main>
+  )
 }

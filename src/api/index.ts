@@ -4,6 +4,7 @@ export {
   updateCharacter,
   listCharacters,
   deleteCharacter,
+  countCharactersBySystem,
   type CharacterRecord,
   type NewCharacter,
   type CharacterUpdate,

@@ -136,3 +136,20 @@ export async function listCharacters(
   if (error) throw error
   return (data as CharacterRow[]).map(toRecord)
 }
+
+/**
+ * Count of the current user's characters, keyed by systemId. Systems with zero
+ * characters are absent from the map. RLS scopes the rows to the caller, so no
+ * explicit user filter is needed here.
+ */
+export async function countCharactersBySystem(
+  client: SupabaseClient = supabase,
+): Promise<Record<string, number>> {
+  const { data, error } = await client.from('characters').select('system_id')
+  if (error) throw error
+  const counts: Record<string, number> = {}
+  for (const row of data as { system_id: string }[]) {
+    counts[row.system_id] = (counts[row.system_id] ?? 0) + 1
+  }
+  return counts
+}

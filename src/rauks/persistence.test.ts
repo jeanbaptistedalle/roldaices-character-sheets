@@ -1,0 +1,69 @@
+import { describe, it, expect } from 'vitest'
+import { draftToData, dataToDraft, summarize, type RauksData } from './persistence'
+import { emptyDraft, type CharacterDraft } from './rules/character'
+import type { CharacterRecord } from '../api'
+
+function completeDraft(): CharacterDraft {
+  return {
+    ...emptyDraft(),
+    traits: { physical: 4, perception: 3, mental: 3, charisma: 3, competence: 3, rerolls: 2 },
+    skillIds: ['gorilla', 'shadow', 'lawyer'],
+    name: 'Arakel',
+    origin: 'Vhalto',
+    sex: 'F',
+    birthDate: '3/2/6',
+    rauksorg: 'Orsk-7',
+    description: 'A weary investigator.',
+    imageUri: 'https://example.test/p.svg',
+  }
+}
+
+function recordFrom(draft: CharacterDraft, data: RauksData): CharacterRecord {
+  return {
+    id: 'id-1',
+    systemId: 'rauks',
+    name: draft.name ?? '',
+    description: draft.description ?? null,
+    imageUri: draft.imageUri ?? null,
+    data,
+    createdAt: '2026-07-09T00:00:00Z',
+  }
+}
+
+describe('persistence', () => {
+  it('draftToData keeps mechanics and Rauks identity, drops shared columns', () => {
+    const data = draftToData(completeDraft())
+    expect(data.traits.physical).toBe(4)
+    expect(data.skillIds).toEqual(['gorilla', 'shadow', 'lawyer'])
+    expect(data.origin).toBe('Vhalto')
+    expect(data.rauksorg).toBe('Orsk-7')
+    // name/description/imageUri are stored as columns, not in data.
+    expect('name' in data).toBe(false)
+  })
+
+  it('draftToData throws on an incomplete draft', () => {
+    expect(() => draftToData(emptyDraft())).toThrow()
+  })
+
+  it('round-trips through dataToDraft', () => {
+    const draft = completeDraft()
+    const data = draftToData(draft)
+    const restored = dataToDraft(recordFrom(draft, data))
+    expect(restored.traits).toEqual(draft.traits)
+    expect(restored.skillIds).toEqual(draft.skillIds)
+    expect(restored.name).toBe('Arakel')
+    expect(restored.origin).toBe('Vhalto')
+    expect(restored.description).toBe('A weary investigator.')
+    expect(restored.imageUri).toBe('https://example.test/p.svg')
+  })
+
+  it('summarize shows origin (or Imperial) and the skill count', () => {
+    expect(summarize(draftToData(completeDraft()))).toBe('Vhalto · 3 skills')
+    const imperial: RauksData = {
+      traits: completeDraft().traits, skillIds: ['gorilla'], imperial: true,
+    }
+    expect(summarize(imperial)).toBe('Imperial · 1 skill')
+    const anon: RauksData = { traits: completeDraft().traits, skillIds: [] }
+    expect(summarize(anon)).toBe('Rauks · 0 skills')
+  })
+})

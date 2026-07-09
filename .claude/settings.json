@@ -1,0 +1,22 @@
+{
+  "env": {
+    "ENABLE_LSP_TOOL": "1"
+  },
+  "extraKnownMarketplaces": {
+    "context-mode-source": {
+      "source": { "source": "github", "repo": "mksglu/context-mode" }
+    }
+  },
+  "enabledPlugins": {
+    "context-mode@context-mode-source": true,
+    "superpowers@superpowers-source": true,
+    "security-guidance@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true
+  },
+  "mcpServers": {
+    "codebase-memory-mcp": {
+      "command": "codebase-memory-mcp"
+    }
+  }
+}

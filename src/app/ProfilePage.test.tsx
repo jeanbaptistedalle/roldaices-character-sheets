@@ -61,6 +61,19 @@ describe('ProfilePage', () => {
     expect(countEl.className).toContain('stone-400')
   })
 
+  it('links each system row to its game route', async () => {
+    renderPage()
+    const link = await screen.findByRole('link', { name: /Mazes/ })
+    expect(link).toHaveAttribute('href', '/mazes')
+  })
+
+  it('states the per-system character limit', async () => {
+    renderPage()
+    await waitFor(() =>
+      expect(screen.getByText(/up to 5 characters per game/i)).toBeInTheDocument(),
+    )
+  })
+
   it('redirects away when signed out', () => {
     vi.mocked(useAuth).mockReturnValue({ user: null, loading: false } as ReturnType<typeof useAuth>)
     renderPage()

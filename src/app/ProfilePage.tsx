@@ -88,6 +88,10 @@ export function ProfilePage() {
         <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-500/80">
           Characters
         </h2>
+        <p className="mt-1 text-xs text-stone-500">
+          You can create up to {MAX_CHARACTERS_PER_SYSTEM} characters per game. Select a
+          game to open it.
+        </p>
 
         {error ? (
           <p className="mt-4 text-sm text-red-400">{error}</p>
@@ -99,20 +103,22 @@ export function ProfilePage() {
               const count = counts[system.id] ?? 0
               const full = count >= MAX_CHARACTERS_PER_SYSTEM
               return (
-                <li
-                  key={system.id}
-                  className="flex items-center justify-between rounded-lg border border-stone-800 bg-stone-900/50 px-4 py-3"
-                >
-                  <span className="text-stone-200">{system.name}</span>
-                  <span
-                    className={
-                      full
-                        ? 'text-sm font-semibold text-amber-400'
-                        : 'text-sm text-stone-400'
-                    }
+                <li key={system.id}>
+                  <Link
+                    to={`/${system.id}`}
+                    className="flex items-center justify-between rounded-lg border border-stone-800 bg-stone-900/50 px-4 py-3 transition-colors hover:border-stone-600 hover:bg-stone-900"
                   >
-                    {count} / {MAX_CHARACTERS_PER_SYSTEM}
-                  </span>
+                    <span className="text-stone-200">{system.name}</span>
+                    <span
+                      className={
+                        full
+                          ? 'text-sm font-semibold text-amber-400'
+                          : 'text-sm text-stone-400'
+                      }
+                    >
+                      {count} / {MAX_CHARACTERS_PER_SYSTEM}
+                    </span>
+                  </Link>
                 </li>
               )
             })}

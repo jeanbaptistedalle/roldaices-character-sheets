@@ -45,7 +45,9 @@ export function ProfilePage() {
     return () => {
       cancelled = true
     }
-  }, [authLoading, user])
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- key on the stable id; `user` gets a new
+    // reference on every token refresh, which would otherwise retrigger the fetch.
+  }, [authLoading, user?.id])
 
   if (authLoading) return null
   if (!user) return <Navigate to="/" replace />

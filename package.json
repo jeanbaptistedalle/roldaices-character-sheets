@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "migration:list": "supabase migration list",
     "db:push": "supabase db push",
     "db:reset": "supabase db reset",
     "db:start": "supabase start"

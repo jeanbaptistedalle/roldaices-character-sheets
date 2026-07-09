@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { saveCharacter, listCharacters, deleteCharacter, updateCharacter } from './characters'
+import { saveCharacter, listCharacters, deleteCharacter, updateCharacter, countCharactersBySystem } from './characters'
 
 const ROW = {
   id: 'char-1',
@@ -200,5 +200,37 @@ describe('updateCharacter', () => {
     await expect(
       updateCharacter('char-1', { name: 'Grit', data: {} }, client),
     ).rejects.toThrow('denied')
+  })
+})
+
+describe('countCharactersBySystem', () => {
+  function mockCountClient(rows: { system_id: string }[], error: unknown = null) {
+    const select = vi.fn().mockResolvedValue({ data: rows, error })
+    const from = vi.fn(() => ({ select }))
+    const client = { from } as unknown as SupabaseClient
+    return { client, from, select }
+  }
+
+  it('tallies characters per system', async () => {
+    const { client, from, select } = mockCountClient([
+      { system_id: 'mazes' },
+      { system_id: 'mazes' },
+      { system_id: 'other' },
+    ])
+    const counts = await countCharactersBySystem(client)
+
+    expect(from).toHaveBeenCalledWith('characters')
+    expect(select).toHaveBeenCalledWith('system_id')
+    expect(counts).toEqual({ mazes: 2, other: 1 })
+  })
+
+  it('returns an empty map when the user has no characters', async () => {
+    const { client } = mockCountClient([])
+    expect(await countCharactersBySystem(client)).toEqual({})
+  })
+
+  it('throws when the query fails', async () => {
+    const { client } = mockCountClient([], new Error('boom'))
+    await expect(countCharactersBySystem(client)).rejects.toThrow('boom')
   })
 })

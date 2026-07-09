@@ -52,6 +52,15 @@ describe('ProfilePage', () => {
     expect(screen.getByText('5 / 5')).toBeInTheDocument()
   })
 
+  it('shows 0 / 5 in the muted style for systems with no characters', async () => {
+    vi.mocked(countCharactersBySystem).mockResolvedValue({})
+    renderPage()
+    await waitFor(() => expect(screen.getByText('0 / 5')).toBeInTheDocument())
+    const countEl = screen.getByText('0 / 5')
+    expect(countEl.className).not.toContain('amber')
+    expect(countEl.className).toContain('stone-400')
+  })
+
   it('redirects away when signed out', () => {
     vi.mocked(useAuth).mockReturnValue({ user: null, loading: false } as ReturnType<typeof useAuth>)
     renderPage()

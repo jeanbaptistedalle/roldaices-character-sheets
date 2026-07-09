@@ -1,17 +1,14 @@
 import { useState } from 'react'
 import { useAuth } from '../auth'
 import { LoginModal } from '../shared/LoginModal'
+import { displayNameOf, avatarUrlOf } from './userDisplay'
 
 export function Header() {
   const { user, loading, signOut } = useAuth()
   const [modalOpen, setModalOpen] = useState(false)
 
-  const displayName =
-    (user?.user_metadata?.full_name as string | undefined) ??
-    (user?.user_metadata?.user_name as string | undefined) ??
-    user?.email ??
-    'Account'
-  const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
+  const displayName = displayNameOf(user)
+  const avatarUrl = avatarUrlOf(user)
 
   return (
     <header className="sticky top-0 z-40 border-b border-stone-800 bg-stone-950/80 backdrop-blur">

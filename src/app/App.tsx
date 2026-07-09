@@ -1,24 +1,32 @@
-import { useState } from 'react'
+import { Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { SystemPicker } from './SystemPicker'
 import { Header } from './Header'
+import { ProfilePage } from './ProfilePage'
 import { SYSTEMS } from './registry'
 import { AuthProvider } from '../auth'
 
-function App() {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const system = selectedId
-    ? SYSTEMS.find((s) => s.id === selectedId) ?? null
-    : null
+/** Resolves the :systemId param to a system and mounts its Entry, or redirects
+ *  home for an unknown id. */
+function SystemRoute() {
+  const { systemId } = useParams()
+  const navigate = useNavigate()
+  const system = SYSTEMS.find((s) => s.id === systemId)
+  if (!system) return <Navigate to="/" replace />
+  return <system.Entry onExit={() => navigate('/')} />
+}
 
+function App() {
+  const navigate = useNavigate()
   return (
     <AuthProvider>
       <div className="flex min-h-screen flex-col bg-stone-950 text-stone-100">
         <Header />
-        {system ? (
-          <system.Entry onExit={() => setSelectedId(null)} />
-        ) : (
-          <SystemPicker onSelect={setSelectedId} />
-        )}
+        <Routes>
+          <Route path="/" element={<SystemPicker onSelect={(id) => navigate(`/${id}`)} />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/:systemId" element={<SystemRoute />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </div>
     </AuthProvider>
   )

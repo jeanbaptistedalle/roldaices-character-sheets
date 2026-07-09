@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../auth'
 import { LoginModal } from '../shared/LoginModal'
 import { displayNameOf, avatarUrlOf } from './userDisplay'
@@ -20,7 +21,10 @@ export function Header() {
         <div className="flex items-center gap-3">
           {loading ? null : user ? (
             <>
-              <span className="flex items-center gap-2 text-sm text-stone-300">
+              <Link
+                to="/profile"
+                className="flex items-center gap-2 rounded-lg px-1 text-sm text-stone-300 transition-colors hover:text-stone-100"
+              >
                 {avatarUrl && (
                   <img
                     src={avatarUrl}
@@ -29,7 +33,7 @@ export function Header() {
                   />
                 )}
                 <span className="max-w-[12rem] truncate">{displayName}</span>
-              </span>
+              </Link>
               <button
                 type="button"
                 onClick={() => signOut()}

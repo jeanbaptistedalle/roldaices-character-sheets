@@ -8,3 +8,10 @@ export {
   type NewCharacter,
   type CharacterUpdate,
 } from './characters'
+
+export {
+  getCurrentProfile,
+  getCurrentUserRole,
+  type ProfileRecord,
+  type UserRole,
+} from './profiles'

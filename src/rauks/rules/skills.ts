@@ -1,5 +1,5 @@
-// The Rauks skills (the rules call them "compétences"), grouped by the trait
-// used to roll them. English ids/names/descriptions. See
+// The Rauks skills (the named special abilities), grouped by the trait used to
+// roll them. English ids/names/descriptions. See
 // .claude/skills/rauks-rules/SKILL.md.
 
 export type SkillCategory = 'Physical' | 'Perception' | 'Mental' | 'Social' | 'Karma'

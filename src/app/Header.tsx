@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '../auth'
 import { LoginModal } from '../shared/LoginModal'
 import { displayNameOf, avatarUrlOf } from './userDisplay'
+import { LanguageToggle } from './LanguageToggle'
 
 export function Header() {
   const { t } = useTranslation('common')
@@ -21,6 +22,7 @@ export function Header() {
         </span>
 
         <div className="flex items-center gap-3">
+          <LanguageToggle />
           {loading ? null : user ? (
             <>
               <Link

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PORTRAITS, randomPortraits, PORTRAIT_COUNT, type Portrait } from './portraits'
+import { randomPortraits, PORTRAIT_COUNT, type Portrait } from './portraits'
 import { cn } from '../cn'
 
 /** The gallery always shows exactly this many portraits to choose from. */
@@ -17,7 +17,9 @@ export function PortraitPicker({
   value: string
   onChange: (imageUri: string) => void
 }) {
-  const [bucket, setBucket] = useState<Portrait[]>(PORTRAITS)
+  // Draw a fresh random bucket on first render (lazy init runs once) so the
+  // gallery is different every time it mounts, not only after a refresh.
+  const [bucket, setBucket] = useState<Portrait[]>(() => randomPortraits(GALLERY_SIZE))
   // Portraits pinned to the front of the gallery: these survive a refresh so a
   // picked portrait is never lost. `kept` holds its own Portrait objects rather
   // than being derived from `value`, so selecting a *new* portrait does not

@@ -1,4 +1,5 @@
 import { type Dispatch } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { CharacterDraft } from '../../../rules/character'
 import {
   TRAITS, pointsRemaining, canIncrement, canDecrement, rerollTokens, type TraitInfo,
@@ -13,17 +14,18 @@ export function TraitsStep({
   draft: CharacterDraft
   dispatch: Dispatch<WizardAction>
 }) {
+  const { t } = useTranslation('rauks')
   const remaining = pointsRemaining(draft.traits)
   const groups: { group: TraitInfo['group']; title: string }[] = [
-    { group: 'roll', title: 'Roll traits' },
-    { group: 'budget', title: 'Budget traits' },
+    { group: 'roll', title: t('steps.traits.groupRoll') },
+    { group: 'budget', title: t('steps.traits.groupBudget') },
   ]
 
   return (
     <StepShell
-      eyebrow="Step 1"
-      title="Assign your traits"
-      intro="Each trait runs 1–4 (2 is normal). Spend all 18 points. One trait may drop to 1."
+      eyebrow={t('steps.traits.eyebrow')}
+      title={t('steps.traits.title')}
+      intro={t('steps.traits.intro')}
     >
       <div className="mx-auto max-w-xl space-y-8">
         <div
@@ -35,7 +37,7 @@ export function TraitsStep({
               : 'border-amber-800/60 bg-amber-950/20 text-amber-300',
           )}
         >
-          {remaining} point{remaining === 1 ? '' : 's'} remaining
+          {t('steps.traits.pointsRemaining', { count: remaining })}
         </div>
 
         {groups.map(({ group, title }) => (
@@ -78,6 +80,7 @@ function Stepper({
   onInc: () => void
   onDec: () => void
 }) {
+  const { t } = useTranslation('rauks')
   return (
     <div className="flex items-center gap-4 rounded-xl border border-stone-800 bg-stone-900/60 p-4">
       <div className="min-w-0 flex-1">
@@ -86,17 +89,29 @@ function Stepper({
       </div>
       <div className="flex shrink-0 flex-col items-end gap-1">
         <div className="flex items-center gap-3">
-          <StepButton label={`Decrease ${info.label}`} disabled={!canDec} onClick={onDec}>−</StepButton>
+          <StepButton
+            label={t('steps.traits.decreaseAria', { trait: info.label })}
+            disabled={!canDec}
+            onClick={onDec}
+          >
+            −
+          </StepButton>
           <span className="w-6 text-center text-2xl font-bold text-amber-400">{value}</span>
-          <StepButton label={`Increase ${info.label}`} disabled={!canInc} onClick={onInc}>+</StepButton>
+          <StepButton
+            label={t('steps.traits.increaseAria', { trait: info.label })}
+            disabled={!canInc}
+            onClick={onInc}
+          >
+            +
+          </StepButton>
         </div>
         {info.key === 'rerolls' && (
           <div
             data-testid="reroll-total"
             className="text-xs text-stone-500"
           >
-            <span className="font-semibold text-amber-400">{rerollTokens(value)}</span> reroll
-            {rerollTokens(value) === 1 ? '' : 's'}
+            <span className="font-semibold text-amber-400">{rerollTokens(value)}</span>{' '}
+            {t('rerollSuffix', { count: rerollTokens(value) })}
           </div>
         )}
       </div>

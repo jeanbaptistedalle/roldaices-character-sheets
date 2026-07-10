@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../auth'
 import { listCharacters, deleteCharacter, type CharacterRecord } from '../api'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
@@ -14,6 +15,8 @@ export function RauksHome({
   onEdit: (character: CharacterRecord) => void
   onExit: () => void
 }) {
+  const { t } = useTranslation()
+  const { t: tRauks } = useTranslation('rauks')
   return (
     <div className="flex-1 bg-stone-950 text-stone-100">
       <div className="mx-auto max-w-3xl px-6 pt-8">
@@ -22,17 +25,18 @@ export function RauksHome({
           onClick={onExit}
           className="text-sm text-stone-500 transition-colors hover:text-amber-400"
         >
-          ← Systems
+          {t('systemHome.backToSystems')}
         </button>
       </div>
       <main className="mx-auto flex max-w-3xl flex-col items-center px-6 pb-20 pt-8 text-center">
         <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-amber-500/80">
-          Thibaut &amp; Quentin Constant
+          {tRauks('publisher')}
         </p>
-        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">Rauks Character Sheets</h1>
+        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
+          {tRauks('home.title')}
+        </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-stone-400">
-          Build a Rauks: an elite investigator-knight of the World Empire. Assign your
-          traits, choose your skills, and take the contract.
+          {tRauks('home.subtitle')}
         </p>
         <Characters onCreate={onCreate} onEdit={onEdit} />
       </main>
@@ -47,6 +51,7 @@ function Characters({
   onCreate: (count: number) => void
   onEdit: (character: CharacterRecord) => void
 }) {
+  const { t } = useTranslation()
   const { user, loading } = useAuth()
   if (loading) return null
   if (!user) {
@@ -56,7 +61,7 @@ function Characters({
         onClick={() => onCreate(0)}
         className="mt-14 rounded-lg bg-amber-600 px-8 py-3 text-lg font-semibold text-stone-950 transition-colors hover:bg-amber-500"
       >
-        Create a Character
+        {t('systemHome.createCharacter')}
       </button>
     )
   }
@@ -70,6 +75,7 @@ function CharacterList({
   onCreate: (count: number) => void
   onEdit: (character: CharacterRecord) => void
 }) {
+  const { t } = useTranslation()
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const [characters, setCharacters] = useState<CharacterRecord[]>([])
   const [confirmTarget, setConfirmTarget] = useState<CharacterRecord | null>(null)
@@ -106,7 +112,7 @@ function CharacterList({
       setCharacters((prev) => prev.filter((c) => c.id !== confirmTarget.id))
       setConfirmTarget(null)
     } catch {
-      setDeleteError("Couldn't delete this character. Try again.")
+      setDeleteError(t('systemHome.deleteError'))
     } finally {
       setDeleting(false)
     }
@@ -117,7 +123,7 @@ function CharacterList({
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-baseline gap-2">
           <h2 className="text-sm font-semibold uppercase tracking-widest text-stone-400">
-            Your characters
+            {t('systemHome.yourCharacters')}
           </h2>
           {status === 'ready' && (
             <span className="text-sm font-semibold text-stone-500">
@@ -130,17 +136,19 @@ function CharacterList({
           onClick={() => onCreate(characters.length)}
           className="rounded-lg bg-amber-600 px-5 py-2 text-sm font-semibold text-stone-950 transition-colors hover:bg-amber-500"
         >
-          Create a Character
+          {t('systemHome.createCharacter')}
         </button>
       </div>
 
-      {status === 'loading' && <p className="py-8 text-sm text-stone-500">Loading…</p>}
+      {status === 'loading' && (
+        <p className="py-8 text-sm text-stone-500">{t('systemHome.loading')}</p>
+      )}
       {status === 'error' && (
-        <p className="py-8 text-sm text-red-400">Couldn't load your characters. Try again later.</p>
+        <p className="py-8 text-sm text-red-400">{t('systemHome.loadError')}</p>
       )}
       {status === 'ready' && characters.length === 0 && (
         <p className="rounded-xl border border-dashed border-stone-800 py-10 text-sm text-stone-500">
-          No characters yet — create your first one.
+          {t('systemHome.empty')}
         </p>
       )}
       {status === 'ready' && characters.length > 0 && (
@@ -158,15 +166,18 @@ function CharacterList({
 
       {confirmTarget && (
         <ConfirmDialog
-          title="Delete character"
+          title={t('systemHome.deleteTitle')}
           message={
             <>
-              Delete <span className="font-semibold text-stone-100">{confirmTarget.name}</span>? This
-              can't be undone.
+              {t('systemHome.deleteConfirmPrefix')}
+              <span className="font-semibold text-stone-100">
+                {confirmTarget.name}
+              </span>
+              {t('systemHome.deleteConfirmSuffix')}
             </>
           }
-          confirmLabel="Delete"
-          busyLabel="Deleting…"
+          confirmLabel={t('systemHome.delete')}
+          busyLabel={t('systemHome.deleting')}
           destructive
           busy={deleting}
           error={deleteError}
@@ -187,6 +198,7 @@ function CharacterRow({
   onEdit: () => void
   onRequestDelete: () => void
 }) {
+  const { t } = useTranslation()
   const summary = summarize(character.data as RauksData)
   return (
     <li className="flex items-center gap-4 rounded-xl border border-stone-800 bg-stone-900/60 p-4">
@@ -206,7 +218,7 @@ function CharacterRow({
       <button
         type="button"
         onClick={onEdit}
-        aria-label={`Edit ${character.name}`}
+        aria-label={t('systemHome.editAria', { name: character.name })}
         className="shrink-0 rounded-lg p-2 text-stone-500 transition-colors hover:bg-stone-800 hover:text-amber-400"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
@@ -216,7 +228,7 @@ function CharacterRow({
       <button
         type="button"
         onClick={onRequestDelete}
-        aria-label={`Delete ${character.name}`}
+        aria-label={t('systemHome.deleteAria', { name: character.name })}
         className="shrink-0 rounded-lg p-2 text-stone-500 transition-colors hover:bg-stone-800 hover:text-red-400"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">

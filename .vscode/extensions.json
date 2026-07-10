@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "anthropic.claude-code",
+    "bradlc.vscode-tailwindcss",
+    "christian-kohler.path-intellisense",
+    "dbaeumer.vscode-eslint",
+    "dsznajder.es7-react-js-snippets",
+    "esbenp.prettier-vscode",
+    "formulahendry.auto-rename-tag",
+    "mikestead.dotenv",
+    "ms-vscode.vscode-typescript-next",
+    "ms-vscode.vs-keybindings",
+    "vscode-icons-team.vscode-icons"
+  ]
+}

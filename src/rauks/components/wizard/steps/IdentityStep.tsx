@@ -1,4 +1,5 @@
 import { type Dispatch } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PortraitPicker } from '../../../../shared/portraits'
 import type { CharacterDraft } from '../../../rules/character'
 import type { WizardAction } from '../wizardReducer'
@@ -14,35 +15,38 @@ export function IdentityStep({
   draft: CharacterDraft
   dispatch: Dispatch<WizardAction>
 }) {
+  const { t } = useTranslation('rauks')
   return (
     <StepShell
-      eyebrow="Step 3"
-      title="Fill in the passport"
-      intro="A name is required; the rest of the passport is up to you."
+      eyebrow={t('steps.identity.eyebrow')}
+      title={t('steps.identity.title')}
+      intro={t('steps.identity.intro')}
     >
       <div className="mx-auto max-w-xl space-y-6">
         <label className="block">
           <span className="text-sm font-semibold text-stone-200">
-            Name <span className="text-amber-500">*</span>
+            {t('steps.identity.nameLabel')} <span className="text-amber-500">*</span>
           </span>
           <input
             type="text"
             value={draft.name ?? ''}
             onChange={(e) => dispatch({ type: 'setName', name: e.target.value })}
-            placeholder="e.g. Arakel Sarif"
+            placeholder={t('steps.identity.namePlaceholder')}
             autoFocus
             className={inputClass}
           />
         </label>
 
         <label className="block">
-          <span className="text-sm font-semibold text-stone-200">Origin</span>
+          <span className="text-sm font-semibold text-stone-200">
+            {t('steps.identity.originLabel')}
+          </span>
           <input
             type="text"
-            value={draft.imperial ? 'Imperial' : draft.origin ?? ''}
+            value={draft.imperial ? t('steps.identity.imperialValue') : draft.origin ?? ''}
             disabled={draft.imperial}
             onChange={(e) => dispatch({ type: 'setOrigin', origin: e.target.value })}
-            placeholder="City or culture of origin"
+            placeholder={t('steps.identity.originPlaceholder')}
             className={inputClass}
           />
         </label>
@@ -54,49 +58,57 @@ export function IdentityStep({
             onChange={(e) => dispatch({ type: 'setImperial', value: e.target.checked })}
             className="h-4 w-4 rounded border-stone-700 bg-stone-950 accent-amber-600"
           />
-          <span className="text-sm text-stone-300">Imperial origin (no city — the Empire itself)</span>
+          <span className="text-sm text-stone-300">{t('steps.identity.imperialLabel')}</span>
         </label>
 
         <div className="grid gap-6 sm:grid-cols-2">
           <label className="block">
-            <span className="text-sm font-semibold text-stone-200">Sex</span>
+            <span className="text-sm font-semibold text-stone-200">
+              {t('steps.identity.sexLabel')}
+            </span>
             <input
               type="text"
               value={draft.sex ?? ''}
               onChange={(e) => dispatch({ type: 'setSex', sex: e.target.value })}
-              placeholder="Declarative"
+              placeholder={t('steps.identity.sexPlaceholder')}
               className={inputClass}
             />
           </label>
           <label className="block">
-            <span className="text-sm font-semibold text-stone-200">Birth date</span>
+            <span className="text-sm font-semibold text-stone-200">
+              {t('steps.identity.birthDateLabel')}
+            </span>
             <input
               type="text"
               value={draft.birthDate ?? ''}
               onChange={(e) => dispatch({ type: 'setBirthDate', birthDate: e.target.value })}
-              placeholder="Imperial calendar, e.g. 3rd of the 2nd month"
+              placeholder={t('steps.identity.birthDatePlaceholder')}
               className={inputClass}
             />
           </label>
         </div>
 
         <label className="block">
-          <span className="text-sm font-semibold text-stone-200">Rauksorg</span>
+          <span className="text-sm font-semibold text-stone-200">
+            {t('steps.identity.rauksorgLabel')}
+          </span>
           <input
             type="text"
             value={draft.rauksorg ?? ''}
             onChange={(e) => dispatch({ type: 'setRauksorg', rauksorg: e.target.value })}
-            placeholder="The Rauks unit this character belongs to"
+            placeholder={t('steps.identity.rauksorgPlaceholder')}
             className={inputClass}
           />
         </label>
 
         <label className="block">
-          <span className="text-sm font-semibold text-stone-200">Description</span>
+          <span className="text-sm font-semibold text-stone-200">
+            {t('steps.identity.descriptionLabel')}
+          </span>
           <textarea
             value={draft.description ?? ''}
             onChange={(e) => dispatch({ type: 'setDescription', description: e.target.value })}
-            placeholder="A short description, backstory, or notable quirk…"
+            placeholder={t('steps.identity.descriptionPlaceholder')}
             rows={4}
             className={inputClass + ' resize-y'}
           />

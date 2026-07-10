@@ -1,4 +1,5 @@
 import { useEffect, useState, type Dispatch } from 'react'
+import { useTranslation } from 'react-i18next'
 import { buildCharacter, type CharacterDraft } from '../../../rules/character'
 import { rerollTokens } from '../../../rules/traits'
 import { draftToData } from '../../../persistence'
@@ -8,9 +9,6 @@ import { useAuth } from '../../../../auth'
 import { saveCharacter, updateCharacter, listCharacters } from '../../../../api'
 import { LoginModal } from '../../../../shared/LoginModal'
 import { isAtLimit, MAX_CHARACTERS_PER_SYSTEM } from '../../../../app/limits'
-
-const STANDARD_EQUIPMENT =
-  'Tactical harness, bespoke Rauks pressure revolver, passport, wallet, tactical watch, and a notebook.'
 
 export function RecapStep({
   draft,
@@ -25,6 +23,7 @@ export function RecapStep({
   editId?: string
   atLimit: boolean
 }) {
+  const { t } = useTranslation('rauks')
   const character = buildCharacter(draft)
   const { user } = useAuth()
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'error'>('idle')
@@ -74,17 +73,20 @@ export function RecapStep({
   }
 
   const identityRows: [string, string | undefined][] = [
-    ['Origin', character.imperial ? 'Imperial' : character.origin],
-    ['Sex', character.sex],
-    ['Birth date', character.birthDate],
-    ['Rauksorg', character.rauksorg],
+    [
+      t('steps.identity.originLabel'),
+      character.imperial ? t('steps.identity.imperialValue') : character.origin,
+    ],
+    [t('steps.identity.sexLabel'), character.sex],
+    [t('steps.identity.birthDateLabel'), character.birthDate],
+    [t('steps.identity.rauksorgLabel'), character.rauksorg],
   ]
 
   return (
     <StepShell
-      eyebrow="Step 4"
-      title={character.name || 'Your character'}
-      intro={`${character.imperial ? 'Imperial' : character.origin || 'Rauks'} · ${character.skills.length} skill${character.skills.length === 1 ? '' : 's'}`}
+      eyebrow={t('steps.recap.eyebrow')}
+      title={character.name || t('steps.recap.titleFallback')}
+      intro={`${character.imperial ? t('steps.identity.imperialValue') : character.origin || 'Rauks'} · ${t('steps.recap.introSkill', { count: character.skills.length })}`}
     >
       <div className="mx-auto max-w-2xl space-y-6">
         {(character.imageUri || character.description) && (
@@ -128,8 +130,8 @@ export function RecapStep({
                   data-testid="recap-reroll-total"
                   className="mt-2 border-t border-stone-800 pt-2 text-[0.65rem] text-stone-500"
                 >
-                  <span className="font-semibold text-amber-400">{rerollTokens(value)}</span> reroll
-                  {rerollTokens(value) === 1 ? '' : 's'}
+                  <span className="font-semibold text-amber-400">{rerollTokens(value)}</span>{' '}
+                  {t('rerollSuffix', { count: rerollTokens(value) })}
                 </div>
               )}
             </div>
@@ -139,7 +141,7 @@ export function RecapStep({
         {/* Skills */}
         <div className="rounded-xl border border-stone-800 bg-stone-900/60 p-5">
           <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-stone-500">
-            Skills
+            {t('steps.recap.skillsHeading')}
           </h3>
           <ul className="space-y-2">
             {character.skills.map((skill) => (
@@ -158,7 +160,10 @@ export function RecapStep({
 
         {/* Standard equipment */}
         <div className="rounded-xl border border-stone-800 bg-stone-900/40 p-5 text-sm text-stone-400">
-          <p><span className="font-semibold text-stone-300">Standard equipment:</span> {STANDARD_EQUIPMENT}</p>
+          <p>
+            <span className="font-semibold text-stone-300">{t('steps.recap.equipmentLabel')}</span>{' '}
+            {t('steps.recap.standardEquipment')}
+          </p>
         </div>
 
         {/* Actions */}
@@ -170,29 +175,29 @@ export function RecapStep({
             className="rounded-lg bg-amber-600 px-6 py-2.5 font-semibold text-stone-950 transition-colors hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {blocked
-              ? 'Character limit reached'
+              ? t('steps.recap.limitReached')
               : saveStatus === 'saving'
-                ? 'Saving…'
+                ? t('steps.recap.saving')
                 : !user
-                  ? 'Log in to save'
+                  ? t('steps.recap.loginToSave')
                   : editId
-                    ? 'Save changes'
-                    : 'Save character'}
+                    ? t('steps.recap.saveChanges')
+                    : t('steps.recap.saveCharacter')}
           </button>
           <button
             type="button"
             onClick={() => dispatch({ type: 'reset' })}
             className="rounded-lg border border-stone-700 px-6 py-2.5 font-semibold text-stone-200 hover:border-amber-600/50"
           >
-            Start over
+            {t('steps.recap.startOver')}
           </button>
         </div>
         {saveStatus === 'error' && (
-          <p className="text-center text-sm text-red-400">Couldn't save your character. Try again.</p>
+          <p className="text-center text-sm text-red-400">{t('steps.recap.saveError')}</p>
         )}
         {blocked && (
           <p className="text-center text-sm text-red-300">
-            You've reached the limit of {MAX_CHARACTERS_PER_SYSTEM} characters. Delete one before saving a new character.
+            {t('steps.recap.limitMessage', { max: MAX_CHARACTERS_PER_SYSTEM })}
           </p>
         )}
       </div>

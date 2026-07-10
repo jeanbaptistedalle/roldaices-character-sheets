@@ -1,4 +1,5 @@
 import { type Dispatch } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { CharacterDraft } from '../../../rules/character'
 import { skillsByCategory } from '../../../rules/skills'
 import type { WizardAction } from '../wizardReducer'
@@ -11,6 +12,7 @@ export function SkillsStep({
   draft: CharacterDraft
   dispatch: Dispatch<WizardAction>
 }) {
+  const { t } = useTranslation('rauks')
   const budget = draft.traits.competence
   const picked = draft.skillIds.length
   const full = picked >= budget
@@ -18,9 +20,9 @@ export function SkillsStep({
 
   return (
     <StepShell
-      eyebrow="Step 2"
-      title="Choose your skills"
-      intro="Your Competence trait sets how many skills you may pick — no more, no fewer."
+      eyebrow={t('steps.skills.eyebrow')}
+      title={t('steps.skills.title')}
+      intro={t('steps.skills.intro')}
     >
       <div className="mx-auto max-w-2xl space-y-6">
         <div
@@ -32,7 +34,7 @@ export function SkillsStep({
               : 'border-amber-800/60 bg-amber-950/20 text-amber-300',
           )}
         >
-          {picked} / {budget} skills
+          {t('steps.skills.counter', { picked, budget })}
         </div>
 
         {groups.map(({ category, skills }) => (
@@ -63,7 +65,9 @@ export function SkillsStep({
                     <span className="font-semibold text-stone-100">{skill.name}</span>
                     <span className="mt-1 text-sm text-stone-400">{skill.description}</span>
                     {skill.gear && (
-                      <span className="mt-2 text-xs italic text-amber-300/80">Gear: {skill.gear}</span>
+                      <span className="mt-2 text-xs italic text-amber-300/80">
+                        {t('steps.skills.gear', { gear: skill.gear })}
+                      </span>
                     )}
                   </button>
                 )

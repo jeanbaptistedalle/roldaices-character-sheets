@@ -9,32 +9,29 @@ import { RecapStep } from './steps/RecapStep'
 export const rauksWizard: WizardConfig<CharacterDraft, WizardAction> = {
   emptyDraft,
   draftReducer,
-  // Rauks wizard chrome isn't localized yet (Task 7): labels stay literal
-  // English strings. i18next echoes back an unknown key under the 'rauks'
-  // namespace, so they render unchanged.
   i18nNs: 'rauks',
   steps: [
     {
       key: 'traits',
-      label: 'Traits',
+      label: 'steps.traits.label',
       canAdvance: (d) => canAdvance(d, 'traits'),
       render: ({ draft, dispatch }) => <TraitsStep draft={draft} dispatch={dispatch} />,
     },
     {
       key: 'skills',
-      label: 'Skills',
+      label: 'steps.skills.label',
       canAdvance: (d) => canAdvance(d, 'skills'),
       render: ({ draft, dispatch }) => <SkillsStep draft={draft} dispatch={dispatch} />,
     },
     {
       key: 'identity',
-      label: 'Identity',
+      label: 'steps.identity.label',
       canAdvance: (d) => canAdvance(d, 'identity'),
       render: ({ draft, dispatch }) => <IdentityStep draft={draft} dispatch={dispatch} />,
     },
     {
       key: 'recap',
-      label: 'Recap',
+      label: 'steps.recap.label',
       terminal: true,
       canAdvance: () => true,
       render: ({ draft, dispatch, onSaved, editId, atLimit }) => (

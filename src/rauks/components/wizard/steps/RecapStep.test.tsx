@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
+import { renderWithI18n } from '../../../../test/i18n'
 import { RecapStep } from './RecapStep'
 import { emptyDraft, type CharacterDraft } from '../../../rules/character'
 
@@ -24,7 +25,7 @@ describe('RecapStep', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('renders the built character name, traits, and chosen skills', () => {
-    render(
+    renderWithI18n(
       <RecapStep draft={completeDraft()} dispatch={vi.fn()} onSaved={vi.fn()} atLimit={false} />,
     )
     expect(screen.getByText('Arakel')).toBeInTheDocument()
@@ -33,14 +34,14 @@ describe('RecapStep', () => {
   })
 
   it('prompts to log in to save when logged out', () => {
-    render(
+    renderWithI18n(
       <RecapStep draft={completeDraft()} dispatch={vi.fn()} onSaved={vi.fn()} atLimit={false} />,
     )
     expect(screen.getByRole('button', { name: /Log in to save/ })).toBeInTheDocument()
   })
 
   it('shows the calculated reroll total under the rerolls trait (1 + 2 × value)', () => {
-    render(
+    renderWithI18n(
       <RecapStep draft={completeDraft()} dispatch={vi.fn()} onSaved={vi.fn()} atLimit={false} />,
     )
     // rerolls = 2 => 1 + 2 × 2 = 5
@@ -48,7 +49,7 @@ describe('RecapStep', () => {
   })
 
   it('labels the competence trait "Skill" (not "Competence")', () => {
-    render(
+    renderWithI18n(
       <RecapStep draft={completeDraft()} dispatch={vi.fn()} onSaved={vi.fn()} atLimit={false} />,
     )
     expect(screen.getByText('Skill')).toBeInTheDocument()
@@ -56,7 +57,7 @@ describe('RecapStep', () => {
   })
 
   it('does not mention Karma', () => {
-    render(
+    renderWithI18n(
       <RecapStep draft={completeDraft()} dispatch={vi.fn()} onSaved={vi.fn()} atLimit={false} />,
     )
     expect(screen.queryByText(/Karma/)).not.toBeInTheDocument()

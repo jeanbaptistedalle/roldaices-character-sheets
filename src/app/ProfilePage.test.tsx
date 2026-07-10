@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import type { User } from '@supabase/supabase-js'
+import { renderWithI18n } from '../test/i18n'
 import { ProfilePage } from './ProfilePage'
 
 vi.mock('../auth', () => ({ useAuth: vi.fn() }))
@@ -19,7 +20,7 @@ const USER = {
 } as unknown as User
 
 function renderPage() {
-  return render(
+  return renderWithI18n(
     <MemoryRouter>
       <ProfilePage />
     </MemoryRouter>,

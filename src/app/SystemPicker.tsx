@@ -1,18 +1,19 @@
+import { useTranslation } from 'react-i18next'
 import { SYSTEMS } from './registry'
 
 export function SystemPicker({ onSelect }: { onSelect: (id: string) => void }) {
+  const { t } = useTranslation('common')
   return (
     <div className="flex-1 bg-stone-950 text-stone-100">
       <main className="mx-auto flex max-w-3xl flex-col items-center px-6 py-20 text-center">
         <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-amber-500/80">
-          Tabletop RPGs
+          {t('picker.eyebrow')}
         </p>
         <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
-          Roldaice's character sheets
+          {t('brand')}
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-stone-400">
-          Build characters for tabletop roleplaying games. Pick a system to
-          begin.
+          {t('picker.subtitle')}
         </p>
 
         <section className="mt-14 grid w-full grid-cols-1 gap-4 sm:grid-cols-2">

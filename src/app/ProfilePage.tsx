@@ -1,24 +1,18 @@
 import { useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../auth'
 import {
   getCurrentProfile,
   countCharactersBySystem,
   type ProfileRecord,
-  type UserRole,
 } from '../api'
 import { SYSTEMS } from './registry'
 import { MAX_CHARACTERS_PER_SYSTEM } from './limits'
 import { displayNameOf, avatarUrlOf } from './userDisplay'
 
-const ROLE_LABELS: Record<UserRole, string> = {
-  admin: 'Admin',
-  moderator: 'Moderator',
-  user: 'Member',
-  guest: 'Guest',
-}
-
 export function ProfilePage() {
+  const { t } = useTranslation('common')
   const { user, loading: authLoading } = useAuth()
   const [profile, setProfile] = useState<ProfileRecord | null>(null)
   const [counts, setCounts] = useState<Record<string, number>>({})
@@ -37,7 +31,7 @@ export function ProfilePage() {
         setCounts(c)
       })
       .catch((e) => {
-        if (!cancelled) setError(e instanceof Error ? e.message : 'Failed to load profile.')
+        if (!cancelled) setError(e instanceof Error ? e.message : t('profile.loadError'))
       })
       .finally(() => {
         if (!cancelled) setLoading(false)
@@ -54,12 +48,12 @@ export function ProfilePage() {
 
   const displayName = displayNameOf(user)
   const avatarUrl = avatarUrlOf(user)
-  const roleLabel = profile ? ROLE_LABELS[profile.role] : null
+  const roleLabel = profile ? t(`profile.roles.${profile.role}`) : null
 
   return (
     <main className="mx-auto w-full max-w-2xl flex-1 px-6 py-12">
       <Link to="/" className="text-sm text-stone-400 transition-colors hover:text-stone-200">
-        ← Back
+        {t('profile.back')}
       </Link>
 
       <section className="mt-6 flex items-center gap-4">
@@ -86,17 +80,16 @@ export function ProfilePage() {
 
       <section className="mt-10">
         <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-500/80">
-          Characters
+          {t('profile.charactersHeading')}
         </h2>
         <p className="mt-1 text-xs text-stone-500">
-          You can create up to {MAX_CHARACTERS_PER_SYSTEM} characters per game. Select a
-          game to open it.
+          {t('profile.limitNote', { max: MAX_CHARACTERS_PER_SYSTEM })}
         </p>
 
         {error ? (
           <p className="mt-4 text-sm text-red-400">{error}</p>
         ) : loading ? (
-          <p className="mt-4 text-sm text-stone-400">Loading…</p>
+          <p className="mt-4 text-sm text-stone-400">{t('profile.loading')}</p>
         ) : (
           <ul className="mt-4 space-y-2">
             {SYSTEMS.map((system) => {

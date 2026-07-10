@@ -1,23 +1,13 @@
 import { useEffect, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
+import { useTranslation } from 'react-i18next'
 
 /**
  * Generic confirmation modal. Presentational and dumb: the parent owns all
  * async state (`busy`, `error`) and lifecycle. Mirrors LoginModal conventions —
  * portal to body, close on Escape, close on overlay click, stone/amber theme.
  */
-export function ConfirmDialog({
-  title,
-  message,
-  confirmLabel = 'Confirm',
-  cancelLabel = 'Cancel',
-  busyLabel = 'Working…',
-  destructive = false,
-  busy = false,
-  error = null,
-  onConfirm,
-  onCancel,
-}: {
+export function ConfirmDialog(props: {
   title: string
   message: ReactNode
   confirmLabel?: string
@@ -29,6 +19,19 @@ export function ConfirmDialog({
   onConfirm: () => void
   onCancel: () => void
 }) {
+  const { t } = useTranslation('common')
+  const {
+    title,
+    message,
+    confirmLabel = t('confirm.confirm'),
+    cancelLabel = t('confirm.cancel'),
+    busyLabel = t('confirm.busy'),
+    destructive = false,
+    busy = false,
+    error = null,
+    onConfirm,
+    onCancel,
+  } = props
   // Close on Escape (ignored while busy).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && !busy && onCancel()

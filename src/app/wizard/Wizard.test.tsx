@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { screen, fireEvent } from '@testing-library/react'
+import { renderWithI18n } from '../../test/i18n'
 import { Wizard, type WizardProps } from './Wizard'
 import type { WizardConfig } from './WizardState'
 
@@ -36,7 +37,7 @@ const config: WizardConfig<Draft, Action> = {
 }
 
 function renderWizard(overrides: Partial<WizardProps<Draft, Action>> = {}) {
-  return render(
+  return renderWithI18n(
     <Wizard
       config={config}
       onExit={vi.fn()}

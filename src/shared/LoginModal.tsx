@@ -1,8 +1,10 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../auth'
 
 export function LoginModal({ onClose }: { onClose: () => void }) {
+  const { t } = useTranslation('common')
   const { signInWithDiscord, signInWithEmail } = useAuth()
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>(
@@ -25,7 +27,7 @@ export function LoginModal({ onClose }: { onClose: () => void }) {
     const { error } = (await signInWithEmail(email)) as { error: unknown }
     if (error) {
       setStatus('error')
-      setError("Couldn't send the link. Check the address and try again.")
+      setError(t('login.errorEmail'))
       return
     }
     setStatus('sent')
@@ -36,7 +38,7 @@ export function LoginModal({ onClose }: { onClose: () => void }) {
     const { error } = (await signInWithDiscord()) as { error: unknown }
     if (error) {
       setStatus('error')
-      setError("Couldn't start Discord sign-in. Try again.")
+      setError(t('login.errorDiscord'))
     }
     // On success the browser redirects away; nothing more to do here.
   }
@@ -52,14 +54,14 @@ export function LoginModal({ onClose }: { onClose: () => void }) {
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
-        aria-label="Log in"
+        aria-label={t('login.title')}
       >
         <div className="mb-6 flex items-start justify-between">
-          <h2 className="text-xl font-bold text-stone-100">Log in</h2>
+          <h2 className="text-xl font-bold text-stone-100">{t('login.title')}</h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t('login.close')}
             className="text-stone-500 transition-colors hover:text-stone-200"
           >
             ✕
@@ -68,9 +70,9 @@ export function LoginModal({ onClose }: { onClose: () => void }) {
 
         {status === 'sent' ? (
           <p className="text-sm leading-relaxed text-stone-300">
-            Check your inbox — we sent a magic link to{' '}
-            <span className="font-semibold text-amber-400">{email}</span>. Open
-            it on this device to finish logging in.
+            {t('login.sentPrefix')}
+            <span className="font-semibold text-amber-400">{email}</span>
+            {t('login.sentSuffix')}
           </p>
         ) : (
           <>
@@ -79,12 +81,12 @@ export function LoginModal({ onClose }: { onClose: () => void }) {
               onClick={onDiscord}
               className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#5865F2] px-4 py-2.5 font-semibold text-white transition-opacity hover:opacity-90"
             >
-              Continue with Discord
+              {t('login.discord')}
             </button>
 
             <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-widest text-stone-600">
               <span className="h-px flex-1 bg-stone-800" />
-              or
+              {t('login.or')}
               <span className="h-px flex-1 bg-stone-800" />
             </div>
 
@@ -94,7 +96,7 @@ export function LoginModal({ onClose }: { onClose: () => void }) {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder={t('login.emailPlaceholder')}
                 className="w-full rounded-lg border border-stone-700 bg-stone-950 px-3 py-2.5 text-stone-100 placeholder-stone-600 outline-none focus:border-amber-600/60"
               />
               <button
@@ -102,7 +104,7 @@ export function LoginModal({ onClose }: { onClose: () => void }) {
                 disabled={status === 'sending'}
                 className="w-full rounded-lg border border-amber-600/50 bg-amber-600/10 px-4 py-2.5 font-semibold text-amber-300 transition-colors hover:bg-amber-600/20 disabled:opacity-50"
               >
-                {status === 'sending' ? 'Sending…' : 'Send an invitation link'}
+                {status === 'sending' ? t('login.sending') : t('login.submit')}
               </button>
             </form>
           </>

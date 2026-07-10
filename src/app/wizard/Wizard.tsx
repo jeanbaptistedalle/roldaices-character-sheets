@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useReducer } from 'react'
+import { useTranslation } from 'react-i18next'
 import { isAtLimit, MAX_CHARACTERS_PER_SYSTEM } from '../limits'
 import { ProgressSteps, cn } from './ui'
 import {
@@ -22,6 +23,7 @@ export function Wizard<Draft, Action>({
   editing,
   characterCount,
 }: WizardProps<Draft, Action>) {
+  const { t } = useTranslation('common')
   const reducer = useMemo(() => makeWizardReducer(config), [config])
   const init = useMemo(() => makeInitWizardState(config.emptyDraft), [config])
   // Edit mode opens on the terminal (recap) step. Key off the `terminal` flag
@@ -51,10 +53,10 @@ export function Wizard<Draft, Action>({
             onClick={onExit}
             className="text-sm text-stone-500 transition-colors hover:text-amber-400"
           >
-            ← Home
+            {t('wizard.home')}
           </button>
           <span className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-500/70">
-            Character Creation
+            {t('wizard.heading')}
           </span>
           <span className="w-12" />
         </div>
@@ -70,8 +72,7 @@ export function Wizard<Draft, Action>({
             role="alert"
             className="mt-6 rounded-lg border border-red-800/60 bg-red-950/40 px-4 py-3 text-sm text-red-200"
           >
-            You've reached the limit of {MAX_CHARACTERS_PER_SYSTEM} characters. You won't
-            be able to save this one — delete an existing character first.
+            {t('wizard.atLimit', { max: MAX_CHARACTERS_PER_SYSTEM })}
           </div>
         )}
 
@@ -90,7 +91,7 @@ export function Wizard<Draft, Action>({
                   : 'border-stone-700 text-stone-200 hover:border-amber-600/50',
               )}
             >
-              Back
+              {t('wizard.back')}
             </button>
             <button
               type="button"
@@ -103,7 +104,7 @@ export function Wizard<Draft, Action>({
                   : 'cursor-not-allowed bg-stone-800 text-stone-600',
               )}
             >
-              Next
+              {t('wizard.next')}
             </button>
           </div>
         )}
@@ -114,7 +115,7 @@ export function Wizard<Draft, Action>({
               onClick={() => dispatch({ type: 'back' })}
               className="rounded-lg border border-stone-700 px-6 py-2.5 font-semibold text-stone-200 hover:border-amber-600/50"
             >
-              Back
+              {t('wizard.back')}
             </button>
           </div>
         )}

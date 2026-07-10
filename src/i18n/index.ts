@@ -2,11 +2,13 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { SUPPORTED_LNGS, LANG_STORAGE_KEY } from './config'
+import { appEn } from '../app/i18n/en'
+import { appFr } from '../app/i18n/fr'
 
 // Per-slice bundles are registered here as they are built (Tasks 3, 6, 8).
 const resources = {
-  en: {} as Record<string, Record<string, unknown>>,
-  fr: {} as Record<string, Record<string, unknown>>,
+  en: { common: appEn },
+  fr: { common: appFr },
 }
 
 i18n
@@ -15,6 +17,7 @@ i18n
   .init({
     resources,
     fallbackLng: 'en',
+    defaultNS: 'common',
     supportedLngs: SUPPORTED_LNGS as unknown as string[],
     nonExplicitSupportedLngs: true,
     interpolation: { escapeValue: false },

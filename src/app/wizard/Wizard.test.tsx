@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Wizard } from './Wizard'
+import { Wizard, type WizardProps } from './Wizard'
 import type { WizardConfig } from './WizardState'
 
 interface Draft {
@@ -35,7 +35,7 @@ const config: WizardConfig<Draft, Action> = {
   ],
 }
 
-function renderWizard(overrides: Partial<React.ComponentProps<typeof Wizard>> = {}) {
+function renderWizard(overrides: Partial<WizardProps<Draft, Action>> = {}) {
   return render(
     <Wizard
       config={config}

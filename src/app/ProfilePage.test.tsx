@@ -55,8 +55,9 @@ describe('ProfilePage', () => {
   it('shows 0 / 5 in the muted style for systems with no characters', async () => {
     vi.mocked(countCharactersBySystem).mockResolvedValue({})
     renderPage()
-    await waitFor(() => expect(screen.getByText('0 / 5')).toBeInTheDocument())
-    const countEl = screen.getByText('0 / 5')
+    // Every registered system shows "0 / 5" when the user has no characters.
+    await waitFor(() => expect(screen.getAllByText('0 / 5').length).toBeGreaterThan(0))
+    const countEl = screen.getAllByText('0 / 5')[0]
     expect(countEl.className).not.toContain('amber')
     expect(countEl.className).toContain('stone-400')
   })

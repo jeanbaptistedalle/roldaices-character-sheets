@@ -24,7 +24,10 @@ export function Wizard<Draft, Action>({
 }: WizardProps<Draft, Action>) {
   const reducer = useMemo(() => makeWizardReducer(config), [config])
   const init = useMemo(() => makeInitWizardState(config.emptyDraft), [config])
-  const recapIndex = config.steps.length - 1
+  // Edit mode opens on the terminal (recap) step. Key off the `terminal` flag
+  // rather than position so a config with a non-last terminal step still works.
+  const terminalIndex = config.steps.findIndex((s) => s.terminal)
+  const recapIndex = terminalIndex === -1 ? config.steps.length - 1 : terminalIndex
   const [state, dispatch] = useReducer(reducer, undefined, () =>
     editing ? init(editing.draft, recapIndex) : init(),
   )

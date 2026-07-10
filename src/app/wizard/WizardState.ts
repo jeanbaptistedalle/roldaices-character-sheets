@@ -34,6 +34,12 @@ export interface WizardStep<Draft, Action> {
 
 export interface WizardConfig<Draft, Action> {
   emptyDraft: () => Draft
+  /**
+   * Reduces the draft for a system's own actions. The generic reducer owns
+   * navigation, so `'next'`, `'back'`, `'goto'`, and `'reset'` are reserved
+   * NavAction `type` values — a system's Action union must not reuse them, or
+   * those actions would be routed to navigation and never reach draftReducer.
+   */
   draftReducer: (draft: Draft, action: Action) => Draft
   steps: WizardStep<Draft, Action>[]
 }

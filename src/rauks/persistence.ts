@@ -24,8 +24,9 @@ export function draftToData(draft: CharacterDraft): RauksData {
     traits: draft.traits,
     skillIds: draft.skillIds,
   }
+  // Imperial origin has no city; don't persist a stale origin alongside it.
   if (draft.imperial) data.imperial = true
-  if (draft.origin?.trim()) data.origin = draft.origin.trim()
+  else if (draft.origin?.trim()) data.origin = draft.origin.trim()
   if (draft.sex?.trim()) data.sex = draft.sex.trim()
   if (draft.birthDate?.trim()) data.birthDate = draft.birthDate.trim()
   if (draft.rauksorg?.trim()) data.rauksorg = draft.rauksorg.trim()

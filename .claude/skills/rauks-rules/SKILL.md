@@ -34,6 +34,9 @@ The character sheet has the form of a **passeport**. Building a character:
    Rauksorg the character is attached to. All narrative, no stats. See below.
 2. **Characteristics** — distribute **18 points** across the **6
    characteristics**, each rated **2–4** (2 = normal, 3 = good, 4 = excellent).
+   *(App implementation note: the character-creation app permits **one** single
+   characteristic to drop to **1** for a specialist build; at most one may be 1.
+   The rest stay 2–4 and the total is still 18.)*
 3. **Competencies** — choose a number of competencies **equal to the
    `Compétences` characteristic value**. Each is a named special ability from
    the list below.
@@ -271,12 +274,16 @@ used to roll them.
 
 ## Modeling notes for the app
 
-- **Characteristics** → 6 fields, each an integer `2..4`, summing to `18`.
-  Split them into two groups since two are meta-budgets:
+- **Characteristics** → 6 fields, each an integer summing to `18`. Split them
+  into two groups since two are meta-budgets:
   - **Roll characteristics**: `physique | perception | mental | charisme`.
   - **Budget characteristics**: `competences` (= max competencies held),
     `relances` (= reroll count / recovery).
-  Enforce the `2..4` range and the 18-point total at creation.
+  Range is `1..4` with the source book's `2` as the normal floor: the app lets
+  **at most one** characteristic drop to `1` (specialist build); enforce the
+  range, the at-most-one-at-1 rule, and the 18-point total at creation. (The
+  implemented English identifiers are `physical | perception | mental |
+  charisma | competence | rerolls`.)
 - **Competency** → id + `characteristic` category (`Physique | Perception |
   Mental | Social | Karma`) + description + optional bundled gear. Keep the list
   **data-driven**. A character holds up to `competences` of them. Note the roll
@@ -296,8 +303,8 @@ used to roll them.
 ## Still worth pulling from the source when needed (not captured here)
 
 - Exact wound/characteristic-loss bookkeeping and secourisme interplay.
-- Whether `Compétences`/`Relances` share the same 2–4 range as the rolling
-  four (the text states all six are 2–4 with 18 points — assume yes) and any
-  edge cases in relance recovery rates per value.
+- Edge cases in relance recovery rates per `Relances` value (the app treats all
+  six characteristics with the same range/budget rules; recovery detail is not
+  yet modeled).
 - Detailed range/movement rules and weapon effects table.
 - Any per-city origin content the GM introduces per scenario.

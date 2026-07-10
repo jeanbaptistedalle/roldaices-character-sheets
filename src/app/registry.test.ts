@@ -9,7 +9,7 @@ describe('SYSTEMS registry', () => {
   it('includes the Rauks system with a stable id', () => {
     const rauks = SYSTEMS.find((s) => s.id === 'rauks')
     expect(rauks).toBeDefined()
-    expect(rauks?.name).toBe('Rauks')
+    expect(rauks?.i18nNamespace).toBe('rauks')
     expect(typeof rauks?.Entry).toBe('function')
   })
 
@@ -18,12 +18,15 @@ describe('SYSTEMS registry', () => {
     expect(new Set(ids).size).toBe(ids.length)
   })
 
-  it('every system has a name, publisher, tagline, and Entry', () => {
+  it('every system has an id, i18nNamespace, and Entry', () => {
     for (const s of SYSTEMS) {
-      expect(s.name).toBeTruthy()
-      expect(s.publisher).toBeTruthy()
-      expect(s.tagline).toBeTruthy()
+      expect(s.id).toBeTruthy()
+      expect(s.i18nNamespace).toBeTruthy()
       expect(s.Entry).toBeTypeOf('function')
     }
+  })
+
+  it('exposes the expected i18n namespaces in order', () => {
+    expect(SYSTEMS.map((s) => s.i18nNamespace)).toEqual(['mazes', 'rauks'])
   })
 })

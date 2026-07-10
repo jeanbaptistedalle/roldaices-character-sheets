@@ -4,11 +4,15 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 import { SUPPORTED_LNGS, LANG_STORAGE_KEY } from './config'
 import { appEn } from '../app/i18n/en'
 import { appFr } from '../app/i18n/fr'
+import { mazesEn } from '../mazes/i18n/en'
+import { mazesFr } from '../mazes/i18n/fr'
+import { rauksEn } from '../rauks/i18n/en'
+import { rauksFr } from '../rauks/i18n/fr'
 
 // Per-slice bundles are registered here as they are built (Tasks 3, 6, 8).
 const resources = {
-  en: { common: appEn },
-  fr: { common: appFr },
+  en: { common: appEn, mazes: mazesEn, rauks: rauksEn },
+  fr: { common: appFr, mazes: mazesFr, rauks: rauksFr },
 }
 
 i18n

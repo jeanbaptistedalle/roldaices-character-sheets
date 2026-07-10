@@ -8,11 +8,12 @@ import {
   type ProfileRecord,
 } from '../api'
 import { SYSTEMS } from './registry'
+import { getSystemT } from './system'
 import { MAX_CHARACTERS_PER_SYSTEM } from './limits'
 import { displayNameOf, avatarUrlOf } from './userDisplay'
 
 export function ProfilePage() {
-  const { t } = useTranslation('common')
+  const { t, i18n } = useTranslation('common')
   const { user, loading: authLoading } = useAuth()
   const [profile, setProfile] = useState<ProfileRecord | null>(null)
   const [counts, setCounts] = useState<Record<string, number>>({})
@@ -95,13 +96,14 @@ export function ProfilePage() {
             {SYSTEMS.map((system) => {
               const count = counts[system.id] ?? 0
               const full = count >= MAX_CHARACTERS_PER_SYSTEM
+              const tSystem = getSystemT(i18n, system.i18nNamespace)
               return (
                 <li key={system.id}>
                   <Link
                     to={`/${system.id}`}
                     className="flex items-center justify-between rounded-lg border border-stone-800 bg-stone-900/50 px-4 py-3 transition-colors hover:border-stone-600 hover:bg-stone-900"
                   >
-                    <span className="text-stone-200">{system.name}</span>
+                    <span className="text-stone-200">{tSystem('name')}</span>
                     <span
                       className={
                         full

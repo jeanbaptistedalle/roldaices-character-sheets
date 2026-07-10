@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/roldaices-character-sheets/',
   plugins: [react(), tailwindcss()],
   test: {
     environment: 'jsdom',

@@ -1,4 +1,5 @@
 import type { Dispatch } from 'react'
+import { useTranslation } from 'react-i18next'
 import { getClass, type ClassEdge } from '../../../rules/classes'
 import { getEdge, DOMAINS, FRIENDS_PLACES } from '../../../rules/edges'
 import type { CharacterDraft, EdgeSlot } from '../../../rules/character'
@@ -12,14 +13,15 @@ export function EdgesStep({
   draft: CharacterDraft
   dispatch: Dispatch<WizardAction>
 }) {
+  const { t } = useTranslation('mazes')
   if (!draft.classId) return null
   const cls = getClass(draft.classId)
 
   return (
     <StepShell
-      eyebrow="Step 4"
-      title="Resolve your edges"
-      intro={`Answer ${cls.name}'s questions to lock in your three edges.`}
+      eyebrow={t('steps.edges.eyebrow')}
+      title={t('steps.edges.title')}
+      intro={t('steps.edges.intro', { className: cls.name })}
     >
       <div className="mx-auto max-w-xl space-y-6">
         {/* Always edge (locked in) */}
@@ -80,6 +82,7 @@ function SubChoice({
   draft: CharacterDraft
   dispatch: Dispatch<WizardAction>
 }) {
+  const { t } = useTranslation('mazes')
   const edge = getEdge(classEdge.edgeId)
   const kind = edge.subChoice
   if (!kind) return null
@@ -88,7 +91,7 @@ function SubChoice({
   if (classEdge.presetSubChoice) {
     return (
       <p className="mt-3 text-sm text-stone-400">
-        <span className="text-stone-500">Set:</span>{' '}
+        <span className="text-stone-500">{t('steps.edges.setLabel')}</span>{' '}
         <span className="text-amber-300">{classEdge.presetSubChoice}</span>
       </p>
     )
@@ -100,12 +103,12 @@ function SubChoice({
   if (kind === 'name') {
     return (
       <label className="mt-3 block text-sm">
-        <span className="text-stone-500">Name it (optional):</span>
+        <span className="text-stone-500">{t('steps.edges.nameOptional')}</span>
         <input
           type="text"
           value={value ?? ''}
           onChange={(e) => set(e.target.value)}
-          placeholder={`Name your ${edge.name.toLowerCase()}`}
+          placeholder={t('steps.edges.namePlaceholder', { edge: edge.name.toLowerCase() })}
           className="mt-1 w-full rounded-lg border border-stone-700 bg-stone-950 px-3 py-2 text-stone-100 placeholder:text-stone-600 focus:border-amber-500 focus:outline-none"
         />
       </label>
@@ -116,8 +119,8 @@ function SubChoice({
   return (
     <div className="mt-3">
       <p className="text-sm text-stone-500">
-        {kind === 'place' ? 'Choose a place:' : 'Choose a domain:'}
-        <span className="ml-1 text-amber-500/80">(required)</span>
+        {kind === 'place' ? t('steps.edges.choosePlace') : t('steps.edges.chooseDomain')}
+        <span className="ml-1 text-amber-500/80">{t('steps.edges.required')}</span>
       </p>
       <div className="mt-2 flex flex-wrap gap-2">
         {choices.map((choice) => (
@@ -138,12 +141,12 @@ function SubChoice({
       </div>
       {kind === 'school-or-domain' && (
         <label className="mt-2 block text-xs text-stone-500">
-          …or name a school instead:
+          {t('steps.edges.orNameSchool')}
           <input
             type="text"
             value={value && !DOMAINS.includes(value as (typeof DOMAINS)[number]) ? value : ''}
             onChange={(e) => set(e.target.value)}
-            placeholder="e.g. Necromancy"
+            placeholder={t('steps.edges.schoolPlaceholder')}
             className="mt-1 w-full rounded-lg border border-stone-700 bg-stone-950 px-3 py-2 text-stone-100 placeholder:text-stone-600 focus:border-amber-500 focus:outline-none"
           />
         </label>

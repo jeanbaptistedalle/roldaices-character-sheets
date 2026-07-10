@@ -9,6 +9,10 @@ import { RecapStep } from './steps/RecapStep'
 export const rauksWizard: WizardConfig<CharacterDraft, WizardAction> = {
   emptyDraft,
   draftReducer,
+  // Rauks wizard chrome isn't localized yet (Task 7): labels stay literal
+  // English strings. i18next echoes back an unknown key under the 'rauks'
+  // namespace, so they render unchanged.
+  i18nNs: 'rauks',
   steps: [
     {
       key: 'traits',

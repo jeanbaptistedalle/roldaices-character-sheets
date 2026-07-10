@@ -13,6 +13,9 @@ const config: WizardConfig<Draft, Action> = {
   emptyDraft: () => ({ name: '' }),
   draftReducer: (draft, action) =>
     action.type === 'setName' ? { ...draft, name: action.name } : draft,
+  // Not a real namespace's keys — i18next echoes back the literal labels
+  // below unchanged, which is what this test asserts on.
+  i18nNs: 'mazes',
   steps: [
     {
       key: 'name',

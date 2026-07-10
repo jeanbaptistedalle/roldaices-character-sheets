@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useReducer } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isAtLimit, MAX_CHARACTERS_PER_SYSTEM } from '../limits'
+import { getSystemT } from '../system'
 import { ProgressSteps, cn } from './ui'
 import {
   makeInitWizardState,
@@ -23,7 +24,8 @@ export function Wizard<Draft, Action>({
   editing,
   characterCount,
 }: WizardProps<Draft, Action>) {
-  const { t } = useTranslation('common')
+  const { t, i18n } = useTranslation('common')
+  const stepT = getSystemT(i18n, config.i18nNs)
   const reducer = useMemo(() => makeWizardReducer(config), [config])
   const init = useMemo(() => makeInitWizardState(config.emptyDraft), [config])
   // Edit mode opens on the terminal (recap) step. Key off the `terminal` flag
@@ -62,7 +64,14 @@ export function Wizard<Draft, Action>({
         </div>
 
         <ProgressSteps
-          steps={config.steps}
+          steps={config.steps.map((s) => ({
+            key: s.key,
+            // `label` is a plain `string` (it may be a real translation key,
+            // e.g. for Mazes, or a literal fallback label a system hasn't
+            // localized yet, e.g. Rauks) — too dynamic for the strictly
+            // key-typed `stepT`, hence the escape hatch here.
+            label: stepT(s.label as never),
+          }))}
           current={state.stepIndex}
           onGoto={(stepIndex) => dispatch({ type: 'goto', stepIndex })}
         />

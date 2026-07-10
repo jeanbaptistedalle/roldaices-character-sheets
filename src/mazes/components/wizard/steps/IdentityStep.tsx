@@ -1,4 +1,5 @@
 import { type Dispatch } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PortraitPicker } from '../../../../shared/portraits'
 import type { CharacterDraft } from '../../../rules/character'
 import type { WizardAction } from '../wizardReducer'
@@ -11,23 +12,24 @@ export function IdentityStep({
   draft: CharacterDraft
   dispatch: Dispatch<WizardAction>
 }) {
+  const { t } = useTranslation('mazes')
   return (
     <StepShell
-      eyebrow="Step 5"
-      title="Name your character"
-      intro="Give your character an identity. A name is required; the rest is up to you."
+      eyebrow={t('steps.identity.eyebrow')}
+      title={t('steps.identity.title')}
+      intro={t('steps.identity.intro')}
     >
       <div className="mx-auto max-w-xl space-y-6">
         {/* Name */}
         <label className="block">
           <span className="text-sm font-semibold text-stone-200">
-            Name <span className="text-amber-500">*</span>
+            {t('steps.identity.nameLabel')} <span className="text-amber-500">*</span>
           </span>
           <input
             type="text"
             value={draft.name ?? ''}
             onChange={(e) => dispatch({ type: 'setName', name: e.target.value })}
-            placeholder="e.g. Ironwolf"
+            placeholder={t('steps.identity.namePlaceholder')}
             autoFocus
             className="mt-1 w-full rounded-lg border border-stone-700 bg-stone-950 px-3 py-2 text-stone-100 placeholder:text-stone-600 focus:border-amber-500 focus:outline-none"
           />
@@ -35,11 +37,13 @@ export function IdentityStep({
 
         {/* Description */}
         <label className="block">
-          <span className="text-sm font-semibold text-stone-200">Description</span>
+          <span className="text-sm font-semibold text-stone-200">
+            {t('steps.identity.descriptionLabel')}
+          </span>
           <textarea
             value={draft.description ?? ''}
             onChange={(e) => dispatch({ type: 'setDescription', description: e.target.value })}
-            placeholder="A short description, backstory, or notable quirk…"
+            placeholder={t('steps.identity.descriptionPlaceholder')}
             rows={4}
             className="mt-1 w-full resize-y rounded-lg border border-stone-700 bg-stone-950 px-3 py-2 text-stone-100 placeholder:text-stone-600 focus:border-amber-500 focus:outline-none"
           />

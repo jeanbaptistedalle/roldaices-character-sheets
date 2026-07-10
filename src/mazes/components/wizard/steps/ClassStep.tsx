@@ -1,4 +1,5 @@
 import type { Dispatch } from 'react'
+import { useTranslation } from 'react-i18next'
 import { classesByAspect } from '../../../rules/classes'
 import { getEdge } from '../../../rules/edges'
 import type { CharacterDraft } from '../../../rules/character'
@@ -12,14 +13,15 @@ export function ClassStep({
   draft: CharacterDraft
   dispatch: Dispatch<WizardAction>
 }) {
+  const { t } = useTranslation('mazes')
   if (!draft.aspect) return null
   const classes = classesByAspect(draft.aspect)
 
   return (
     <StepShell
-      eyebrow="Step 3"
-      title="Choose your class"
-      intro={`${draft.aspect} classes. Your class is a descriptive name and grants your three edges.`}
+      eyebrow={t('steps.class.eyebrow')}
+      title={t('steps.class.title')}
+      intro={t('steps.class.intro', { aspect: draft.aspect })}
     >
       <div className="grid gap-4 sm:grid-cols-2">
         {classes.map((cls) => (

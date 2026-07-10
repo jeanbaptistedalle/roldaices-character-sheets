@@ -1,4 +1,5 @@
 import type { Dispatch } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ASPECTS } from '../../../rules/aspects'
 import type { CharacterDraft } from '../../../rules/character'
 import type { WizardAction } from '../wizardReducer'
@@ -11,11 +12,12 @@ export function AspectStep({
   draft: CharacterDraft
   dispatch: Dispatch<WizardAction>
 }) {
+  const { t } = useTranslation('mazes')
   return (
     <StepShell
-      eyebrow="Step 2"
-      title="Choose your aspect"
-      intro="How do you solve your problems? Your aspect shapes your gear and the classes open to you."
+      eyebrow={t('steps.aspect.eyebrow')}
+      title={t('steps.aspect.title')}
+      intro={t('steps.aspect.intro')}
     >
       <div className="grid gap-4 sm:grid-cols-3">
         {ASPECTS.map((aspect) => (

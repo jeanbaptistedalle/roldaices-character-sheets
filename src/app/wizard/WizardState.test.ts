@@ -15,6 +15,7 @@ const config: WizardConfig<Draft, Action> = {
   emptyDraft: () => ({ name: '' }),
   draftReducer: (draft, action) =>
     action.type === 'setName' ? { ...draft, name: action.name } : draft,
+  i18nNs: 'mazes',
   steps: [
     { key: 'a', label: 'A', canAdvance: (d) => d.name !== '', render: () => null },
     { key: 'b', label: 'B', canAdvance: () => true, render: () => null, terminal: true },

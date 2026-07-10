@@ -1,4 +1,5 @@
 import type { Dispatch } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ROLES } from '../../../rules/roles'
 import type { CharacterDraft } from '../../../rules/character'
 import type { WizardAction } from '../wizardReducer'
@@ -11,11 +12,12 @@ export function RoleStep({
   draft: CharacterDraft
   dispatch: Dispatch<WizardAction>
 }) {
+  const { t } = useTranslation('mazes')
   return (
     <StepShell
-      eyebrow="Step 1"
-      title="Choose your role"
-      intro="Your role is your die. Pick based on what you want to do in the game."
+      eyebrow={t('steps.role.eyebrow')}
+      title={t('steps.role.title')}
+      intro={t('steps.role.intro')}
     >
       <div className="grid gap-4 sm:grid-cols-2">
         {ROLES.map((role) => (

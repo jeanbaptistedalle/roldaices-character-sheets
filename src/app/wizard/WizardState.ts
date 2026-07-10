@@ -42,6 +42,14 @@ export interface WizardConfig<Draft, Action> {
    */
   draftReducer: (draft: Draft, action: Action) => Draft
   steps: WizardStep<Draft, Action>[]
+  /**
+   * i18next namespace each step's `label` is a translation key into (e.g.
+   * `'mazes'`). The shared `Wizard` shell resolves labels against this
+   * namespace via `getSystemT`, so a system that hasn't localized its wizard
+   * yet can keep literal English labels here — i18next echoes back an unknown
+   * key as-is, so those labels still render unchanged.
+   */
+  i18nNs: string
 }
 
 export function makeWizardReducer<Draft, Action>(

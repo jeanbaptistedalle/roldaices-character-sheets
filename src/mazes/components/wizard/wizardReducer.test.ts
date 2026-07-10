@@ -1,88 +1,63 @@
 import { describe, it, expect } from 'vitest'
-import { STEPS, initialWizardState, initWizardState, wizardReducer, type WizardState } from './wizardReducer'
-import { emptyDraft } from '../../rules/character'
+import { draftReducer, type WizardAction } from './wizardReducer'
+import { emptyDraft, type CharacterDraft } from '../../rules/character'
 
-function stateAt(partial: Partial<WizardState['draft']>, stepIndex = 0): WizardState {
-  return { draft: { ...initialWizardState.draft, ...partial }, stepIndex }
+function draftWith(partial: Partial<CharacterDraft>): CharacterDraft {
+  return { ...emptyDraft(), ...partial }
 }
 
-describe('wizardReducer', () => {
+function reduce(draft: CharacterDraft, action: WizardAction): CharacterDraft {
+  return draftReducer(draft, action)
+}
+
+describe('draftReducer', () => {
   it('sets the role', () => {
-    const s = wizardReducer(initialWizardState, { type: 'setRole', role: 'Fighter' })
-    expect(s.draft.role).toBe('Fighter')
+    expect(reduce(emptyDraft(), { type: 'setRole', role: 'Fighter' }).role).toBe('Fighter')
   })
 
   it('resets class and edges when the aspect changes', () => {
-    const start = stateAt({ aspect: 'Sword', classId: 'monster-slayer', answers: [0, 1] })
-    const s = wizardReducer(start, { type: 'setAspect', aspect: 'Sorcery' })
-    expect(s.draft.aspect).toBe('Sorcery')
-    expect(s.draft.classId).toBeUndefined()
-    expect(s.draft.answers).toEqual([undefined, undefined])
+    const start = draftWith({ aspect: 'Sword', classId: 'monster-slayer', answers: [0, 1] })
+    const d = reduce(start, { type: 'setAspect', aspect: 'Sorcery' })
+    expect(d.aspect).toBe('Sorcery')
+    expect(d.classId).toBeUndefined()
+    expect(d.answers).toEqual([undefined, undefined])
   })
 
   it('keeps downstream intact when the same aspect is re-selected', () => {
-    const start = stateAt({ aspect: 'Sword', classId: 'monster-slayer', answers: [0, 1] })
-    const s = wizardReducer(start, { type: 'setAspect', aspect: 'Sword' })
-    expect(s.draft.classId).toBe('monster-slayer')
+    const start = draftWith({ aspect: 'Sword', classId: 'monster-slayer', answers: [0, 1] })
+    expect(reduce(start, { type: 'setAspect', aspect: 'Sword' }).classId).toBe('monster-slayer')
   })
 
   it('resets answers when the class changes', () => {
-    const start = stateAt({ aspect: 'Sword', classId: 'monster-slayer', answers: [0, 1] })
-    const s = wizardReducer(start, { type: 'setClass', classId: 'jaded-sellsword' })
-    expect(s.draft.classId).toBe('jaded-sellsword')
-    expect(s.draft.answers).toEqual([undefined, undefined])
+    const start = draftWith({ aspect: 'Sword', classId: 'monster-slayer', answers: [0, 1] })
+    const d = reduce(start, { type: 'setClass', classId: 'jaded-sellsword' })
+    expect(d.classId).toBe('jaded-sellsword')
+    expect(d.answers).toEqual([undefined, undefined])
   })
 
   it('clears a slot sub-choice when its answer changes', () => {
-    const start: WizardState = {
-      draft: {
-        ...initialWizardState.draft,
-        aspect: 'Sorcery',
-        classId: 'guild-mage',
-        answers: [0, 0],
-        subChoices: { q0: 'Forge' },
-      },
-      stepIndex: 3,
-    }
-    const s = wizardReducer(start, { type: 'setAnswer', index: 0, option: 1 })
-    expect(s.draft.answers[0]).toBe(1)
-    expect(s.draft.subChoices.q0).toBeUndefined()
-  })
-
-  it('advances only when the current step is satisfied', () => {
-    // Step 0 (role) with no role selected: next is a no-op.
-    expect(wizardReducer(initialWizardState, { type: 'next' }).stepIndex).toBe(0)
-    const withRole = stateAt({ role: 'Fighter' }, 0)
-    expect(wizardReducer(withRole, { type: 'next' }).stepIndex).toBe(1)
-  })
-
-  it('goes back without underflowing', () => {
-    expect(wizardReducer(initialWizardState, { type: 'back' }).stepIndex).toBe(0)
-    const s = wizardReducer(stateAt({}, 2), { type: 'back' })
-    expect(s.stepIndex).toBe(1)
-  })
-
-  it('resets to the initial state', () => {
-    const start = stateAt({ role: 'Fighter', aspect: 'Sword', classId: 'monster-slayer' }, 3)
-    const s = wizardReducer(start, { type: 'reset' })
-    expect(s).toEqual(initialWizardState)
-  })
-
-  it('exposes the six steps in order, with identity before recap', () => {
-    expect(STEPS).toEqual(['role', 'aspect', 'class', 'edges', 'identity', 'recap'])
+    const start = draftWith({
+      aspect: 'Sorcery',
+      classId: 'guild-mage',
+      answers: [0, 0],
+      subChoices: { q0: 'Forge' },
+    })
+    const d = reduce(start, { type: 'setAnswer', index: 0, option: 1 })
+    expect(d.answers[0]).toBe(1)
+    expect(d.subChoices.q0).toBeUndefined()
   })
 
   it('sets identity fields', () => {
-    let s = wizardReducer(initialWizardState, { type: 'setName', name: 'Ironwolf' })
-    expect(s.draft.name).toBe('Ironwolf')
-    s = wizardReducer(s, { type: 'setDescription', description: 'A grizzled hunter.' })
-    expect(s.draft.description).toBe('A grizzled hunter.')
-    s = wizardReducer(s, { type: 'setImage', imageUri: 'https://example.test/p.svg' })
-    expect(s.draft.imageUri).toBe('https://example.test/p.svg')
+    let d = reduce(emptyDraft(), { type: 'setName', name: 'Ironwolf' })
+    d = reduce(d, { type: 'setDescription', description: 'A grizzled hunter.' })
+    d = reduce(d, { type: 'setImage', imageUri: 'https://example.test/p.svg' })
+    expect(d.name).toBe('Ironwolf')
+    expect(d.description).toBe('A grizzled hunter.')
+    expect(d.imageUri).toBe('https://example.test/p.svg')
   })
 
   it('keeps identity fields when the aspect or class changes', () => {
-    const start = stateAt({
+    const start = draftWith({
       aspect: 'Sword',
       classId: 'monster-slayer',
       answers: [0, 1],
@@ -90,25 +65,7 @@ describe('wizardReducer', () => {
       description: 'A grizzled hunter.',
       imageUri: 'https://example.test/p.svg',
     })
-    const afterAspect = wizardReducer(start, { type: 'setAspect', aspect: 'Sorcery' })
-    expect(afterAspect.draft.name).toBe('Ironwolf')
-    expect(afterAspect.draft.description).toBe('A grizzled hunter.')
-    expect(afterAspect.draft.imageUri).toBe('https://example.test/p.svg')
-
-    const afterClass = wizardReducer(start, { type: 'setClass', classId: 'jaded-sellsword' })
-    expect(afterClass.draft.name).toBe('Ironwolf')
-  })
-})
-
-describe('initWizardState', () => {
-  it('returns the empty initial state by default', () => {
-    expect(initWizardState()).toEqual(initialWizardState)
-  })
-
-  it('seeds a supplied draft and opens on the recap step', () => {
-    const draft = { ...emptyDraft(), role: 'Fighter' as const }
-    const state = initWizardState(draft, STEPS.indexOf('recap'))
-    expect(state.draft).toEqual(draft)
-    expect(state.stepIndex).toBe(STEPS.indexOf('recap'))
+    expect(reduce(start, { type: 'setAspect', aspect: 'Sorcery' }).name).toBe('Ironwolf')
+    expect(reduce(start, { type: 'setClass', classId: 'jaded-sellsword' }).name).toBe('Ironwolf')
   })
 })

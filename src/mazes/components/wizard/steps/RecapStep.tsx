@@ -2,7 +2,7 @@ import { useEffect, useState, type Dispatch } from 'react'
 import { buildCharacter, type CharacterDraft } from '../../../rules/character'
 import { RESOLUTIONS, hittableTargets } from '../../../rules/resolutions'
 import { draftToData } from '../../../persistence'
-import type { WizardAction } from '../wizardReducer'
+import type { NavAction } from '../../../../app/wizard/WizardState'
 import { StepShell } from '../ui'
 import { useAuth } from '../../../../auth'
 import { saveCharacter, updateCharacter, listCharacters } from '../../../../api'
@@ -28,7 +28,7 @@ export function RecapStep({
   atLimit,
 }: {
   draft: CharacterDraft
-  dispatch: Dispatch<WizardAction>
+  dispatch: Dispatch<NavAction>
   onSaved: () => void
   editId?: string
   atLimit: boolean

@@ -53,6 +53,11 @@ export function sumTraits(t: Traits): number {
   return TRAITS.reduce((sum, { key }) => sum + t[key], 0)
 }
 
+/** Reroll tokens granted by the `rerolls` trait: 1 base + 2 per point. */
+export function rerollTokens(rerolls: number): number {
+  return 1 + 2 * rerolls
+}
+
 export function pointsRemaining(t: Traits): number {
   return TRAIT_TOTAL - sumTraits(t)
 }

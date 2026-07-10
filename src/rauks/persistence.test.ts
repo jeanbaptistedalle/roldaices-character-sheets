@@ -57,13 +57,13 @@ describe('persistence', () => {
     expect(restored.imageUri).toBe('https://example.test/p.svg')
   })
 
-  it('summarize shows origin (or Imperial) and the skill count', () => {
-    expect(summarize(draftToData(completeDraft()))).toBe('Vhalto · 3 skills')
-    const imperial: RauksData = {
-      traits: completeDraft().traits, skillIds: ['gorilla'], imperial: true,
+  it('summarize lists the chosen skill names', () => {
+    expect(summarize(draftToData(completeDraft()))).toBe('Gorilla · Shadow · Lawyer')
+    const one: RauksData = {
+      traits: completeDraft().traits, skillIds: ['gorilla'],
     }
-    expect(summarize(imperial)).toBe('Imperial · 1 skill')
+    expect(summarize(one)).toBe('Gorilla')
     const anon: RauksData = { traits: completeDraft().traits, skillIds: [] }
-    expect(summarize(anon)).toBe('Rauks · 0 skills')
+    expect(summarize(anon)).toBe('No skills')
   })
 })

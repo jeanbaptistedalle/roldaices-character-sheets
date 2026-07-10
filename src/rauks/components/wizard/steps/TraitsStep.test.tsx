@@ -25,4 +25,11 @@ describe('TraitsStep', () => {
     render(<TraitsStep draft={draft} dispatch={vi.fn()} />)
     expect(screen.getByLabelText('Decrease Physical')).toBeDisabled()
   })
+
+  it('shows the calculated reroll total on the rerolls card (1 + 2 × value)', () => {
+    const draft = { ...emptyDraft(), traits: { ...emptyDraft().traits, rerolls: 3 } }
+    render(<TraitsStep draft={draft} dispatch={vi.fn()} />)
+    // 1 + 2 × 3 = 7
+    expect(screen.getByTestId('reroll-total')).toHaveTextContent('7 rerolls')
+  })
 })

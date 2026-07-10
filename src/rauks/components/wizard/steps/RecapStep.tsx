@@ -1,5 +1,6 @@
 import { useEffect, useState, type Dispatch } from 'react'
 import { buildCharacter, type CharacterDraft } from '../../../rules/character'
+import { rerollTokens } from '../../../rules/traits'
 import { draftToData } from '../../../persistence'
 import type { WizardAction } from '../wizardReducer'
 import { StepShell } from '../ui'
@@ -120,8 +121,17 @@ export function RecapStep({
             >
               <div className="text-2xl font-bold text-amber-400">{value}</div>
               <div className="mt-1 text-[0.65rem] font-semibold uppercase tracking-widest text-stone-400">
-                {info.label}
+                {info.key === 'competence' ? 'Skill' : info.label}
               </div>
+              {info.key === 'rerolls' && (
+                <div
+                  data-testid="recap-reroll-total"
+                  className="mt-2 border-t border-stone-800 pt-2 text-[0.65rem] text-stone-500"
+                >
+                  <span className="font-semibold text-amber-400">{rerollTokens(value)}</span> reroll
+                  {rerollTokens(value) === 1 ? '' : 's'}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -146,10 +156,9 @@ export function RecapStep({
           </ul>
         </div>
 
-        {/* Standard equipment + Karma note */}
+        {/* Standard equipment */}
         <div className="rounded-xl border border-stone-800 bg-stone-900/40 p-5 text-sm text-stone-400">
           <p><span className="font-semibold text-stone-300">Standard equipment:</span> {STANDARD_EQUIPMENT}</p>
-          <p className="mt-2">Karma is a group resource tracked at the table, not on this sheet.</p>
         </div>
 
         {/* Actions */}

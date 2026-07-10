@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   TRAITS, TRAIT_TOTAL, getTrait, emptyTraits, sumTraits, pointsRemaining,
-  countAtOne, traitsComplete, canIncrement, canDecrement, type Traits,
+  countAtOne, traitsComplete, canIncrement, canDecrement, rerollTokens, type Traits,
 } from './traits'
 
 const T = (overrides: Partial<Traits> = {}): Traits => ({ ...emptyTraits(), ...overrides })
@@ -63,5 +63,12 @@ describe('traits', () => {
     expect(canDecrement(T({ physical: 2, perception: 1 }), 'physical')).toBe(false)
     // a trait above 2 can always drop (lands at >= 2).
     expect(canDecrement(T({ physical: 3, perception: 1 }), 'physical')).toBe(true)
+  })
+
+  it('computes reroll tokens as 1 + 2 × the rerolls value', () => {
+    expect(rerollTokens(1)).toBe(3)
+    expect(rerollTokens(2)).toBe(5)
+    expect(rerollTokens(3)).toBe(7)
+    expect(rerollTokens(4)).toBe(9)
   })
 })

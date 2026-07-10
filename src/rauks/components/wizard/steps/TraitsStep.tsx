@@ -1,7 +1,7 @@
 import { type Dispatch } from 'react'
 import type { CharacterDraft } from '../../../rules/character'
 import {
-  TRAITS, pointsRemaining, canIncrement, canDecrement, type TraitInfo,
+  TRAITS, pointsRemaining, canIncrement, canDecrement, rerollTokens, type TraitInfo,
 } from '../../../rules/traits'
 import type { WizardAction } from '../wizardReducer'
 import { StepShell, cn } from '../ui'
@@ -84,10 +84,21 @@ function Stepper({
         <div className="font-semibold text-stone-100">{info.label}</div>
         <div className="text-sm text-stone-500">{info.description}</div>
       </div>
-      <div className="flex shrink-0 items-center gap-3">
-        <StepButton label={`Decrease ${info.label}`} disabled={!canDec} onClick={onDec}>−</StepButton>
-        <span className="w-6 text-center text-2xl font-bold text-amber-400">{value}</span>
-        <StepButton label={`Increase ${info.label}`} disabled={!canInc} onClick={onInc}>+</StepButton>
+      <div className="flex shrink-0 flex-col items-end gap-1">
+        <div className="flex items-center gap-3">
+          <StepButton label={`Decrease ${info.label}`} disabled={!canDec} onClick={onDec}>−</StepButton>
+          <span className="w-6 text-center text-2xl font-bold text-amber-400">{value}</span>
+          <StepButton label={`Increase ${info.label}`} disabled={!canInc} onClick={onInc}>+</StepButton>
+        </div>
+        {info.key === 'rerolls' && (
+          <div
+            data-testid="reroll-total"
+            className="text-xs text-stone-500"
+          >
+            <span className="font-semibold text-amber-400">{rerollTokens(value)}</span> reroll
+            {rerollTokens(value) === 1 ? '' : 's'}
+          </div>
+        )}
       </div>
     </div>
   )

@@ -5,6 +5,7 @@
 import type { CharacterRecord } from '../api'
 import { emptyDraft, isDraftComplete, type CharacterDraft } from './rules/character'
 import type { Traits } from './rules/traits'
+import { getSkill } from './rules/skills'
 
 export interface RauksData {
   traits: Traits
@@ -50,9 +51,8 @@ export function dataToDraft(record: CharacterRecord): CharacterDraft {
   }
 }
 
-/** One-line list-row summary, e.g. "Imperial · 3 skills". */
+/** One-line list-row summary of the chosen skills, e.g. "Gorilla · Shadow · Lawyer". */
 export function summarize(data: RauksData): string {
-  const origin = data.imperial ? 'Imperial' : data.origin?.trim() || 'Rauks'
-  const n = data.skillIds.length
-  return `${origin} · ${n} skill${n === 1 ? '' : 's'}`
+  if (data.skillIds.length === 0) return 'No skills'
+  return data.skillIds.map((id) => getSkill(id).name).join(' · ')
 }

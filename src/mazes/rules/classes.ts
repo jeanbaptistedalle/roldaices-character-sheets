@@ -1,25 +1,36 @@
 // The 24 example classes from the corebook. A class is a name (Adjective +
 // Noun) that acts as an edge, plus 3 edges: one "always" edge and two questions.
 // See .claude/skills/mazes-rules/SKILL.md.
+//
+// User-facing display text is localized, keyed on the stable ids below (never
+// on rendered English). Render sites resolve:
+//   - class name      -> t(`terms.classes.<id>`)
+//   - question prompt -> t(`terms.classQuestions.<id>.<0|1>`)
+//   - flavor label    -> t(`terms.classFlavor.<flavorKey>`)
+// `name` is kept as the authoritative English source (used by the list-row
+// summary and tests). `presetSubChoice` is the stored/logic value; its
+// localized display comes from `flavorKey`.
 
 import type { Aspect } from './aspects'
 
 export interface ClassOption {
   edgeId: string
-  /** Flavor label to display instead of the plain edge name (e.g. "Sworn Swords"). */
-  label?: string
+  /**
+   * i18n flavor-label key (`terms.classFlavor.<flavorKey>`) shown instead of the
+   * plain edge name (e.g. "Sworn Swords" for a `retainers` edge).
+   */
+  flavorKey?: string
   /** A sub-choice the class fixes for you (e.g. magic school "Summoning"). */
   presetSubChoice?: string
 }
 
 export interface ClassEdge {
   edgeId: string
-  label?: string
+  flavorKey?: string
   presetSubChoice?: string
 }
 
 export interface ClassQuestion {
-  prompt: string
   options: ClassOption[]
 }
 
@@ -41,8 +52,8 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Sword',
     always: { edgeId: 'precise' },
     questions: [
-      { prompt: 'As a dangerous fighter, are you…', options: [{ edgeId: 'agile' }, { edgeId: 'accurate' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'hale' }, { edgeId: 'fast' }, { edgeId: 'strong' }] },
+      { options: [{ edgeId: 'agile' }, { edgeId: 'accurate' }] },
+      { options: [{ edgeId: 'hale' }, { edgeId: 'fast' }, { edgeId: 'strong' }] },
     ],
   },
   {
@@ -51,13 +62,12 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Sword',
     always: { edgeId: 'well-armed' },
     questions: [
-      { prompt: 'As a mercenary soldier, do you have…', options: [{ edgeId: 'rank' }, { edgeId: 'wealth' }] },
+      { options: [{ edgeId: 'rank' }, { edgeId: 'wealth' }] },
       {
-        prompt: 'Are you…',
         options: [
           { edgeId: 'lucky' },
           { edgeId: 'veteran' },
-          { edgeId: 'retainers', label: 'Sworn Swords', presetSubChoice: 'Sworn Swords' },
+          { edgeId: 'retainers', flavorKey: 'sworn-swords', presetSubChoice: 'Sworn Swords' },
         ],
       },
     ],
@@ -68,10 +78,9 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Sword',
     always: { edgeId: 'accurate' },
     questions: [
-      { prompt: 'As a road-weary archer, are you…', options: [{ edgeId: 'travelled' }, { edgeId: 'quiet' }] },
+      { options: [{ edgeId: 'travelled' }, { edgeId: 'quiet' }] },
       {
-        prompt: 'Are you…',
-        options: [{ edgeId: 'naturewise' }, { edgeId: 'tough' }, { edgeId: 'familiar', label: 'Beast' }],
+        options: [{ edgeId: 'naturewise' }, { edgeId: 'tough' }, { edgeId: 'familiar', flavorKey: 'beast' }],
       },
     ],
   },
@@ -82,10 +91,9 @@ export const CLASSES: ClassDef[] = [
     always: { edgeId: 'well-armed' },
     questions: [
       {
-        prompt: 'As a hunter of vicious monsters, are you…',
-        options: [{ edgeId: 'mazewise' }, { edgeId: 'retainers', label: 'Loyal Hounds', presetSubChoice: 'Loyal Hounds' }],
+        options: [{ edgeId: 'mazewise' }, { edgeId: 'retainers', flavorKey: 'loyal-hounds', presetSubChoice: 'Loyal Hounds' }],
       },
-      { prompt: 'Are you…', options: [{ edgeId: 'cunning' }, { edgeId: 'dexterous' }, { edgeId: 'strong' }] },
+      { options: [{ edgeId: 'cunning' }, { edgeId: 'dexterous' }, { edgeId: 'strong' }] },
     ],
   },
   {
@@ -94,8 +102,8 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Sword',
     always: { edgeId: 'bugbear' },
     questions: [
-      { prompt: 'As a lone monster, are you…', options: [{ edgeId: 'deadly' }, { edgeId: 'armored' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'strong' }, { edgeId: 'tough' }, { edgeId: 'travelled' }] },
+      { options: [{ edgeId: 'deadly' }, { edgeId: 'armored' }] },
+      { options: [{ edgeId: 'strong' }, { edgeId: 'tough' }, { edgeId: 'travelled' }] },
     ],
   },
   {
@@ -104,8 +112,8 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Sword',
     always: { edgeId: 'young' },
     questions: [
-      { prompt: 'As the chosen one, do you have a…', options: [{ edgeId: 'magic-weapon' }, { edgeId: 'magic-item' }] },
-      { prompt: 'Do others say that you are…', options: [{ edgeId: 'beautiful' }, { edgeId: 'charming' }, { edgeId: 'lucky' }] },
+      { options: [{ edgeId: 'magic-weapon' }, { edgeId: 'magic-item' }] },
+      { options: [{ edgeId: 'beautiful' }, { edgeId: 'charming' }, { edgeId: 'lucky' }] },
     ],
   },
   {
@@ -114,8 +122,8 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Sword',
     always: { edgeId: 'tough' },
     questions: [
-      { prompt: 'As a lone hero, are you…', options: [{ edgeId: 'deadly' }, { edgeId: 'strong' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'ardent' }, { edgeId: 'hale' }, { edgeId: 'naturewise' }] },
+      { options: [{ edgeId: 'deadly' }, { edgeId: 'strong' }] },
+      { options: [{ edgeId: 'ardent' }, { edgeId: 'hale' }, { edgeId: 'naturewise' }] },
     ],
   },
   {
@@ -125,10 +133,9 @@ export const CLASSES: ClassDef[] = [
     always: { edgeId: 'armored' },
     questions: [
       {
-        prompt: 'As a heavily armored soldier, are you…',
-        options: [{ edgeId: 'deadly' }, { edgeId: 'retainers', label: 'Shieldbearers', presetSubChoice: 'Shieldbearers' }],
+        options: [{ edgeId: 'deadly' }, { edgeId: 'retainers', flavorKey: 'shieldbearers', presetSubChoice: 'Shieldbearers' }],
       },
-      { prompt: 'Are you…', options: [{ edgeId: 'ardent' }, { edgeId: 'strong' }, { edgeId: 'intimidating' }] },
+      { options: [{ edgeId: 'ardent' }, { edgeId: 'strong' }, { edgeId: 'intimidating' }] },
     ],
   },
 
@@ -139,8 +146,8 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Shadow',
     always: { edgeId: 'smallfolk' },
     questions: [
-      { prompt: 'As a small and stout adventurer, are you…', options: [{ edgeId: 'animalwise' }, { edgeId: 'shapeshift', label: 'Shapeshifter' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'charming' }, { edgeId: 'quiet' }, { edgeId: 'friends' }] },
+      { options: [{ edgeId: 'animalwise' }, { edgeId: 'shapeshift', flavorKey: 'shapeshifter' }] },
+      { options: [{ edgeId: 'charming' }, { edgeId: 'quiet' }, { edgeId: 'friends' }] },
     ],
   },
   {
@@ -150,10 +157,9 @@ export const CLASSES: ClassDef[] = [
     always: { edgeId: 'mazewise' },
     questions: [
       {
-        prompt: 'As a crypt explorer, are you…',
-        options: [{ edgeId: 'gearwise' }, { edgeId: 'retainers', label: 'Torchbearers', presetSubChoice: 'Torchbearers' }],
+        options: [{ edgeId: 'gearwise' }, { edgeId: 'retainers', flavorKey: 'torchbearers', presetSubChoice: 'Torchbearers' }],
       },
-      { prompt: 'Are you…', options: [{ edgeId: 'cunning' }, { edgeId: 'dexterous' }, { edgeId: 'keen' }] },
+      { options: [{ edgeId: 'cunning' }, { edgeId: 'dexterous' }, { edgeId: 'keen' }] },
     ],
   },
   {
@@ -162,8 +168,8 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Shadow',
     always: { edgeId: 'travelled' },
     questions: [
-      { prompt: 'As a wandering jack, are you…', options: [{ edgeId: 'charming' }, { edgeId: 'cunning' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'fast' }, { edgeId: 'lucky' }, { edgeId: 'friends' }] },
+      { options: [{ edgeId: 'charming' }, { edgeId: 'cunning' }] },
+      { options: [{ edgeId: 'fast' }, { edgeId: 'lucky' }, { edgeId: 'friends' }] },
     ],
   },
   {
@@ -172,8 +178,8 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Shadow',
     always: { edgeId: 'quiet' },
     questions: [
-      { prompt: 'As a penniless beggar, are you…', options: [{ edgeId: 'streetwise' }, { edgeId: 'dexterous' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'agile' }, { edgeId: 'fast' }, { edgeId: 'keen' }] },
+      { options: [{ edgeId: 'streetwise' }, { edgeId: 'dexterous' }] },
+      { options: [{ edgeId: 'agile' }, { edgeId: 'fast' }, { edgeId: 'keen' }] },
     ],
   },
   {
@@ -182,8 +188,8 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Shadow',
     always: { edgeId: 'deadly' },
     questions: [
-      { prompt: 'As a hard killer, are you…', options: [{ edgeId: 'accurate' }, { edgeId: 'quiet' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'agile' }, { edgeId: 'fast' }, { edgeId: 'keen' }] },
+      { options: [{ edgeId: 'accurate' }, { edgeId: 'quiet' }] },
+      { options: [{ edgeId: 'agile' }, { edgeId: 'fast' }, { edgeId: 'keen' }] },
     ],
   },
   {
@@ -192,8 +198,8 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Shadow',
     always: { edgeId: 'gearwise' },
     questions: [
-      { prompt: 'As a door cracker and riddler, are you carrying…', options: [{ edgeId: 'tools' }, { edgeId: 'learned' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'streetwise' }, { edgeId: 'keen' }, { edgeId: 'quiet' }] },
+      { options: [{ edgeId: 'tools' }, { edgeId: 'learned' }] },
+      { options: [{ edgeId: 'streetwise' }, { edgeId: 'keen' }, { edgeId: 'quiet' }] },
     ],
   },
   {
@@ -202,8 +208,8 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Shadow',
     always: { edgeId: 'streetwise' },
     questions: [
-      { prompt: 'As a scofflaw and a footpad, are you…', options: [{ edgeId: 'accurate' }, { edgeId: 'quiet' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'agile' }, { edgeId: 'charming' }, { edgeId: 'keen' }] },
+      { options: [{ edgeId: 'accurate' }, { edgeId: 'quiet' }] },
+      { options: [{ edgeId: 'agile' }, { edgeId: 'charming' }, { edgeId: 'keen' }] },
     ],
   },
   {
@@ -213,13 +219,12 @@ export const CLASSES: ClassDef[] = [
     always: { edgeId: 'lorewise' },
     questions: [
       {
-        prompt: 'As a seeker of dark knowledge, do you have…',
         options: [
-          { edgeId: 'retainers', label: 'Mad Followers', presetSubChoice: 'Mad Followers' },
-          { edgeId: 'familiar', label: 'a dark Familiar' },
+          { edgeId: 'retainers', flavorKey: 'mad-followers', presetSubChoice: 'Mad Followers' },
+          { edgeId: 'familiar', flavorKey: 'dark-familiar' },
         ],
       },
-      { prompt: 'Are you…', options: [{ edgeId: 'intimidating' }, { edgeId: 'old' }, { edgeId: 'rank' }] },
+      { options: [{ edgeId: 'intimidating' }, { edgeId: 'old' }, { edgeId: 'rank' }] },
     ],
   },
 
@@ -230,8 +235,8 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Sorcery',
     always: { edgeId: 'magic' },
     questions: [
-      { prompt: 'As a channeler of raw power, are you…', options: [{ edgeId: 'accurate' }, { edgeId: 'armored' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'ardent' }, { edgeId: 'strong' }, { edgeId: 'tough' }] },
+      { options: [{ edgeId: 'accurate' }, { edgeId: 'armored' }] },
+      { options: [{ edgeId: 'ardent' }, { edgeId: 'strong' }, { edgeId: 'tough' }] },
     ],
   },
   {
@@ -240,8 +245,8 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Sorcery',
     always: { edgeId: 'magic' },
     questions: [
-      { prompt: 'As an arcane conjuror, do you have a…', options: [{ edgeId: 'familiar' }, { edgeId: 'magic-item' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'learned' }, { edgeId: 'travelled' }, { edgeId: 'naturewise' }] },
+      { options: [{ edgeId: 'familiar' }, { edgeId: 'magic-item' }] },
+      { options: [{ edgeId: 'learned' }, { edgeId: 'travelled' }, { edgeId: 'naturewise' }] },
     ],
   },
   {
@@ -251,23 +256,22 @@ export const CLASSES: ClassDef[] = [
     always: { edgeId: 'lorewise' },
     questions: [
       {
-        prompt: 'As a seeker of dark secrets, do you practice…',
         options: [
-          { edgeId: 'magic', label: 'Forbidden Magic' },
-          { edgeId: 'magic-item', label: 'Accursed Relic', presetSubChoice: 'Accursed Relic' },
+          { edgeId: 'magic', flavorKey: 'forbidden-magic' },
+          { edgeId: 'magic-item', flavorKey: 'accursed-relic', presetSubChoice: 'Accursed Relic' },
         ],
       },
-      { prompt: 'Are you…', options: [{ edgeId: 'intimidating' }, { edgeId: 'keen' }, { edgeId: 'wealth' }] },
+      { options: [{ edgeId: 'intimidating' }, { edgeId: 'keen' }, { edgeId: 'wealth' }] },
     ],
   },
   {
     id: 'infernal-summoner',
     name: 'The Infernal Summoner',
     aspect: 'Sorcery',
-    always: { edgeId: 'magic', label: 'Summoning', presetSubChoice: 'Summoning' },
+    always: { edgeId: 'magic', flavorKey: 'summoning', presetSubChoice: 'Summoning' },
     questions: [
-      { prompt: 'As a diabolist, are you…', options: [{ edgeId: 'lorewise' }, { edgeId: 'familiar' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'ardent' }, { edgeId: 'beautiful' }, { edgeId: 'learned' }] },
+      { options: [{ edgeId: 'lorewise' }, { edgeId: 'familiar' }] },
+      { options: [{ edgeId: 'ardent' }, { edgeId: 'beautiful' }, { edgeId: 'learned' }] },
     ],
   },
   {
@@ -276,18 +280,18 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Sorcery',
     always: { edgeId: 'ilf' },
     questions: [
-      { prompt: 'As one of the forgotten, do you…', options: [{ edgeId: 'magic' }, { edgeId: 'magic-weapon' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'beautiful' }, { edgeId: 'cunning' }, { edgeId: 'quiet' }] },
+      { options: [{ edgeId: 'magic' }, { edgeId: 'magic-weapon' }] },
+      { options: [{ edgeId: 'beautiful' }, { edgeId: 'cunning' }, { edgeId: 'quiet' }] },
     ],
   },
   {
     id: 'quack-alchemist',
     name: 'The Quack Alchemist',
     aspect: 'Sorcery',
-    always: { edgeId: 'magic-item', label: 'Potions', presetSubChoice: 'Potions' },
+    always: { edgeId: 'magic-item', flavorKey: 'potions', presetSubChoice: 'Potions' },
     questions: [
-      { prompt: 'As a charlatan and snake oil seller, are you…', options: [{ edgeId: 'lorewise' }, { edgeId: 'naturewise' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'dexterous' }, { edgeId: 'keen' }, { edgeId: 'learned' }] },
+      { options: [{ edgeId: 'lorewise' }, { edgeId: 'naturewise' }] },
+      { options: [{ edgeId: 'dexterous' }, { edgeId: 'keen' }, { edgeId: 'learned' }] },
     ],
   },
   {
@@ -296,8 +300,8 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Sorcery',
     always: { edgeId: 'shapeshift' },
     questions: [
-      { prompt: 'As a servant of the underground world, are you…', options: [{ edgeId: 'naturewise' }, { edgeId: 'mazewise' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'strong' }, { edgeId: 'keen' }, { edgeId: 'deadly' }] },
+      { options: [{ edgeId: 'naturewise' }, { edgeId: 'mazewise' }] },
+      { options: [{ edgeId: 'strong' }, { edgeId: 'keen' }, { edgeId: 'deadly' }] },
     ],
   },
   {
@@ -306,8 +310,8 @@ export const CLASSES: ClassDef[] = [
     aspect: 'Sorcery',
     always: { edgeId: 'magic' },
     questions: [
-      { prompt: 'As a soothsayer, are you…', options: [{ edgeId: 'lorewise' }, { edgeId: 'naturewise' }] },
-      { prompt: 'Are you…', options: [{ edgeId: 'cunning' }, { edgeId: 'learned' }, { edgeId: 'familiar' }] },
+      { options: [{ edgeId: 'lorewise' }, { edgeId: 'naturewise' }] },
+      { options: [{ edgeId: 'cunning' }, { edgeId: 'learned' }, { edgeId: 'familiar' }] },
     ],
   },
 ]

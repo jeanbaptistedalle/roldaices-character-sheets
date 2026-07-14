@@ -27,13 +27,15 @@ export interface ResolvedEdge {
   slot: EdgeSlot
   edge: EdgeInfo
   /**
-   * Class-specific flavor label override (e.g. "Sworn Swords"), if the class
+   * i18n flavor-label key (`terms.classFlavor.<flavorKey>`), if the class
    * defines one. When absent, callers display the edge's own term
-   * (`terms.edges.<edge.id>`) resolved via i18n — this module has no `t`.
+   * (`terms.edges.<edge.id>`) — this module has no `t`.
    */
-  label?: string
+  flavorKey?: string
   /** Preset or player-supplied sub-choice, if any. */
   subChoice?: string
+  /** True when the sub-choice is a class preset (not player-supplied). */
+  presetSubChoice: boolean
   /** True if this edge needs a required sub-choice that isn't set yet. */
   needsSubChoice: boolean
 }
@@ -63,8 +65,9 @@ function resolveSlot(slot: EdgeSlot, classEdge: ClassEdge, draft: CharacterDraft
   return {
     slot,
     edge,
-    label: classEdge.label,
+    flavorKey: classEdge.flavorKey,
     subChoice,
+    presetSubChoice: Boolean(classEdge.presetSubChoice),
     needsSubChoice,
   }
 }

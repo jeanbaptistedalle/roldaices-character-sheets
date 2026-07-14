@@ -37,7 +37,9 @@ export function ClassStep({
             <p className="text-stone-400">
               {t('terms.always')}{' '}
               <span className="font-semibold text-amber-300">
-                {cls.always.label ?? t(`terms.edges.${cls.always.edgeId}` as any)}
+                {cls.always.flavorKey
+                  ? t(`terms.classFlavor.${cls.always.flavorKey}` as any)
+                  : t(`terms.edges.${cls.always.edgeId}` as any)}
               </span>
             </p>
           </SelectableCard>

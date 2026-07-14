@@ -30,7 +30,9 @@ export function EdgesStep({
             {t('terms.always')}
           </p>
           <p className="mt-1 text-lg font-semibold text-amber-300">
-            {cls.always.label ?? t(`terms.edges.${cls.always.edgeId}` as any)}
+            {cls.always.flavorKey
+              ? t(`terms.classFlavor.${cls.always.flavorKey}` as any)
+              : t(`terms.edges.${cls.always.edgeId}` as any)}
           </p>
           <p className="mt-1 text-sm text-stone-400">
             {t(`terms.edgeDescriptions.${cls.always.edgeId}` as any)}
@@ -46,7 +48,9 @@ export function EdgesStep({
           const chosen = answer !== undefined ? question.options[answer] : undefined
           return (
             <div key={slot} className="rounded-xl border border-stone-800 bg-stone-900/60 p-5">
-              <p className="mb-3 text-stone-200">{question.prompt}</p>
+              <p className="mb-3 text-stone-200">
+                {t(`terms.classQuestions.${cls.id}.${index}` as any)}
+              </p>
               <div className="flex flex-wrap gap-2">
                 {question.options.map((opt, optIndex) => (
                   <OptionChip
@@ -54,7 +58,9 @@ export function EdgesStep({
                     selected={answer === optIndex}
                     onClick={() => dispatch({ type: 'setAnswer', index, option: optIndex })}
                   >
-                    {opt.label ?? t(`terms.edges.${opt.edgeId}` as any)}
+                    {opt.flavorKey
+                      ? t(`terms.classFlavor.${opt.flavorKey}` as any)
+                      : t(`terms.edges.${opt.edgeId}` as any)}
                   </OptionChip>
                 ))}
               </div>
@@ -91,12 +97,17 @@ function SubChoice({
   const kind = edge.subChoice
   if (!kind) return null
 
-  // A class-preset sub-choice is fixed — just show it.
+  // A class-preset sub-choice is fixed — just show it (localized via flavorKey,
+  // falling back to the stored preset value if no key is defined).
   if (classEdge.presetSubChoice) {
     return (
       <p className="mt-3 text-sm text-stone-400">
         <span className="text-stone-500">{t('steps.edges.setLabel')}</span>{' '}
-        <span className="text-amber-300">{classEdge.presetSubChoice}</span>
+        <span className="text-amber-300">
+          {classEdge.flavorKey
+            ? t(`terms.classFlavor.${classEdge.flavorKey}` as any)
+            : classEdge.presetSubChoice}
+        </span>
       </p>
     )
   }

@@ -129,8 +129,14 @@ export function RecapStep({
             {character.edges.map((e) => (
               <li key={e.slot} className="flex items-baseline justify-between gap-3">
                 <span className="font-semibold text-stone-100">
-                  {e.label ?? t(`terms.edges.${e.edge.id}` as any)}
-                  {e.subChoice && <span className="text-amber-300"> ({e.subChoice})</span>}
+                  {e.flavorKey
+                    ? t(`terms.classFlavor.${e.flavorKey}` as any)
+                    : t(`terms.edges.${e.edge.id}` as any)}
+                  {/* A class preset is already conveyed by the flavor label, so
+                      only show a parenthetical for player-supplied sub-choices. */}
+                  {!e.presetSubChoice && e.subChoice && (
+                    <span className="text-amber-300"> ({e.subChoice})</span>
+                  )}
                 </span>
                 <span className="text-xs uppercase tracking-widest text-stone-600">
                   {t(`terms.edgeTypes.${e.edge.type}`)}

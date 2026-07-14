@@ -149,6 +149,51 @@ export const mazesEn = {
       'underground-druid': 'The Underground Druid',
       'wise-witch': 'The Wise Witch',
     },
+    // The two questions each class asks on the Edges step, keyed by class id in
+    // [question 1, question 2] order. Mirrors src/mazes/rules/classes.ts.
+    classQuestions: {
+      'dangerous-bravo': ['As a dangerous fighter, are you…', 'Are you…'],
+      'jaded-sellsword': ['As a mercenary soldier, do you have…', 'Are you…'],
+      'knockabout-ranger': ['As a road-weary archer, are you…', 'Are you…'],
+      'monster-slayer': ['As a hunter of vicious monsters, are you…', 'Are you…'],
+      'outcast-bugbear': ['As a lone monster, are you…', 'Are you…'],
+      'reluctant-hero': ['As the chosen one, do you have a…', 'Do others say that you are…'],
+      'savage-barbarian': ['As a lone hero, are you…', 'Are you…'],
+      'valiant-dragoon': ['As a heavily armored soldier, are you…', 'Are you…'],
+      'adventurous-smallfolk': ['As a small and stout adventurer, are you…', 'Are you…'],
+      'cursed-tomb-robber': ['As a crypt explorer, are you…', 'Are you…'],
+      'excellent-vagabond': ['As a wandering jack, are you…', 'Are you…'],
+      'filthy-urchin': ['As a penniless beggar, are you…', 'Are you…'],
+      'nighthawk-assassin': ['As a hard killer, are you…', 'Are you…'],
+      'puzzling-locksmith': ['As a door cracker and riddler, are you carrying…', 'Are you…'],
+      'talented-thief': ['As a scofflaw and a footpad, are you…', 'Are you…'],
+      'zealous-cultist': ['As a seeker of dark knowledge, do you have…', 'Are you…'],
+      'blazing-magician': ['As a channeler of raw power, are you…', 'Are you…'],
+      'guild-mage': ['As an arcane conjuror, do you have a…', 'Are you…'],
+      'haunted-librarian': ['As a seeker of dark secrets, do you practice…', 'Are you…'],
+      'infernal-summoner': ['As a diabolist, are you…', 'Are you…'],
+      'last-ilf': ['As one of the forgotten, do you have…', 'Are you…'],
+      'quack-alchemist': ['As a charlatan and snake oil seller, are you…', 'Are you…'],
+      'underground-druid': ['As a servant of the underground world, are you…', 'Are you…'],
+      'wise-witch': ['As a soothsayer, are you…', 'Are you…'],
+    },
+    // Class-specific flavor labels shown instead of the plain edge name (e.g. a
+    // `retainers` edge presented as "Sworn Swords"). Keyed by the `flavorKey`
+    // in src/mazes/rules/classes.ts.
+    classFlavor: {
+      'sworn-swords': 'Sworn Swords',
+      beast: 'Beast',
+      'loyal-hounds': 'Loyal Hounds',
+      shieldbearers: 'Shieldbearers',
+      shapeshifter: 'Shapeshifter',
+      torchbearers: 'Torchbearers',
+      'mad-followers': 'Mad Followers',
+      'dark-familiar': 'a dark Familiar',
+      'forbidden-magic': 'Forbidden Magic',
+      'accursed-relic': 'Accursed Relic',
+      summoning: 'Summoning',
+      potions: 'Potions',
+    },
     edges: {
       // Attributes
       ardent: 'Ardent',

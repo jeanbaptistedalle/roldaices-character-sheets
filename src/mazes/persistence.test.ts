@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { emptyDraft, type CharacterDraft } from './rules/character'
-import { draftToData, dataToDraft, summarize } from './persistence'
+import { draftToData, dataToDraft, summaryKeys } from './persistence'
 import type { CharacterRecord } from '../api'
 
 function fullDraft(): CharacterDraft {
@@ -66,25 +66,29 @@ describe('draftToData', () => {
   })
 })
 
-describe('summarize', () => {
+describe('summaryKeys', () => {
   const edges = [
     { edgeId: 'well-armed' },
     { edgeId: 'rank' },
     { edgeId: 'veteran' },
   ] as const
 
-  it('renders role, aspect and class from ids', () => {
-    expect(summarize(draftToData(fullDraft()))).toBe(
-      'Fighter · Sword · The Jaded Sellsword',
-    )
+  it('returns role, aspect and class i18n keys in display order', () => {
+    expect(summaryKeys(draftToData(fullDraft()))).toEqual([
+      'terms.roles.Fighter',
+      'terms.aspects.Sword',
+      'terms.classes.jaded-sellsword',
+    ])
   })
 
   it('tolerates partial data', () => {
-    expect(summarize({ role: 'Fighter', edges: [...edges] })).toBe('Fighter')
+    expect(summaryKeys({ role: 'Fighter', edges: [...edges] })).toEqual([
+      'terms.roles.Fighter',
+    ])
   })
 
-  it('returns an empty string when role, aspect and class are absent', () => {
-    expect(summarize({ edges: [...edges] })).toBe('')
+  it('returns no keys when role, aspect and class are absent', () => {
+    expect(summaryKeys({ edges: [...edges] })).toEqual([])
   })
 })
 

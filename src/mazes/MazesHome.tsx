@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '../auth'
 import { listCharacters, deleteCharacter, type CharacterRecord } from '../api'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
-import { summarize, type MazesData } from './persistence'
+import { summaryKeys, type MazesData } from './persistence'
 import { MAX_CHARACTERS_PER_SYSTEM } from '../app/limits'
 
 export function MazesHome({
@@ -209,7 +209,10 @@ function CharacterRow({
   onRequestDelete: () => void
 }) {
   const { t } = useTranslation()
-  const summary = summarize(character.data as MazesData)
+  const { t: tMazes } = useTranslation('mazes')
+  const summary = summaryKeys(character.data as MazesData)
+    .map((key) => tMazes(key as any))
+    .join(' · ')
   return (
     <li className="flex items-center gap-4 rounded-xl border border-stone-800 bg-stone-900/60 p-4">
       {character.imageUri ? (

@@ -58,19 +58,24 @@ function storedEdge(
   return subChoice ? { edgeId: source.edgeId, subChoice } : { edgeId: source.edgeId }
 }
 
-/** A one-line summary for list rows, e.g. "Fighter · Sword · The Jaded Sellsword". */
-export function summarize(data: MazesData): string {
-  const parts: string[] = []
+/**
+ * The i18n term keys describing a stored character (role, aspect, class), in
+ * display order. Returns keys rather than text so list rows can render the
+ * summary in the active language — resolve each with the `mazes` translator and
+ * join with " · " (e.g. "Fighter · Sword · The Jaded Sellsword").
+ */
+export function summaryKeys(data: MazesData): string[] {
+  const keys: string[] = []
   if (data.role) {
-    parts.push(data.role)
+    keys.push(`terms.roles.${data.role}`)
   }
   if (data.aspect) {
-    parts.push(getAspect(data.aspect).id)
+    keys.push(`terms.aspects.${getAspect(data.aspect).id}`)
   }
   if (data.classId) {
-    parts.push(getClass(data.classId).name)
+    keys.push(`terms.classes.${data.classId}`)
   }
-  return parts.join(' · ')
+  return keys
 }
 
 /**

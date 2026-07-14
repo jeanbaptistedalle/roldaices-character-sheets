@@ -40,7 +40,7 @@ export function SkillsStep({
         {groups.map(({ category, skills }) => (
           <div key={category}>
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-stone-500">
-              {category}
+              {t(`terms.skillCategories.${category}`)}
             </h3>
             <div className="grid gap-3 sm:grid-cols-2">
               {skills.map((skill) => {
@@ -62,7 +62,9 @@ export function SkillsStep({
                           : 'border-stone-800 bg-stone-900/60 hover:border-amber-600/50',
                     )}
                   >
-                    <span className="font-semibold text-stone-100">{skill.name}</span>
+                    <span className="font-semibold text-stone-100">
+                      {t(`terms.skills.${skill.id}` as any)}
+                    </span>
                     <span className="mt-1 text-sm text-stone-400">{skill.description}</span>
                     {skill.gear && (
                       <span className="mt-2 text-xs italic text-amber-300/80">

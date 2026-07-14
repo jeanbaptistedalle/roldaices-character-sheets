@@ -122,8 +122,11 @@ export function RecapStep({
               className="rounded-xl border border-stone-800 bg-stone-900/60 p-4 text-center"
             >
               <div className="text-2xl font-bold text-amber-400">{value}</div>
-              <div className="mt-1 text-[0.65rem] font-semibold uppercase tracking-widest text-stone-400">
-                {info.key === 'competence' ? 'Skill' : info.label}
+              <div
+                data-testid={`recap-trait-label-${info.key}`}
+                className="mt-1 text-[0.65rem] font-semibold uppercase tracking-widest text-stone-400"
+              >
+                {t(`terms.characteristics.${info.key}`)}
               </div>
               {info.key === 'rerolls' && (
                 <div
@@ -147,11 +150,11 @@ export function RecapStep({
             {character.skills.map((skill) => (
               <li key={skill.id} className="flex items-baseline justify-between gap-3">
                 <span className="font-semibold text-stone-100">
-                  {skill.name}
+                  {t(`terms.skills.${skill.id}` as any)}
                   {skill.gear && <span className="text-amber-300"> — {skill.gear}</span>}
                 </span>
                 <span className="text-xs uppercase tracking-widest text-stone-600">
-                  {skill.category}
+                  {t(`terms.skillCategories.${skill.category}`)}
                 </span>
               </li>
             ))}

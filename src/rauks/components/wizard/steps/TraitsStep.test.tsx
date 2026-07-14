@@ -7,7 +7,7 @@ import { emptyDraft } from '../../../rules/character'
 describe('TraitsStep', () => {
   it('shows the six trait labels and the points-remaining counter', () => {
     renderWithI18n(<TraitsStep draft={emptyDraft()} dispatch={vi.fn()} />)
-    for (const label of ['Physical', 'Perception', 'Mental', 'Charisma', 'Competence', 'Rerolls']) {
+    for (const label of ['Physical', 'Perception', 'Mental', 'Charisma', 'Skills', 'Rerolls']) {
       expect(screen.getByText(label)).toBeInTheDocument()
     }
     // All traits at 2 (sum 12) => 6 points remaining.

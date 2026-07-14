@@ -48,12 +48,21 @@ describe('RecapStep', () => {
     expect(screen.getByTestId('recap-reroll-total')).toHaveTextContent('5 rerolls')
   })
 
-  it('labels the competence trait "Skill" (not "Competence")', () => {
+  it('labels the competence trait via the localized characteristics term (not a hardcoded "Skill")', () => {
     renderWithI18n(
       <RecapStep draft={completeDraft()} dispatch={vi.fn()} onSaved={vi.fn()} atLimit={false} />,
     )
-    expect(screen.getByText('Skill')).toBeInTheDocument()
+    expect(screen.getByTestId('recap-trait-label-competence')).toHaveTextContent('Skills')
     expect(screen.queryByText('Competence')).not.toBeInTheDocument()
+  })
+
+  it('localizes the competence trait label in French too', () => {
+    renderWithI18n(
+      <RecapStep draft={completeDraft()} dispatch={vi.fn()} onSaved={vi.fn()} atLimit={false} />,
+      { lng: 'fr' },
+    )
+    expect(screen.getByTestId('recap-trait-label-competence')).toHaveTextContent('Compétences')
+    expect(screen.queryByText('Skill')).not.toBeInTheDocument()
   })
 
   it('does not mention Karma', () => {

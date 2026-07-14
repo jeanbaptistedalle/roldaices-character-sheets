@@ -81,16 +81,17 @@ function Stepper({
   onDec: () => void
 }) {
   const { t } = useTranslation('rauks')
+  const label = t(`terms.characteristics.${info.key}`)
   return (
     <div className="flex items-center gap-4 rounded-xl border border-stone-800 bg-stone-900/60 p-4">
       <div className="min-w-0 flex-1">
-        <div className="font-semibold text-stone-100">{info.label}</div>
+        <div className="font-semibold text-stone-100">{label}</div>
         <div className="text-sm text-stone-500">{info.description}</div>
       </div>
       <div className="flex shrink-0 flex-col items-end gap-1">
         <div className="flex items-center gap-3">
           <StepButton
-            label={t('steps.traits.decreaseAria', { trait: info.label })}
+            label={t('steps.traits.decreaseAria', { trait: label })}
             disabled={!canDec}
             onClick={onDec}
           >
@@ -98,7 +99,7 @@ function Stepper({
           </StepButton>
           <span className="w-6 text-center text-2xl font-bold text-amber-400">{value}</span>
           <StepButton
-            label={t('steps.traits.increaseAria', { trait: info.label })}
+            label={t('steps.traits.increaseAria', { trait: label })}
             disabled={!canInc}
             onClick={onInc}
           >

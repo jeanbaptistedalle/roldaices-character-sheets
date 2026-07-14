@@ -3,3 +3,18 @@
 body {
   background-color: #0c0a09; /* stone-950 */
 }
+
+/*
+ * Tailwind v4's Preflight no longer forces `cursor: pointer` on buttons
+ * (it matches the browser default of `default`). Restore the pointer for
+ * enabled interactive controls, and show `not-allowed` when disabled.
+ */
+button:not(:disabled),
+[role='button']:not([aria-disabled='true']) {
+  cursor: pointer;
+}
+
+button:disabled,
+[role='button'][aria-disabled='true'] {
+  cursor: not-allowed;
+}

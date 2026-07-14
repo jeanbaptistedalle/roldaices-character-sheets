@@ -96,7 +96,7 @@ export function RecapStep({
     <StepShell
       eyebrow={t('steps.recap.eyebrow')}
       title={character.name || t('steps.recap.titleFallback')}
-      intro={`${character.aspect.id} · ${character.className}`}
+      intro={`${t(`terms.aspects.${character.aspect.id}`)} · ${t(`terms.classes.${character.classId}` as any)}`}
     >
       <div className="mx-auto max-w-2xl space-y-6">
         {(character.imageUri || character.description) && (
@@ -115,25 +115,25 @@ export function RecapStep({
         )}
 
         <div className="grid grid-cols-3 gap-4">
-          <Stat label="Die" value={role.dieLabel} />
-          <Stat label="Hearts" value={role.hearts} />
-          <Stat label="Stars" value={role.stars} />
+          <Stat label={t('terms.die')} value={role.dieLabel} />
+          <Stat label={t('terms.hearts')} value={role.hearts} />
+          <Stat label={t('terms.stars')} value={role.stars} />
         </div>
 
         {/* Edges */}
         <div className="rounded-xl border border-stone-800 bg-stone-900/60 p-5">
           <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-stone-500">
-            Edges
+            {t('terms.edgesHeading')}
           </h3>
           <ul className="space-y-2">
             {character.edges.map((e) => (
               <li key={e.slot} className="flex items-baseline justify-between gap-3">
                 <span className="font-semibold text-stone-100">
-                  {e.label}
+                  {e.label ?? t(`terms.edges.${e.edge.id}` as any)}
                   {e.subChoice && <span className="text-amber-300"> ({e.subChoice})</span>}
                 </span>
                 <span className="text-xs uppercase tracking-widest text-stone-600">
-                  {e.edge.type}
+                  {t(`terms.edgeTypes.${e.edge.type}`)}
                 </span>
               </li>
             ))}
@@ -146,18 +146,18 @@ export function RecapStep({
             {t('steps.recap.whatHits', { die: role.dieLabel })}
           </h3>
           <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-3">
-            <Row label="Key" value="1" />
+            <Row label={t('terms.resolutions.Key')} value="1" />
             {RESOLUTIONS.map((r) => {
               const targets = hittableTargets(r.id, role.die)
               return (
                 <Row
                   key={r.id}
-                  label={r.id}
+                  label={t(`terms.resolutions.${r.id}`)}
                   value={targets.length ? targets.join(', ') : '—'}
                 />
               )
             })}
-            <Row label="Crown" value={String(role.die)} />
+            <Row label={t('terms.resolutions.Crown')} value={String(role.die)} />
           </div>
         </div>
 

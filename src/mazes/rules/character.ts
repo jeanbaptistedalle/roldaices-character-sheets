@@ -26,8 +26,12 @@ export interface CharacterDraft {
 export interface ResolvedEdge {
   slot: EdgeSlot
   edge: EdgeInfo
-  /** Display label (class flavor label, else the edge name). */
-  label: string
+  /**
+   * Class-specific flavor label override (e.g. "Sworn Swords"), if the class
+   * defines one. When absent, callers display the edge's own term
+   * (`terms.edges.<edge.id>`) resolved via i18n — this module has no `t`.
+   */
+  label?: string
   /** Preset or player-supplied sub-choice, if any. */
   subChoice?: string
   /** True if this edge needs a required sub-choice that isn't set yet. */
@@ -59,7 +63,7 @@ function resolveSlot(slot: EdgeSlot, classEdge: ClassEdge, draft: CharacterDraft
   return {
     slot,
     edge,
-    label: classEdge.label ?? edge.name,
+    label: classEdge.label,
     subChoice,
     needsSubChoice,
   }

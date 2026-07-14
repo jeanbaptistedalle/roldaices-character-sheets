@@ -30,8 +30,6 @@ export const mazesEn = {
       intro: '{{aspect}} classes. Your class is a descriptive name and grants your three edges.',
     },
     edges: {
-      // TODO: 'edges' label is a provisional common-word translation ("Atouts") —
-      // confirm against the official Dédales term in Task 8.
       label: 'Edges',
       eyebrow: 'Step 4',
       title: 'Resolve your edges',
@@ -69,6 +67,139 @@ export const mazesEn = {
       saveError: "Couldn't save your character. Try again.",
       limitMessage:
         "You've reached the limit of {{max}} characters. Delete one before saving a new character.",
+    },
+  },
+  // Rules vocabulary (English = authoritative source, from the mazes-rules skill).
+  // Keyed on the stable domain id/enum from src/mazes/rules/*.ts — never on the
+  // rendered text. See .claude/skills/mazes-rules/SKILL.md.
+  terms: {
+    // Keys mirror each domain's enum casing exactly (Role/Aspect/Resolution/
+    // DOMAINS/FRIENDS_PLACES) so render sites can key off the typed id/enum
+    // value directly (t(`terms.roles.${role.id}`), etc.) instead of a
+    // re-cased string, keeping the lookup type-checked end to end.
+    roles: {
+      Paragon: 'Paragon',
+      Vanguard: 'Vanguard',
+      Fighter: 'Fighter',
+      Sentinel: 'Sentinel',
+    },
+    aspects: {
+      Sword: 'Sword',
+      Shadow: 'Shadow',
+      Sorcery: 'Sorcery',
+    },
+    resolutions: {
+      Key: 'Key',
+      Books: 'Books',
+      Boots: 'Boots',
+      Blades: 'Blades',
+      Bones: 'Bones',
+      Crown: 'Crown',
+    },
+    domains: {
+      Night: 'Night',
+      Forge: 'Forge',
+      Sea: 'Sea',
+      Sky: 'Sky',
+      Earth: 'Earth',
+    },
+    friendsPlaces: {
+      'High Places': 'High Places',
+      'Low Places': 'Low Places',
+      'Wild Places': 'Wild Places',
+      'Dark Places': 'Dark Places',
+    },
+    edgeTypes: {
+      Attribute: 'Attribute',
+      Combat: 'Combat',
+      Magic: 'Magic',
+      Society: 'Society',
+      Wise: 'Wise',
+      Lineage: 'Lineage',
+      Advance: 'Advance',
+    },
+    hearts: 'Hearts',
+    stars: 'Stars',
+    die: 'Die',
+    edgesHeading: 'Edges',
+    always: 'Always',
+    classes: {
+      'dangerous-bravo': 'The Dangerous Bravo',
+      'jaded-sellsword': 'The Jaded Sellsword',
+      'knockabout-ranger': 'The Knockabout Ranger',
+      'monster-slayer': 'The Monster Slayer',
+      'outcast-bugbear': 'The Outcast Bugbear',
+      'reluctant-hero': 'The Reluctant Hero',
+      'savage-barbarian': 'The Savage Barbarian',
+      'valiant-dragoon': 'The Valiant Dragoon',
+      'adventurous-smallfolk': 'The Adventurous Smallfolk',
+      'cursed-tomb-robber': 'The Cursed Tomb Robber',
+      'excellent-vagabond': 'The Excellent Vagabond',
+      'filthy-urchin': 'The Filthy Urchin',
+      'nighthawk-assassin': 'The Nighthawk Assassin',
+      'puzzling-locksmith': 'The Puzzling Locksmith',
+      'talented-thief': 'The Talented Thief',
+      'zealous-cultist': 'The Zealous Cultist',
+      'blazing-magician': 'The Blazing Magician',
+      'guild-mage': 'The Guild Mage',
+      'haunted-librarian': 'The Haunted Librarian',
+      'infernal-summoner': 'The Infernal Summoner',
+      'last-ilf': 'The Last Ilf',
+      'quack-alchemist': 'The Quack Alchemist',
+      'underground-druid': 'The Underground Druid',
+      'wise-witch': 'The Wise Witch',
+    },
+    edges: {
+      // Attributes
+      ardent: 'Ardent',
+      agile: 'Agile',
+      beautiful: 'Beautiful',
+      charming: 'Charming',
+      cunning: 'Cunning',
+      dexterous: 'Dexterous',
+      fast: 'Fast',
+      hale: 'Hale',
+      intimidating: 'Intimidating',
+      keen: 'Keen',
+      lucky: 'Lucky',
+      old: 'Old',
+      quiet: 'Quiet',
+      strong: 'Strong',
+      young: 'Young',
+      // Combat
+      accurate: 'Accurate',
+      armored: 'Armored',
+      deadly: 'Deadly',
+      precise: 'Precise',
+      tough: 'Tough',
+      'well-armed': 'Well-Armed',
+      // Magic
+      familiar: 'Familiar',
+      magic: 'Magic',
+      'magic-item': 'Magic Item',
+      'magic-weapon': 'Magic Weapon',
+      shapeshift: 'Shapeshift',
+      // Society
+      friends: 'Friends',
+      rank: 'Rank',
+      retainers: 'Retainers',
+      tools: 'Tools',
+      wealth: 'Wealth',
+      // 'Wises
+      animalwise: 'Animalwise',
+      gearwise: 'Gearwise',
+      learned: 'Learned',
+      lorewise: 'Lorewise',
+      mazewise: 'Mazewise',
+      naturewise: 'Naturewise',
+      streetwise: 'Streetwise',
+      travelled: 'Travelled',
+      // Lineages
+      bugbear: 'Bugbear',
+      ilf: 'Ilf',
+      smallfolk: 'Smallfolk',
+      // Advances
+      veteran: 'Veteran',
     },
   },
 }

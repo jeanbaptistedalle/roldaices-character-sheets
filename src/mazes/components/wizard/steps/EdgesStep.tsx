@@ -21,16 +21,16 @@ export function EdgesStep({
     <StepShell
       eyebrow={t('steps.edges.eyebrow')}
       title={t('steps.edges.title')}
-      intro={t('steps.edges.intro', { className: cls.name })}
+      intro={t('steps.edges.intro', { className: t(`terms.classes.${cls.id}` as any) })}
     >
       <div className="mx-auto max-w-xl space-y-6">
         {/* Always edge (locked in) */}
         <div className="rounded-xl border border-stone-800 bg-stone-900/60 p-5">
           <p className="text-xs font-semibold uppercase tracking-widest text-stone-500">
-            Always
+            {t('terms.always')}
           </p>
           <p className="mt-1 text-lg font-semibold text-amber-300">
-            {cls.always.label ?? getEdge(cls.always.edgeId).name}
+            {cls.always.label ?? t(`terms.edges.${cls.always.edgeId}` as any)}
           </p>
           <p className="mt-1 text-sm text-stone-400">{getEdge(cls.always.edgeId).description}</p>
           <SubChoice slot="always" classEdge={cls.always} draft={draft} dispatch={dispatch} />
@@ -52,7 +52,7 @@ export function EdgesStep({
                     selected={answer === optIndex}
                     onClick={() => dispatch({ type: 'setAnswer', index, option: optIndex })}
                   >
-                    {opt.label ?? getEdge(opt.edgeId).name}
+                    {opt.label ?? t(`terms.edges.${opt.edgeId}` as any)}
                   </OptionChip>
                 ))}
               </div>
@@ -108,7 +108,9 @@ function SubChoice({
           type="text"
           value={value ?? ''}
           onChange={(e) => set(e.target.value)}
-          placeholder={t('steps.edges.namePlaceholder', { edge: edge.name.toLowerCase() })}
+          placeholder={t('steps.edges.namePlaceholder', {
+            edge: t(`terms.edges.${edge.id}` as any).toLowerCase(),
+          })}
           className="mt-1 w-full rounded-lg border border-stone-700 bg-stone-950 px-3 py-2 text-stone-100 placeholder:text-stone-600 focus:border-amber-500 focus:outline-none"
         />
       </label>
@@ -135,7 +137,9 @@ function SubChoice({
                 : 'border-stone-700 bg-stone-950 text-stone-200 hover:border-amber-600/50',
             )}
           >
-            {choice}
+            {kind === 'place'
+              ? t(`terms.friendsPlaces.${choice as (typeof FRIENDS_PLACES)[number]}`)
+              : t(`terms.domains.${choice as (typeof DOMAINS)[number]}`)}
           </button>
         ))}
       </div>

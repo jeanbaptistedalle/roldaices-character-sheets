@@ -25,7 +25,7 @@ export function RoleStep({
             key={role.id}
             selected={draft.role === role.id}
             onClick={() => dispatch({ type: 'setRole', role: role.id })}
-            title={role.id}
+            title={t(`terms.roles.${role.id}`)}
             badge={role.dieLabel}
           >
             <p className="text-stone-300">{role.blurb}</p>

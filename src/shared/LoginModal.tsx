@@ -12,11 +12,16 @@ export function LoginModal({ onClose }: { onClose: () => void }) {
   )
   const [error, setError] = useState<string | null>(null)
 
-  // Close on Escape.
+  // Close on Escape, or on a browser back/forward navigation (the modal is
+  // rendered from the persistent header, so its state outlives a route change).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('popstate', onClose)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      window.removeEventListener('popstate', onClose)
+    }
   }, [onClose])
 
   async function onEmailSubmit(e: FormEvent) {

@@ -11,6 +11,8 @@ export const appFr: typeof appEn = {
     eyebrow: 'Jeux de rôle sur table',
     subtitle:
       'Créez des personnages pour vos jeux de rôle sur table. Choisissez un système pour commencer.',
+    characterCount_one: '{{count}} personnage',
+    characterCount_other: '{{count}} personnages',
   },
   login: {
     title: 'Connexion',

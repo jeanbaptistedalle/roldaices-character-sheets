@@ -17,9 +17,12 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-stone-800 bg-stone-950/80 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
-        <span className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-500/80">
+        <Link
+          to="/"
+          className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-500/80 transition-colors hover:text-amber-400"
+        >
           {t('brand')}
-        </span>
+        </Link>
 
         <div className="flex items-center gap-3">
           <LanguageToggle />

@@ -5,6 +5,7 @@ export const appFr: typeof appEn = {
   header: {
     logIn: 'Connexion',
     logOut: 'Déconnexion',
+    github: 'Voir le code source sur GitHub',
   },
   picker: {
     eyebrow: 'Jeux de rôle sur table',

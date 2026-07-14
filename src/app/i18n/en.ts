@@ -3,6 +3,7 @@ export const appEn = {
   header: {
     logIn: 'Log in',
     logOut: 'Log out',
+    github: 'View source on GitHub',
   },
   picker: {
     eyebrow: 'Tabletop RPGs',

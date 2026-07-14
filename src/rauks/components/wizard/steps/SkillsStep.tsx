@@ -65,10 +65,14 @@ export function SkillsStep({
                     <span className="font-semibold text-stone-100">
                       {t(`terms.skills.${skill.id}` as any)}
                     </span>
-                    <span className="mt-1 text-sm text-stone-400">{skill.description}</span>
+                    <span className="mt-1 text-sm text-stone-400">
+                      {t(`terms.skillDescriptions.${skill.id}` as any)}
+                    </span>
                     {skill.gear && (
                       <span className="mt-2 text-xs italic text-amber-300/80">
-                        {t('steps.skills.gear', { gear: skill.gear })}
+                        {t('steps.skills.gear', {
+                          gear: t(`terms.skillGear.${skill.id}` as any),
+                        })}
                       </span>
                     )}
                   </button>

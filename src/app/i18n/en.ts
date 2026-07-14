@@ -70,3 +70,5 @@ export const appEn = {
     fr: 'FR',
   },
 }
+
+export default appEn

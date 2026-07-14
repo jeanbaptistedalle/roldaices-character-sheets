@@ -19,7 +19,13 @@
     },
     "editor.quickSuggestions": {
       "strings": "on"
-    }
+    },
+    "i18n-ally.localesPaths": [
+      "src/i18n",
+      "src/app/i18n",
+      "src/mazes/i18n",
+      "src/rauks/i18n"
+    ]
   },
   "extensions": {
     "recommendations": [

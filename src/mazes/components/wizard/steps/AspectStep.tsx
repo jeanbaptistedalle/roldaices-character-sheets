@@ -27,8 +27,8 @@ export function AspectStep({
             onClick={() => dispatch({ type: 'setAspect', aspect: aspect.id })}
             title={t(`terms.aspects.${aspect.id}`)}
           >
-            <p className="italic text-amber-200/70">{aspect.prompt}</p>
-            <p className="mt-2 text-stone-400">{aspect.description}</p>
+            <p className="italic text-amber-200/70">{t(`terms.aspectPrompts.${aspect.id}`)}</p>
+            <p className="mt-2 text-stone-400">{t(`terms.aspectDescriptions.${aspect.id}`)}</p>
           </SelectableCard>
         ))}
       </div>

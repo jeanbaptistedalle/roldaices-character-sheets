@@ -201,5 +201,101 @@ export const mazesEn = {
       // Advances
       veteran: 'Veteran',
     },
+    // Role blurbs + "wants" bullets — mirror rules/roles.ts. Rendered on the Role step.
+    roleBlurbs: {
+      Paragon: 'The expert. The smallest die, but it explodes the most.',
+      Vanguard: 'The most active role — a good mix, always in the thick of it.',
+      Fighter: 'Here to smash faces. At their best when the battle starts.',
+      Sentinel: 'The shield that guards the party. Hard to stop, deals the most.',
+    },
+    roleWants: {
+      Paragon: [
+        'Be the best at a class ability',
+        'Use your instincts and intelligence',
+        'Investigate and use perception',
+        'Rely on special abilities over basic combat',
+      ],
+      Vanguard: [
+        'Always be in the thick of it',
+        'Be great at physical activities like running and climbing',
+        'Be a decent fighter without being the best',
+        'Blend special abilities and basic combat',
+      ],
+      Fighter: [
+        'Stab it, kill it, set it on fire',
+        'Be good at physical activities like climbing and swimming',
+        'Survive a beating and dish out hurt',
+        'Focus primarily on basic combat',
+      ],
+      Sentinel: [
+        'Be safe and keep others safe',
+        'Be strong and hearty',
+        'Soak up damage and laugh at it',
+        'Deal the most damage on the defensive',
+      ],
+    },
+    // Aspect prompts + descriptions — mirror rules/aspects.ts. Rendered on the Aspect step.
+    aspectPrompts: {
+      Sword: '…by the edge of my SWORD.',
+      Shadow: '…from the embrace of the SHADOWS.',
+      Sorcery: '…with my eldritch SORCERY.',
+    },
+    aspectDescriptions: {
+      Sword:
+        'A martial character — warrior, mercenary, or soldier of fortune. Weapons and armor; power from combat skill.',
+      Shadow:
+        'Stealth, subterfuge, and skills. Light weapons and tools; power from specialization.',
+      Sorcery:
+        'Capital-M Magic and mysterious powers. Spells, items, or magical lineage; Stars are your core.',
+    },
+    // Edge descriptions — mirror rules/edges.ts. Rendered on the Edges step.
+    edgeDescriptions: {
+      ardent: 'Resolute, strong-willed, resists pain and temptation.',
+      agile: 'Control of the body, flexibility, and balance.',
+      beautiful: 'Physically handsome and alluring.',
+      charming: 'Likable, friendly, interesting to talk with.',
+      cunning: 'Mentally slippery, fast, strategic, and sly.',
+      dexterous: 'Deft, sleight of hand, strong hand-eye coordination.',
+      fast: 'Physically fast, fleet of foot, quick to react.',
+      hale: 'Healthy and hardy; advantage on all Healing saves.',
+      intimidating: 'A formidable, overawing, threatening demeanor.',
+      keen: 'Alert, sharp eyes and ears, great senses.',
+      lucky: 'Advantaged on Chaos rolls; ties break in your favor.',
+      old: 'Old and wise: advantage on experience/history; disadvantage on Boots/Blades.',
+      quiet: 'Stealthy and balanced; sneaks and stays unseen.',
+      strong: 'Physically strong; advantage lifting or breaking things.',
+      young:
+        'Young and untested: advantage on physical feats; disadvantage on experience/combat.',
+      accurate: 'Advantage fighting at range; expert marksman.',
+      armored: 'Advantage resisting damage and defending.',
+      deadly: 'Advantage when rolling damage.',
+      precise: 'Advantage in melee; controlled and in control.',
+      tough: 'Takes a hit; advantage on Death’s Door and Healing saves.',
+      'well-armed': 'Bristling with weapons; spend a Star to change armament.',
+      familiar: 'A magical retainer bonded to you.',
+      magic: 'You cast spells or channel magical forces.',
+      'magic-item': 'A specific powerful item that grants advantage.',
+      'magic-weapon': 'A single named magical weapon with a story.',
+      shapeshift: 'Turn into another form; your die changes with the shape.',
+      friends: 'Contacts willing to help or inform you.',
+      rank: 'A title and its respect; +1 Lifestyle tier.',
+      retainers: 'People who follow you; you roll for them.',
+      tools: 'Specific focused tools without spending Treasure.',
+      wealth: 'Wealth beyond what you carry; +1 Lifestyle tier.',
+      animalwise: 'Speak the language of beasts and wild fae.',
+      gearwise: 'Gears, clockwork, traps, and locks.',
+      learned: 'Well educated, well read, deep understanding.',
+      lorewise: 'Ancient and mysterious things; ritual magic.',
+      mazewise: 'Familiar with mazes; never without a torch.',
+      naturewise: 'The natural world, animals, and beasts.',
+      streetwise: 'Crime and life on the hard streets.',
+      travelled: 'Wise about the ways of the world and its people.',
+      bugbear: 'Hulking bearlike humanoid; sees in the dark.',
+      ilf: 'Remnant of the elf nations, touched by an element.',
+      smallfolk: 'Proud small folk; can speak with animals.',
+      veteran: 'Shake off a condition once; a free refresh.',
+    },
   },
 }
+
+export default mazesEn

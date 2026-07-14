@@ -32,7 +32,9 @@ export function EdgesStep({
           <p className="mt-1 text-lg font-semibold text-amber-300">
             {cls.always.label ?? t(`terms.edges.${cls.always.edgeId}` as any)}
           </p>
-          <p className="mt-1 text-sm text-stone-400">{getEdge(cls.always.edgeId).description}</p>
+          <p className="mt-1 text-sm text-stone-400">
+            {t(`terms.edgeDescriptions.${cls.always.edgeId}` as any)}
+          </p>
           <SubChoice slot="always" classEdge={cls.always} draft={draft} dispatch={dispatch} />
         </div>
 
@@ -58,7 +60,9 @@ export function EdgesStep({
               </div>
               {chosen && (
                 <>
-                  <p className="mt-3 text-sm text-stone-400">{getEdge(chosen.edgeId).description}</p>
+                  <p className="mt-3 text-sm text-stone-400">
+                    {t(`terms.edgeDescriptions.${chosen.edgeId}` as any)}
+                  </p>
                   <SubChoice slot={slot} classEdge={chosen} draft={draft} dispatch={dispatch} />
                 </>
               )}

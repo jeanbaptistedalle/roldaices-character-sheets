@@ -131,5 +131,84 @@ export const rauksFr: typeof rauksEn = {
       'born-lucky': 'Le cul bordé de nouilles',
     },
     karma: 'Karma',
+    // Descriptions des caractéristiques — source : rulebook Rauksorg (V4).
+    traitDescriptions: {
+      physical: 'Force, endurance, résistance, agilité et combat au corps à corps.',
+      perception: 'Sens, réflexes, dextérité, discrétion et tir à distance.',
+      mental: 'Savoir, logique, secourisme, bricolage et investigation.',
+      charisma: 'Persuader, charmer, mentir, intimider et cerner les intentions.',
+      competence: '= nombre de compétences que vous pouvez choisir.',
+      rerolls: '= jetons de relance et leur récupération.',
+    },
+    // Descriptions des compétences — source : rulebook Rauksorg (V4), Partie 2.
+    skillDescriptions: {
+      gorilla:
+        'Force quasi-simiesque : enfonce les portes, projette des objets lourds, porte des attaques brutales à gros dégâts. Très intimidant.',
+      athlete:
+        'Mobilité de sportif extrême — parkour, escalade, natation, planeur. Distance ou rattrape n’importe qui. Dès le tour 2, une action bonus en fin de tour sur un jet de Physique de plus en plus dur.',
+      'death-cheater':
+        'Contrôle physiologique exceptionnel. Une fois par combat, résiste à une neutralisation et reste conscient ; la blessure s’applique pleinement après le combat.',
+      'rauks-maga':
+        'Corps à corps rauks : frappes rapides, soumissions non létales, combat au sol, étranglements. Permet aussi d’utiliser l’arme à pression au corps à corps de façon létale (impossible sans elle).',
+      'weapon-master':
+        'Maîtrise des lames : crée une zone de mort — quiconque entre dans son cercle de combat peut être frappé automatiquement via un jet d’opposition, la difficulté augmentant avec le nombre d’assaillants.',
+      'sixth-sense':
+        'Sens exacerbés et véritable sixième sens : ressent le danger, localise des personnes à travers les murs. Les informations peuvent être cryptiques ; inutilisable pour les lectures sociales.',
+      mongoose:
+        'Réflexes quasi surhumains : action bonus en début de combat sur un jet réussi ; peut forcer l’initiative sur l’action annoncée d’un autre personnage, dans n’importe quelle scène.',
+      'sleight-of-hand':
+        'Prestidigitation et pickpocket hors pair — subtilise ou glisse des objets, sabote le matériel ou l’arme d’un adversaire — et crochète les serrures.',
+      shadow:
+        'Discrétion et vitesse : échappe à la vigilance de ceux qui le surveillent ; en combat, se déplace pour briser la ligne de vue même après avoir attaqué.',
+      gunslinger:
+        'Tir rapide : trois tirs en un tour, chacun à +1 rang de difficulté. Lance les trois dés d’un coup et relance ceux qu’il veut.',
+      marksman:
+        'Précision à longue portée : désarme, fait ricocher, ou tire entre plusieurs alliés.',
+      anticipation:
+        'Une fois par session, annule un ou plusieurs événements (réputés anticipés et pas encore survenus) pour retenter une approche. La narration fixée par les critiques ou les jets de chance demeure ; les relances dépensées sont perdues.',
+      'master-tactician':
+        'Expert de la défense : bénéficie toujours d’un jet d’opposition face aux attaques à distance ; repère les points faibles pour amplifier ses attaques ou celles de ses alliés.',
+      'forensics-expert': 'Criminologie : empreintes digitales, balistique et preuves scientifiques.',
+      'rauks-medicine':
+        'Soigne les blessures graves, évite les séquelles, parfois réanime ; empêche les pertes de caractéristiques ; peut autopsier pour déterminer la cause de la mort.',
+      pharmacologist:
+        'Fabrique anesthésiants, poisons et stimulants (liquides, solides ou gazeux) sur un temps mort ; explosifs rudimentaires ; expert en science et en chimie.',
+      lawyer:
+        'Analyse l’ordonnancement juridique d’une ville pour l’exploiter, trouve des failles et de vieilles règles oubliées, et excelle à faire condamner un suspect.',
+      engineer: 'Bricoleur expert : mécanique, électronique et science appliquée.',
+      tracker:
+        'Suit les traces d’une personne ou d’un groupe et remonte une piste ; doué pour la survie en pleine nature.',
+      trapper:
+        'Pose, désamorce et repère les pièges — câbles tendus, collets, fosses, pièges explosifs. Un piège ne fait pas le tri et peut blesser un innocent.',
+      coordinator:
+        'Monte un réseau local d’auxiliaires (3 à 10 recrues, davantage dans les grandes villes) pour porter des messages, s’informer, observer, déplacer des marchandises ou assurer une défense légère.',
+      hypnosis:
+        'Hypnose agressive : suggestions, sommeil profond, suppression de la douleur, affaiblissement de la volonté ou altération de la mémoire. Les effets les plus puissants peuvent exiger un jet de chance ; peut passer pour une agression aux yeux des témoins.',
+      'fatal-beauty': 'Beauté stupéfiante et techniques de séduction. Contenu réservé aux adultes.',
+      profiler:
+        'Après observation, cerne l’honnêteté, le caractère et les méthodes d’une personne ; déduit un coupable à partir d’indices. Maître de l’interrogatoire.',
+      'natural-authority':
+        'Présence qui commande : dirige les PNJ qui assistent le groupe et peut soulever une foule de civils ; peut imposer des actions aux membres du groupe et dépenser ses propres relances pour relancer les jets de ses alliés. Forte intimidation.',
+      'dog-handler':
+        'Un chien rauks dressé, doté des caractéristiques du maître mais limité à des actions de chien ; les ordres complexes exigent des jets de « maître chien » ; le résultat « Rauks! » est toujours un échec pour le chien. Fragile et irremplaçable en cours d’aventure.',
+      acting:
+        'Comédie et déguisement — change de déguisement caché en quelques secondes, même dans une foule. Menteur né.',
+      'immaculate-reputation':
+        'Renommé : +1 sur le Karma du groupe pour les jets de réputation (sans jamais dépasser 4) ; on ne retient que ses exploits.',
+      'born-lucky':
+        'Chance incroyable : +1 sur le Karma du groupe pour les jets de chance (sans jamais dépasser 4).',
+    },
+    // Équipement accordé par certaines compétences — source : rulebook (V4).
+    skillGear: {
+      'weapon-master': 'Un sabre.',
+      marksman: 'Une carabine de précision à poudre noire et 5 cartouches (~300 m).',
+      'forensics-expert': 'Un appareil photo à impression instantanée et un kit de relevé d’empreintes.',
+      'rauks-medicine': 'Un kit de médecine Rauks.',
+      pharmacologist: 'Un kit de pharmacologie et deux préparations offertes au départ.',
+      trapper: 'Des câbles fins en nylon et une pelle pliable.',
+      acting: 'Un déguisement passe-partout.',
+    },
   },
 }
+
+export default rauksFr

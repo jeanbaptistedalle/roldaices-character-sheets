@@ -86,7 +86,7 @@ function Stepper({
     <div className="flex items-center gap-4 rounded-xl border border-stone-800 bg-stone-900/60 p-4">
       <div className="min-w-0 flex-1">
         <div className="font-semibold text-stone-100">{label}</div>
-        <div className="text-sm text-stone-500">{info.description}</div>
+        <div className="text-sm text-stone-500">{t(`terms.traitDescriptions.${info.key}`)}</div>
       </div>
       <div className="flex shrink-0 flex-col items-end gap-1">
         <div className="flex items-center gap-3">

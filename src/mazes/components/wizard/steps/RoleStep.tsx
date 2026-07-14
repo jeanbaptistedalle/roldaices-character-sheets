@@ -28,11 +28,13 @@ export function RoleStep({
             title={t(`terms.roles.${role.id}`)}
             badge={role.dieLabel}
           >
-            <p className="text-stone-300">{role.blurb}</p>
+            <p className="text-stone-300">{t(`terms.roleBlurbs.${role.id}`)}</p>
             <ul className="mt-3 space-y-1 text-xs text-stone-500">
-              {role.wants.map((want) => (
-                <li key={want}>• {want}</li>
-              ))}
+              {(t(`terms.roleWants.${role.id}`, { returnObjects: true }) as string[]).map(
+                (want) => (
+                  <li key={want}>• {want}</li>
+                ),
+              )}
             </ul>
           </SelectableCard>
         ))}

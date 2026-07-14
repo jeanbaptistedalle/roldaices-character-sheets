@@ -72,10 +72,13 @@ export const rauksEn = {
     },
   },
   // Rules vocabulary. French is the authoritative source (the game is
-  // French-native — see the rauks-rules skill). English below is a translated
-  // DRAFT flagged for user review. Keyed on the stable domain id from
-  // src/rauks/rules/*.ts — never on the rendered text. See
-  // .claude/skills/rauks-rules/SKILL.md.
+  // French-native — see the rauks-rules skill). English below was reviewed
+  // against the rulebook (JDR - Rauksorg - V4). A few labels intentionally
+  // diverge from a literal translation for clarity: `competence` → "Skills"
+  // (the trait caps how many Skills you hold), `forensics-expert` → the bare FR
+  // "Expert", and `born-lucky` renders the FR slang "le cul bordé de nouilles".
+  // Keyed on the stable domain id from src/rauks/rules/*.ts — never on the
+  // rendered text. See .claude/skills/rauks-rules/SKILL.md.
   terms: {
     // Keys mirror each characteristic's TraitKey exactly so render sites can
     // key off it directly (t(`terms.characteristics.${info.key}`)).
@@ -143,5 +146,82 @@ export const rauksEn = {
     },
     // Group resource, not per-character. Not yet wired to a render site.
     karma: 'Karma',
+    // Trait descriptions — mirror rules/traits.ts. Rendered on the Traits step.
+    traitDescriptions: {
+      physical: 'Strength, endurance, agility, and melee fighting.',
+      perception: 'Senses, reflexes, dexterity, stealth, and ranged shooting.',
+      mental: 'Knowledge, logic, first aid, tinkering, and investigation.',
+      charisma: 'Persuade, charm, lie, intimidate, and read intentions.',
+      competence: '= number of Skills you may pick.',
+      rerolls: '= reroll tokens and their recovery.',
+    },
+    // Skill descriptions — mirror rules/skills.ts. Rendered on the Skills step.
+    skillDescriptions: {
+      gorilla:
+        'Gorilla-like strength: force doors, throw heavy objects, brutal high-damage attacks. Very intimidating.',
+      athlete:
+        'Extreme-sports mobility — parkour, climbing, swimming, glider. Outruns or catches anyone. From turn 2, a bonus action at end of each turn on an increasingly hard Physical roll.',
+      'death-cheater':
+        'Exceptional physiology control. Once per combat, resist a neutralization and stay conscious; the wound fully applies after combat.',
+      'rauks-maga':
+        'Rauks hand-to-hand: fast strikes, non-lethal submissions, ground fighting, chokes. Also lets you use the pressure weapon lethally in melee (impossible without it).',
+      'weapon-master':
+        'Blade mastery: creates a lethal zone — anyone entering the combat circle can be struck automatically via an opposition roll, difficulty rising as more enter.',
+      'sixth-sense':
+        'Hyper-senses plus a true sixth sense: feel danger, locate people through walls. Information can be cryptic; cannot be used for social reads.',
+      mongoose:
+        "Near-superhuman reflexes: a start-of-combat bonus action on a successful roll; can force initiative over another character's declared action in any scene.",
+      'sleight-of-hand':
+        "Prestidigitation and elite pickpocketing — take or plant objects, sabotage a foe's gear or weapon — plus lockpicking.",
+      shadow:
+        "Stealth and speed: escape watchers' vigilance; in combat, move to break line-of-sight even after attacking.",
+      gunslinger:
+        'Rapid fire: three shots in one turn, each at +1 difficulty rank. Roll all three dice at once and reroll any at will.',
+      marksman: 'Long-range precision: disarm, ricochet, or shoot between allies.',
+      anticipation:
+        'Once per session, cancel one or more events (deemed anticipated and not yet occurred) to retry an approach. Narrative fixed by criticals or luck rolls persists; rerolls spent during it are lost.',
+      'master-tactician':
+        "Defensive expert: always gets an opposition roll versus ranged attacks; finds weak points to amplify allies' or own attacks.",
+      'forensics-expert': 'Criminology: fingerprints, ballistics, and scientific evidence.',
+      'rauks-medicine':
+        'Heal grave wounds, prevent sequelae, sometimes resuscitate; prevents trait loss; can autopsy for cause of death.',
+      pharmacologist:
+        'Craft anesthetics, poisons, and stimulants (liquid, solid, or gas) during a lull; rudimentary explosives; science and chemistry expert.',
+      lawyer:
+        "Reads a city's legal order to exploit it, finds loopholes and forgotten old rules, and is good at getting a suspect convicted.",
+      engineer: 'Expert tinkerer: mechanics, electronics, and applied science.',
+      tracker: 'Track a person or group and hunt a trail; strong at wilderness survival.',
+      trapper:
+        'Set, disarm, and spot traps — tripwires, snares, pits, explosive traps. Traps are indiscriminate and may catch innocents.',
+      coordinator:
+        'Builds a local auxiliary network (3–10 helpers, more in big cities) for messages, information, observation, moving goods, and light defense.',
+      hypnosis:
+        'Aggressive hypnosis: suggestions, deep sleep, suppress pain, weaken will, or alter memory. The hardest effects may need a luck roll; it can look like an assault to witnesses.',
+      'fatal-beauty': 'Stunning beauty and seduction techniques. Adults-only content.',
+      profiler:
+        "Read a person's honesty, character, and methods after observation; infer a perpetrator from clues. A master interrogator.",
+      'natural-authority':
+        "Commanding presence: directs assisting NPCs and can raise a civilian crowd; can impose actions on group members and spend own rerolls to reroll allies' rolls. Strong intimidation.",
+      'dog-handler':
+        'A trained Rauks dog with the master\'s traits but dog-only actions; complex commands need Dog Handler rolls; the "Rauks!" result always fails for the dog. Fragile and irreplaceable mid-adventure.',
+      acting:
+        'Impersonation and disguise — swap a hidden disguise in seconds, even in a crowd. A natural liar.',
+      'immaculate-reputation':
+        'Renowned: +1 over the group Karma on reputation rolls (never above 4); people remember only their exploits.',
+      'born-lucky': 'Incredibly lucky: +1 over the group Karma on luck rolls (never above 4).',
+    },
+    // Gear granted by certain skills — mirror rules/skills.ts. Rendered on the
+    // Skills step and the Recap.
+    skillGear: {
+      'weapon-master': 'A sabre.',
+      marksman: 'A black-powder precision rifle and 5 cartridges (~300m).',
+      'forensics-expert': 'An instant camera and a fingerprint kit.',
+      'rauks-medicine': 'A Rauks medical kit.',
+      pharmacologist: 'A pharmacology kit and two free preparations at start.',
+      trapper: 'Nylon cables and a folding shovel.',
+      acting: 'An all-purpose disguise.',
+    },
   },
 }
+
+export default rauksEn

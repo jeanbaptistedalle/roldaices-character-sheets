@@ -10,6 +10,7 @@
     "mikestead.dotenv",
     "ms-vscode.vscode-typescript-next",
     "ms-vscode.vs-keybindings",
-    "vscode-icons-team.vscode-icons"
+    "vscode-icons-team.vscode-icons",
+    "Lokalise.i18n-ally"
   ]
 }

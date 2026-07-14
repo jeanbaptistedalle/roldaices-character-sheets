@@ -151,7 +151,12 @@ export function RecapStep({
               <li key={skill.id} className="flex items-baseline justify-between gap-3">
                 <span className="font-semibold text-stone-100">
                   {t(`terms.skills.${skill.id}` as any)}
-                  {skill.gear && <span className="text-amber-300"> — {skill.gear}</span>}
+                  {skill.gear && (
+                    <span className="text-amber-300">
+                      {' '}
+                      — {t(`terms.skillGear.${skill.id}` as any)}
+                    </span>
+                  )}
                 </span>
                 <span className="text-xs uppercase tracking-widest text-stone-600">
                   {t(`terms.skillCategories.${skill.category}`)}

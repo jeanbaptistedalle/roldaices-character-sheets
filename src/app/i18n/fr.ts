@@ -73,3 +73,5 @@ export const appFr: typeof appEn = {
     fr: 'FR',
   },
 } as const
+
+export default appFr

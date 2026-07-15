@@ -46,7 +46,7 @@ export const rauksEn = {
       birthDateLabel: 'Birth date',
       birthDatePlaceholder: 'Imperial calendar, e.g. 3rd of the 2nd month',
       rauksorgLabel: 'Rauksorg',
-      rauksorgPlaceholder: 'The Rauks unit this character belongs to',
+      rauksorgPlaceholder: 'e.g. Lille',
       descriptionLabel: 'Description',
       descriptionPlaceholder: 'A short description, backstory, or notable quirk…',
     },

@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Icon } from '@iconify/react'
+import { rpgDiceIcon } from '../shared/icons/rpgDice'
 import { useAuth } from '../auth'
 import { LoginModal } from '../shared/LoginModal'
 import { displayNameOf, avatarUrlOf } from './userDisplay'
@@ -19,9 +21,16 @@ export function Header() {
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
         <Link
           to="/"
-          className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-500/80 transition-colors hover:text-amber-400"
+          className="flex items-center gap-2 text-amber-500/80 transition-colors hover:text-amber-400"
         >
-          {t('brand')}
+          <Icon
+            icon={rpgDiceIcon}
+            aria-hidden="true"
+            className="h-6 w-6 shrink-0 stroke-2"
+          />
+          <span className="text-sm font-semibold uppercase tracking-[0.2em]">
+            {t('brand')}
+          </span>
         </Link>
 
         <div className="flex items-center gap-3">

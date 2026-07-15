@@ -6,6 +6,7 @@ export const rauksEn = {
     title: 'Rauks Character Sheets',
     subtitle:
       'Build a Rauks: an elite investigator-knight of the World Empire. Assign your traits, choose your skills, and take the contract.',
+    noSkills: 'No skills',
   },
   rerollSuffix_one: 'reroll',
   rerollSuffix_other: 'rerolls',

@@ -66,4 +66,17 @@ describe('persistence', () => {
     const anon: RauksData = { traits: completeDraft().traits, skillIds: [] }
     expect(summarize(anon)).toBe('No skills')
   })
+
+  it('summarize localizes skill names and the empty label via the translator', () => {
+    const t = (key: string) =>
+      key === 'terms.skills.gorilla'
+        ? 'Gorille'
+        : key === 'home.noSkills'
+          ? 'Aucune compétence'
+          : key
+    const one: RauksData = { traits: completeDraft().traits, skillIds: ['gorilla'] }
+    expect(summarize(one, t)).toBe('Gorille')
+    const anon: RauksData = { traits: completeDraft().traits, skillIds: [] }
+    expect(summarize(anon, t)).toBe('Aucune compétence')
+  })
 })

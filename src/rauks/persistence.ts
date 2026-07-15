@@ -51,8 +51,13 @@ export function dataToDraft(record: CharacterRecord): CharacterDraft {
   }
 }
 
-/** One-line list-row summary of the chosen skills, e.g. "Gorilla · Shadow · Lawyer". */
-export function summarize(data: RauksData): string {
-  if (data.skillIds.length === 0) return 'No skills'
-  return data.skillIds.map((id) => getSkill(id).name).join(' · ')
+/**
+ * One-line list-row summary of the chosen skills, e.g. "Gorilla · Shadow · Lawyer".
+ * Pass a translator (the `rauks` namespace `t`) to localize the skill names and the
+ * empty label; without one it falls back to the English names from the rules.
+ */
+export function summarize(data: RauksData, t?: (key: string) => string): string {
+  if (data.skillIds.length === 0) return t ? t('home.noSkills') : 'No skills'
+  const name = t ? (id: string) => t(`terms.skills.${id}`) : (id: string) => getSkill(id).name
+  return data.skillIds.map(name).join(' · ')
 }

@@ -199,8 +199,11 @@ function CharacterRow({
   onRequestDelete: () => void
 }) {
   const { t } = useTranslation()
+  const { t: tRauks } = useTranslation('rauks')
   const data = character.data as RauksData
-  const summary = summarize(data)
+  // tRauks is typed against the literal key union; summarize builds keys
+  // dynamically, so bridge it through a plain string signature.
+  const summary = summarize(data, (key) => tRauks(key as never))
   return (
     <li className="flex items-center gap-4 rounded-xl border border-stone-800 bg-stone-900/60 p-4">
       {character.imageUri ? (

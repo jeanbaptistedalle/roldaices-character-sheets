@@ -33,9 +33,6 @@ export function SystemPicker({ onSelect }: { onSelect: (id: string) => void }) {
   return (
     <div className="flex-1 bg-stone-950 text-stone-100">
       <main className="mx-auto flex max-w-3xl flex-col items-center px-6 py-20 text-center">
-        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-amber-500/80">
-          {t('picker.eyebrow')}
-        </p>
         <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
           {t('brand')}
         </h1>

@@ -1,0 +1,29 @@
+name: CI
+
+# Runs on every PR targeting main (and on pushes to main as a safety net).
+# Make the "test" check required in branch protection to block merges on failure.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # Uses the committed .env.test — no secrets needed.
+      - run: npm run test
+
+      # Build is just bundling; it succeeds without real Supabase secrets, so
+      # this gate also works for PRs opened from forks (which can't read secrets).
+      - run: npm run build

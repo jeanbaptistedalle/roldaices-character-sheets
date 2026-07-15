@@ -1,4 +1,6 @@
 {
+  "deno.enablePaths": ["supabase/functions"],
+  "deno.lint": true,
   "i18n-ally.localesPaths": ["src/app/i18n", "src/mazes/i18n", "src/rauks/i18n"],
   "i18n-ally.keystyle": "nested",
   "i18n-ally.namespace": true,

@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "anthropic.claude-code",
+    "denoland.vscode-deno",
     "bradlc.vscode-tailwindcss",
     "christian-kohler.path-intellisense",
     "dbaeumer.vscode-eslint",

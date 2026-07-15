@@ -65,6 +65,24 @@ describe('RecapStep', () => {
     expect(screen.queryByText('Skill')).not.toBeInTheDocument()
   })
 
+  it('surfaces the Rauksorg (city) prominently, ahead of the skills list', () => {
+    renderWithI18n(
+      <RecapStep
+        draft={{ ...completeDraft(), rauksorg: 'Lille' }}
+        dispatch={vi.fn()}
+        onSaved={vi.fn()}
+        atLimit={false}
+      />,
+    )
+    const rauksorg = screen.getByTestId('recap-rauksorg')
+    expect(rauksorg).toHaveTextContent('Lille')
+    // It must render before the skills heading in document order.
+    const skillsHeading = screen.getByRole('heading', { name: 'Skills' })
+    expect(rauksorg.compareDocumentPosition(skillsHeading)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    )
+  })
+
   it('does not mention Karma', () => {
     renderWithI18n(
       <RecapStep draft={completeDraft()} dispatch={vi.fn()} onSaved={vi.fn()} atLimit={false} />,

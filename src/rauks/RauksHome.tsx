@@ -199,7 +199,8 @@ function CharacterRow({
   onRequestDelete: () => void
 }) {
   const { t } = useTranslation()
-  const summary = summarize(character.data as RauksData)
+  const data = character.data as RauksData
+  const summary = summarize(data)
   return (
     <li className="flex items-center gap-4 rounded-xl border border-stone-800 bg-stone-900/60 p-4">
       {character.imageUri ? (
@@ -213,6 +214,9 @@ function CharacterRow({
       )}
       <div className="min-w-0 flex-1">
         <div className="truncate font-semibold text-stone-100">{character.name}</div>
+        {data.rauksorg && (
+          <div className="truncate text-sm font-medium text-amber-300/90">{data.rauksorg}</div>
+        )}
         {summary && <div className="truncate text-sm text-stone-500">{summary}</div>}
       </div>
       <button

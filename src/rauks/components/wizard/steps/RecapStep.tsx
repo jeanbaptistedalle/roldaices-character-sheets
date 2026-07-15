@@ -79,7 +79,6 @@ export function RecapStep({
     ],
     [t('steps.identity.sexLabel'), character.sex],
     [t('steps.identity.birthDateLabel'), character.birthDate],
-    [t('steps.identity.rauksorgLabel'), character.rauksorg],
   ]
 
   return (
@@ -105,7 +104,7 @@ export function RecapStep({
         )}
 
         {/* Identity */}
-        <div className="grid grid-cols-2 gap-x-6 gap-y-2 rounded-xl border border-stone-800 bg-stone-900/60 p-5 text-sm sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-2 rounded-xl border border-stone-800 bg-stone-900/60 p-5 text-sm sm:grid-cols-3">
           {identityRows.map(([label, value]) => (
             <div key={label}>
               <div className="text-xs uppercase tracking-widest text-stone-500">{label}</div>
@@ -139,6 +138,17 @@ export function RecapStep({
               )}
             </div>
           ))}
+        </div>
+
+        {/* Rauksorg — the character's city, surfaced prominently ahead of the skills. */}
+        <div
+          data-testid="recap-rauksorg"
+          className="flex items-baseline justify-between gap-3 rounded-xl border border-amber-800/40 bg-stone-900/60 px-5 py-4"
+        >
+          <span className="text-xs font-semibold uppercase tracking-widest text-stone-500">
+            {t('steps.identity.rauksorgLabel')}
+          </span>
+          <span className="text-lg font-semibold text-amber-300">{character.rauksorg || '—'}</span>
         </div>
 
         {/* Skills */}

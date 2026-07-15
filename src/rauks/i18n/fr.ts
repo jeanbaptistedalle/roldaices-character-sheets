@@ -50,7 +50,7 @@ export const rauksFr: typeof rauksEn = {
       birthDateLabel: 'Date de naissance',
       birthDatePlaceholder: 'Calendrier impérial, ex. 3e jour du 2e mois',
       rauksorgLabel: 'Rauksorg',
-      rauksorgPlaceholder: 'L’unité Rauks à laquelle appartient ce personnage',
+      rauksorgPlaceholder: 'ex. Lille',
       descriptionLabel: 'Description',
       descriptionPlaceholder: 'Une courte description, un passé, ou un trait particulier…',
     },

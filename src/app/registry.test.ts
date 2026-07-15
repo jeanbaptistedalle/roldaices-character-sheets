@@ -28,6 +28,6 @@ describe('SYSTEMS registry', () => {
   })
 
   it('exposes the expected i18n namespaces in order', () => {
-    expect(SYSTEMS.map((s) => s.i18nNamespace)).toEqual(['mazes', 'rauks'])
+    expect(SYSTEMS.map((s) => s.i18nNamespace)).toEqual(['rauks', 'mazes'])
   })
 })

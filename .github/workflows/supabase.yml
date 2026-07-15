@@ -1,0 +1,53 @@
+name: Deploy Supabase
+
+# Pushes database migrations and Edge Functions to the linked Supabase project
+# whenever anything under supabase/ changes on main. Frontend-only changes don't
+# trigger this (see deploy.yml for the GitHub Pages build).
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/**'
+      - '.github/workflows/supabase.yml'
+  workflow_dispatch:
+
+# Never run two Supabase deploys at once (a migration push mid-flight is bad).
+concurrency:
+  group: supabase-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      # A Supabase personal access token (Account → Access Tokens). Authenticates
+      # the CLI.
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      # The project id / ref (Project Settings → General → "Reference ID").
+      SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+      # The database password (Project Settings → Database). Lets `link`/`db push`
+      # run non-interactively.
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Link project
+        run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
+
+      - name: Push database migrations
+        run: supabase db push
+
+      - name: Deploy Edge Functions
+        run: supabase functions deploy discord-membership
+
+      # Keep the Discord guild allow-list in one place (a GitHub secret) and sync
+      # it into the function's runtime env on every deploy. Change the servers by
+      # editing the DISCORD_ALLOWED_GUILD_IDS repo secret and pushing.
+      - name: Sync Discord guild allow-list
+        run: |
+          supabase secrets set \
+            DISCORD_ALLOWED_GUILD_IDS="${{ secrets.DISCORD_ALLOWED_GUILD_IDS }}"

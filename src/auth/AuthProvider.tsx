@@ -8,6 +8,7 @@ import {
 } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '../shared/supabase'
+import { syncDiscordMembership } from '../api'
 import * as actions from './actions'
 
 interface AuthValue {
@@ -15,7 +16,6 @@ interface AuthValue {
   user: User | null
   loading: boolean
   signInWithDiscord: () => Promise<unknown>
-  signInWithEmail: (email: string) => Promise<unknown>
   signOut: () => Promise<unknown>
 }
 
@@ -27,7 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Seed from any existing session, then keep in sync with auth changes
-    // (OAuth redirect, magic-link landing, sign out, token refresh).
+    // (OAuth redirect, sign out, token refresh).
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session)
       setLoading(false)
@@ -35,9 +35,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, next) => {
+    } = supabase.auth.onAuthStateChange((event, next) => {
       setSession(next)
       setLoading(false)
+
+      // Right after a Discord sign-in the session carries the OAuth
+      // provider_token (it's absent on later token refreshes). That's our one
+      // chance to read the user's Discord server list, so kick off the
+      // membership check now. Promote-only and best-effort: a failure here just
+      // leaves the user as a guest, which they can retry by signing in again.
+      if (event === 'SIGNED_IN' && next?.provider_token) {
+        void syncDiscordMembership(next.provider_token).catch(() => {})
+      }
     })
 
     return () => subscription.unsubscribe()
@@ -49,8 +58,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user: session?.user ?? null,
       loading,
       signInWithDiscord: () => actions.signInWithDiscord(supabase),
-      signInWithEmail: (email: string) =>
-        actions.signInWithEmail(supabase, email),
       signOut: () => actions.signOut(supabase),
     }),
     [session, loading],

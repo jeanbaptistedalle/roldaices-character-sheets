@@ -65,10 +65,13 @@ export const rauksEn = {
       saving: 'Saving…',
       loginToSave: 'Log in to save',
       limitReached: 'Character limit reached',
+      awaitingValidation: 'Wait for the admin to validate your account',
       startOver: 'Start over',
       saveError: "Couldn't save your character. Try again.",
       limitMessage:
         "You've reached the limit of {{max}} characters. Delete one before saving a new character.",
+      guestMessage:
+        "Your account isn't validated yet, so you can't save characters. Join our Discord server (or ask an admin) to get access.",
     },
   },
   // Rules vocabulary. French is the authoritative source (the game is

@@ -17,13 +17,8 @@ export const appFr: typeof appEn = {
     title: 'Connexion',
     close: 'Fermer',
     discord: 'Continuer avec Discord',
-    or: 'ou',
-    emailPlaceholder: 'vous@exemple.com',
-    sending: 'Envoi…',
-    submit: 'Envoyer un lien d’invitation',
-    sentPrefix: 'Vérifiez votre boîte mail — nous avons envoyé un lien magique à ',
-    sentSuffix: '. Ouvrez-le sur cet appareil pour terminer la connexion.',
-    errorEmail: 'Impossible d’envoyer le lien. Vérifiez l’adresse et réessayez.',
+    discordHint:
+      'L’accès est réservé aux membres de notre serveur Discord. Connectez-vous avec Discord — si vous en faites partie, votre compte est mis à niveau automatiquement. Sinon, un admin peut vous valider.',
     errorDiscord: 'Impossible de démarrer la connexion Discord. Réessayez.',
   },
   confirm: {

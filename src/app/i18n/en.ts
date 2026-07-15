@@ -14,13 +14,8 @@ export const appEn = {
     title: 'Log in',
     close: 'Close',
     discord: 'Continue with Discord',
-    or: 'or',
-    emailPlaceholder: 'you@example.com',
-    sending: 'Sending…',
-    submit: 'Send an invitation link',
-    sentPrefix: 'Check your inbox — we sent a magic link to ',
-    sentSuffix: '. Open it on this device to finish logging in.',
-    errorEmail: "Couldn't send the link. Check the address and try again.",
+    discordHint:
+      'Access is reserved for members of our Discord server. Sign in with Discord — if you belong, your account is upgraded automatically. Otherwise an admin can validate you.',
     errorDiscord: "Couldn't start Discord sign-in. Try again.",
   },
   confirm: {

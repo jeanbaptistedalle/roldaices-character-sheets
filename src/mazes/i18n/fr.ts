@@ -69,10 +69,13 @@ export const mazesFr: typeof mazesEn = {
       saving: 'Enregistrement…',
       loginToSave: 'Connectez-vous pour enregistrer',
       limitReached: 'Limite de personnages atteinte',
+      awaitingValidation: 'Attendez qu’un admin valide votre compte',
       startOver: 'Recommencer',
       saveError: "Impossible d'enregistrer ce personnage. Réessayez.",
       limitMessage:
         "Vous avez atteint la limite de {{max}} personnages. Supprimez-en un avant d'en enregistrer un nouveau.",
+      guestMessage:
+        'Votre compte n’est pas encore validé, vous ne pouvez donc pas enregistrer de personnages. Rejoignez notre serveur Discord (ou demandez à un admin) pour obtenir l’accès.',
     },
   },
   // Terminologie Dédales (Les XII singes). CONFIRMÉ officiellement depuis la

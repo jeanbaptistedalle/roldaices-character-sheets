@@ -6,7 +6,13 @@ import { draftToData } from '../../../persistence'
 import type { NavAction } from '../../../../app/wizard/WizardState'
 import { StepShell } from '../ui'
 import { useAuth } from '../../../../auth'
-import { saveCharacter, updateCharacter, listCharacters } from '../../../../api'
+import {
+  saveCharacter,
+  updateCharacter,
+  listCharacters,
+  getCurrentUserRole,
+  type UserRole,
+} from '../../../../api'
 import { LoginModal } from '../../../../shared/LoginModal'
 import { isAtLimit, MAX_CHARACTERS_PER_SYSTEM } from '../../../../app/limits'
 
@@ -45,6 +51,23 @@ export function RecapStep({
     }
   }, [user, editId])
 
+  // Guests may build a character but not persist it (enforced server-side by
+  // RLS; this just hides the save button and explains why).
+  const [role, setRole] = useState<UserRole | null>(null)
+  useEffect(() => {
+    if (!user) return
+    let active = true
+    getCurrentUserRole()
+      .then((r) => {
+        if (active) setRole(r)
+      })
+      .catch(() => {})
+    return () => {
+      active = false
+    }
+  }, [user])
+  const isGuest = Boolean(user) && role === 'guest'
+
   const blocked = atLimit || limitReached
 
   async function onSave() {
@@ -52,7 +75,7 @@ export function RecapStep({
       setShowLogin(true)
       return
     }
-    if (blocked) return
+    if (isGuest || blocked) return
     setSaveStatus('saving')
     try {
       const payload = {
@@ -189,18 +212,20 @@ export function RecapStep({
           <button
             type="button"
             onClick={onSave}
-            disabled={saveStatus === 'saving' || blocked}
+            disabled={saveStatus === 'saving' || blocked || isGuest}
             className="rounded-lg bg-amber-600 px-6 py-2.5 font-semibold text-stone-950 transition-colors hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {blocked
-              ? t('steps.recap.limitReached')
-              : saveStatus === 'saving'
-                ? t('steps.recap.saving')
-                : !user
-                  ? t('steps.recap.loginToSave')
-                  : editId
-                    ? t('steps.recap.saveChanges')
-                    : t('steps.recap.saveCharacter')}
+            {isGuest
+              ? t('steps.recap.awaitingValidation')
+              : blocked
+                ? t('steps.recap.limitReached')
+                : saveStatus === 'saving'
+                  ? t('steps.recap.saving')
+                  : !user
+                    ? t('steps.recap.loginToSave')
+                    : editId
+                      ? t('steps.recap.saveChanges')
+                      : t('steps.recap.saveCharacter')}
           </button>
           <button
             type="button"
@@ -213,7 +238,12 @@ export function RecapStep({
         {saveStatus === 'error' && (
           <p className="text-center text-sm text-red-400">{t('steps.recap.saveError')}</p>
         )}
-        {blocked && (
+        {isGuest && (
+          <p className="text-center text-sm text-amber-300/80">
+            {t('steps.recap.guestMessage')}
+          </p>
+        )}
+        {!isGuest && blocked && (
           <p className="text-center text-sm text-red-300">
             {t('steps.recap.limitMessage', { max: MAX_CHARACTERS_PER_SYSTEM })}
           </p>

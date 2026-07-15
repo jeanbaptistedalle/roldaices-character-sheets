@@ -1,11 +1,10 @@
 import { describe, it, expect, vi } from 'vitest'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { signInWithDiscord, signInWithEmail, signOut } from './actions'
+import { signInWithDiscord, signOut } from './actions'
 
 function mockClient() {
   const auth = {
     signInWithOAuth: vi.fn().mockResolvedValue({ data: {}, error: null }),
-    signInWithOtp: vi.fn().mockResolvedValue({ data: {}, error: null }),
     signOut: vi.fn().mockResolvedValue({ error: null }),
   }
   return { auth } as unknown as SupabaseClient & { auth: typeof auth }
@@ -21,13 +20,11 @@ describe('auth actions', () => {
     )
   })
 
-  it('signInWithEmail sends a magic link (OTP) for the given email', () => {
+  it('signInWithDiscord requests the guilds scope so membership can be checked', () => {
     const client = mockClient()
-    signInWithEmail(client, 'player@example.com')
-    expect(client.auth.signInWithOtp).toHaveBeenCalledTimes(1)
-    expect(client.auth.signInWithOtp).toHaveBeenCalledWith(
-      expect.objectContaining({ email: 'player@example.com' }),
-    )
+    signInWithDiscord(client)
+    const options = client.auth.signInWithOAuth.mock.calls[0][0].options
+    expect(options.scopes).toContain('guilds')
   })
 
   it('signOut calls the client sign-out', () => {

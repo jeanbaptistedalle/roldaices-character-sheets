@@ -8,16 +8,21 @@ import tailwindcss from '@tailwindcss/vite'
 // yields a blank page in the browser rather than a build/startup error.
 const REQUIRED_ENV = ['VITE_SUPABASE_URL', 'VITE_SUPABASE_PUBLISHABLE_KEY']
 
-// Fail fast — on `vite dev` (incl. VS Code F5), `vite build`, and `vite
-// preview` — when required config is missing, instead of serving or shipping a
-// blank page. Runs however Vite is launched, so it can't be bypassed the way an
-// npm `prebuild` hook is (F5 runs the `dev` task, never `build`). Values are
-// read via Vite's own env resolution, so `.env`, `.env.<mode>`, and real
-// process env (CI) all count. Test mode is covered by the committed `.env.test`.
+// Fail fast — on any *runtime* launch of the app (`vite dev`, incl. VS Code F5;
+// `vite preview`; and the vitest run) — when required config is missing, instead
+// of serving a blank page. These all resolve with `command === 'serve'`, and the
+// right env file is picked per mode by Vite's own resolution: `.env` for dev,
+// the committed `.env.test` for tests, `.env`/`.env.production` for preview, plus
+// real process env (CI). We deliberately DON'T check `vite build` (command ===
+// 'build'): bundling isn't runtime, and CI builds a fork PR with no secrets as a
+// pure smoke test — the real deploy injects the secrets as process env, and a
+// genuinely misconfigured deploy still surfaces at runtime via
+// src/shared/supabase.ts.
 function requireSupabaseEnv(): Plugin {
   return {
     name: 'require-supabase-env',
     configResolved(config) {
+      if (config.command !== 'serve') return
       const env = loadEnv(config.mode, config.root)
       const missing = REQUIRED_ENV.filter((key) => !env[key])
       if (missing.length) {

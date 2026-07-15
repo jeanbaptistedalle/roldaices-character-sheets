@@ -6,7 +6,6 @@ export const appEn = {
     github: 'View source on GitHub',
   },
   picker: {
-    eyebrow: 'Tabletop RPGs',
     subtitle: 'Build characters for tabletop roleplaying games. Pick a system to begin.',
     characterCount_one: '{{count}} character',
     characterCount_other: '{{count}} characters',

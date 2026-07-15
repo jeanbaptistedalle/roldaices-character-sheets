@@ -3,4 +3,4 @@ import { mazesSystem } from '../mazes'
 import { rauksSystem } from '../rauks'
 
 /** All TTRPG systems available in the app. Add a system: import + append here. */
-export const SYSTEMS: SystemDefinition[] = [mazesSystem, rauksSystem]
+export const SYSTEMS: SystemDefinition[] = [rauksSystem, mazesSystem]

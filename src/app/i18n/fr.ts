@@ -8,7 +8,6 @@ export const appFr: typeof appEn = {
     github: 'Voir le code source sur GitHub',
   },
   picker: {
-    eyebrow: 'Jeux de rôle sur table',
     subtitle:
       'Créez des personnages pour vos jeux de rôle sur table. Choisissez un système pour commencer.',
     characterCount_one: '{{count}} personnage',

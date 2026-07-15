@@ -8,7 +8,7 @@ import {
 } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '../shared/supabase'
-import { syncDiscordMembership } from '../api'
+import { getCurrentUserRole, syncDiscordMembership } from '../api'
 import * as actions from './actions'
 
 interface AuthValue {
@@ -44,8 +44,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // chance to read the user's Discord server list, so kick off the
       // membership check now. Promote-only and best-effort: a failure here just
       // leaves the user as a guest, which they can retry by signing in again.
+      //
+      // The check only ever promotes guest -> user, so skip the Edge Function
+      // entirely for anyone already promoted (user/moderator/admin). We gate on
+      // a cheap own-row profile read (RLS-scoped) instead of invoking the
+      // function on every returning user's login. A null role means the profile
+      // row isn't visible yet (brand-new user) — treat that as needs-check.
       if (event === 'SIGNED_IN' && next?.provider_token) {
-        void syncDiscordMembership(next.provider_token).catch(() => {})
+        const providerToken = next.provider_token
+        void getCurrentUserRole()
+          .then((role) => {
+            if (role === null || role === 'guest') {
+              return syncDiscordMembership(providerToken)
+            }
+          })
+          .catch(() => {})
       }
     })
 

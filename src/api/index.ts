@@ -16,3 +16,8 @@ export {
   type ProfileRecord,
   type UserRole,
 } from './profiles'
+
+export {
+  syncDiscordMembership,
+  type MembershipResult,
+} from './discord'

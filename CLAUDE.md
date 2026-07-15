@@ -41,7 +41,16 @@ npm run preview  # preview the production build
   client and is **publicly visible** — the publishable key
   (`sb_publishable_...`) is public by design; data is protected by Row Level
   Security, not key secrecy. Never use a secret key in the client. Never commit
-  `.env`. Never hard-code keys in source.
+  `.env`. Never hard-code keys in source. Server-side secrets (e.g. the Discord
+  guild allow-list `DISCORD_ALLOWED_GUILD_IDS`) live in the Supabase Edge
+  Function env, synced from GitHub secrets by CI — never `VITE_`-prefixed.
+- **Auth & roles:** sign-in is **Discord-only** (no email/password). Every user
+  has a `role` in `public.profiles` (`guest`/`user`/`moderator`/`admin`),
+  defaulting to `guest`. Guests can use the wizard but cannot persist characters
+  — the `characters` RLS write policies require `public.is_privileged()`.
+  Promotion `guest`→`user` is automatic for members of an allowed Discord server,
+  done server-side by the `discord-membership` Edge Function (promote-only). Role
+  reads in the client (`getCurrentUserRole`) are for UX only; RLS is the gate.
 - **TypeScript:** model each system's domain (stats, dice, roles, characters)
   with explicit types, kept inside that system's `src/<id>/` slice. Prefer
   typed data over loose objects.
@@ -59,12 +68,15 @@ updated as we learn more.
 
 ## Status
 
-- **Done:** project scaffold, system seam (`src/app/`), system picker, Mazes
-  vertical slice (`src/mazes/` — rules, character-creation wizard, identity
-  step), docs, `mazes-rules` skill.
-- **Next (not yet built):** Supabase persistence wiring under `src/api/`
-  (character records carry a `systemId` discriminator), and a second TTRPG
-  system.
+- **Done:** project scaffold, system seam (`src/app/`), system picker; two
+  vertical slices — **Mazes** (`src/mazes/`) and **Rauks** (`src/rauks/`), each
+  with rules + full character-creation wizard; i18n (en/fr); Supabase
+  persistence (`src/api/` — characters carry a `systemId` discriminator) and
+  auth (`src/auth/`); role-based access (`profiles` + RLS); Discord-server
+  membership gating (`discord-membership` Edge Function); CI for GitHub Pages
+  and Supabase deploys; `mazes-rules` / `rauks-rules` skills.
+- **Next:** an admin UI to promote/manage users by hand (currently role changes
+  are done in the Supabase SQL editor), and additional TTRPG systems.
 
 See `docs/superpowers/specs/` for design docs (per-system specs under
 `docs/superpowers/specs/<system>/`).

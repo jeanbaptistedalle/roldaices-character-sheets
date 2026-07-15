@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { SystemPicker } from './SystemPicker'
 import { Header } from './Header'
@@ -12,7 +13,12 @@ function SystemRoute() {
   const navigate = useNavigate()
   const system = SYSTEMS.find((s) => s.id === systemId)
   if (!system) return <Navigate to="/" replace />
-  return <system.Entry onExit={() => navigate('/')} />
+  // Entry may be a lazy chunk (see registry) — Suspense covers its download.
+  return (
+    <Suspense fallback={null}>
+      <system.Entry onExit={() => navigate('/')} />
+    </Suspense>
+  )
 }
 
 function App() {

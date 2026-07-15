@@ -10,7 +10,8 @@ describe('SYSTEMS registry', () => {
     const rauks = SYSTEMS.find((s) => s.id === 'rauks')
     expect(rauks).toBeDefined()
     expect(rauks?.i18nNamespace).toBe('rauks')
-    expect(typeof rauks?.Entry).toBe('function')
+    // Entry is lazy-loaded (React.lazy returns an exotic object, not a function).
+    expect(rauks?.Entry).toBeDefined()
   })
 
   it('has unique ids', () => {
@@ -22,7 +23,7 @@ describe('SYSTEMS registry', () => {
     for (const s of SYSTEMS) {
       expect(s.id).toBeTruthy()
       expect(s.i18nNamespace).toBeTruthy()
-      expect(s.Entry).toBeTypeOf('function')
+      expect(s.Entry).toBeDefined()
     }
   })
 

@@ -15,7 +15,8 @@ test.describe('post-login redirect', () => {
     await page.getByText('Create a Character').click()
     await expect(page.getByText('Choose your role')).toBeVisible()
 
-    await page.getByRole('button', { name: 'Log in' }).click()
+    await page.getByRole('button', { name: 'Account menu' }).click()
+    await page.getByRole('menuitem', { name: 'Log in' }).click()
     await expect(page.getByText('Continue with Discord')).toBeVisible()
 
     // Click and read sessionStorage in the SAME browser-side call — the real

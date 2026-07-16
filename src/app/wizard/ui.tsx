@@ -8,22 +8,26 @@ export function cn(...parts: Array<string | false | undefined>): string {
 export function ProgressSteps({
   steps,
   current,
+  maxReached = current,
   onGoto,
 }: {
   steps: { key: string; label: string }[]
   current: number
+  /** Furthest step index reached so far — steps up to here stay clickable
+   *  even after going back. Defaults to `current` (no look-ahead). */
+  maxReached?: number
   onGoto: (index: number) => void
 }) {
   return (
     <ol className="mb-10 flex items-center justify-center gap-2 sm:gap-3">
       {steps.map((step, i) => {
-        const done = i < current
         const active = i === current
+        const done = i <= maxReached && !active
         return (
           <li key={step.key} className="flex items-center gap-2 sm:gap-3">
             <button
               type="button"
-              disabled={i > current}
+              disabled={i > maxReached}
               onClick={() => onGoto(i)}
               className={cn(
                 'flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest transition-colors',

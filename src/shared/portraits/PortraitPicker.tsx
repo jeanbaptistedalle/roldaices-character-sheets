@@ -23,8 +23,10 @@ export function PortraitPicker({
   // Portraits pinned to the front of the gallery: these survive a refresh so a
   // picked portrait is never lost. `kept` holds its own Portrait objects rather
   // than being derived from `value`, so selecting a *new* portrait does not
-  // wipe the previously-kept one.
-  const [kept, setKept] = useState<Portrait[]>([])
+  // wipe the previously-kept one. Seeded from `value` on mount too — the
+  // wizard unmounts this step while on another one (e.g. Recap), so without
+  // this the already-selected portrait would drop out of view on the way back.
+  const [kept, setKept] = useState<Portrait[]>(() => (value ? [{ seed: 'current', url: value }] : []))
 
   // Always exactly GALLERY_SIZE tiles: dedupe pinned + bucket, then trim. The
   // bucket alone always holds GALLERY_SIZE fresh portraits, so slicing here can

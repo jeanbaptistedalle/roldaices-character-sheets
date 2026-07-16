@@ -14,8 +14,10 @@ export function MazesApp({ onExit }: { onExit: () => void }) {
   )
   const [editing, setEditing] = useState<CharacterRecord | null>(null)
   // Seeded once on mount, e.g. resuming a draft after the Discord OAuth
-  // round trip reloaded the app. Discarded on exit/save alongside the draft.
-  const [resume] = useState<StoredDraft<CharacterDraft> | null>(() =>
+  // round trip reloaded the app. Only relevant for that first render — cleared
+  // as soon as the user goes home or opens a specific character, so a stale
+  // resume can never outlive it and override a later `editing` character.
+  const [resume, setResume] = useState<StoredDraft<CharacterDraft> | null>(() =>
     loadDraft<CharacterDraft>(SYSTEM_ID),
   )
   const [characterCount, setCharacterCount] = useState(0)
@@ -23,6 +25,7 @@ export function MazesApp({ onExit }: { onExit: () => void }) {
   function goHome() {
     clearDraft(SYSTEM_ID)
     setEditing(null)
+    setResume(null)
     setView('home')
   }
 
@@ -45,10 +48,12 @@ export function MazesApp({ onExit }: { onExit: () => void }) {
       onCreate={(count) => {
         setCharacterCount(count)
         setEditing(null)
+        setResume(null)
         setView('wizard')
       }}
       onEdit={(character) => {
         setEditing(character)
+        setResume(null)
         setView('wizard')
       }}
       onExit={onExit}

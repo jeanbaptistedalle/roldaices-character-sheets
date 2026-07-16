@@ -7,6 +7,9 @@ import type { Dispatch, ReactNode } from 'react'
 export interface WizardState<Draft> {
   draft: Draft
   stepIndex: number
+  /** Furthest step ever reached — steps up to here stay navigable even after
+   *  going back, so an edit (which opens on recap) keeps every step open. */
+  maxStepIndex: number
 }
 
 export type NavAction =
@@ -65,20 +68,20 @@ export function makeWizardReducer<Draft, Action>(
     switch ((action as NavAction).type) {
       case 'next': {
         if (!steps[state.stepIndex].canAdvance(state.draft)) return state
-        return { ...state, stepIndex: Math.min(state.stepIndex + 1, lastIndex) }
+        const stepIndex = Math.min(state.stepIndex + 1, lastIndex)
+        return { ...state, stepIndex, maxStepIndex: Math.max(state.maxStepIndex, stepIndex) }
       }
       case 'back':
         return { ...state, stepIndex: Math.max(state.stepIndex - 1, 0) }
-      case 'goto':
-        return {
-          ...state,
-          stepIndex: Math.max(
-            0,
-            Math.min((action as { stepIndex: number }).stepIndex, lastIndex),
-          ),
-        }
+      case 'goto': {
+        const stepIndex = Math.max(
+          0,
+          Math.min((action as { stepIndex: number }).stepIndex, lastIndex),
+        )
+        return { ...state, stepIndex, maxStepIndex: Math.max(state.maxStepIndex, stepIndex) }
+      }
       case 'reset':
-        return { draft: emptyDraft(), stepIndex: 0 }
+        return { draft: emptyDraft(), stepIndex: 0, maxStepIndex: 0 }
       default:
         return { ...state, draft: draftReducer(state.draft, action as Action) }
     }
@@ -93,5 +96,6 @@ export function makeInitWizardState<Draft>(emptyDraft: () => Draft) {
   return (draft?: Draft, stepIndex = 0): WizardState<Draft> => ({
     draft: { ...emptyDraft(), ...draft },
     stepIndex,
+    maxStepIndex: stepIndex,
   })
 }

@@ -89,6 +89,7 @@ export function Wizard<Draft, Action>({
             label: stepT(s.label as never),
           }))}
           current={state.stepIndex}
+          maxReached={state.maxStepIndex}
           onGoto={(stepIndex) => dispatch({ type: 'goto', stepIndex })}
         />
 

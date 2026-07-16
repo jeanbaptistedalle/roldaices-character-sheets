@@ -4,6 +4,9 @@ export const appEn = {
     logIn: 'Log in',
     logOut: 'Log out',
     github: 'View source on GitHub',
+    viewProfile: 'View profile',
+    profileMenuAria: 'Open profile menu',
+    accountMenuAria: 'Account menu',
   },
   picker: {
     subtitle: 'Build characters for tabletop roleplaying games. Pick a system to begin.',
@@ -63,6 +66,7 @@ export const appEn = {
   },
   lang: {
     toggleAria: 'Switch language',
+    sectionLabel: 'Language',
     en: 'EN',
     fr: 'FR',
   },
@@ -71,6 +75,7 @@ export const appEn = {
     light: 'Light',
     dark: 'Dark',
     system: 'System',
+    sectionLabel: 'Theme',
   },
 }
 

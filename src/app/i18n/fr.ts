@@ -6,6 +6,9 @@ export const appFr: typeof appEn = {
     logIn: 'Connexion',
     logOut: 'Déconnexion',
     github: 'Voir le code source sur GitHub',
+    viewProfile: 'Voir le profil',
+    profileMenuAria: 'Ouvrir le menu du profil',
+    accountMenuAria: 'Menu du compte',
   },
   picker: {
     subtitle:
@@ -66,6 +69,7 @@ export const appFr: typeof appEn = {
   },
   lang: {
     toggleAria: 'Changer de langue',
+    sectionLabel: 'Langue',
     en: 'EN',
     fr: 'FR',
   },
@@ -74,6 +78,7 @@ export const appFr: typeof appEn = {
     light: 'Clair',
     dark: 'Sombre',
     system: 'Système',
+    sectionLabel: 'Thème',
   },
 } as const
 

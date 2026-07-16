@@ -1,7 +1,8 @@
 name: CI
 
 # Runs on every PR targeting main (and on pushes to main as a safety net).
-# Make the "test" check required in branch protection to block merges on failure.
+# Make the "test" and "e2e" checks required in branch protection to block
+# merges on failure (the "e2e" job is new — add it to the required list too).
 on:
   pull_request:
     branches: [main]
@@ -27,3 +28,23 @@ jobs:
       # Build is just bundling; it succeeds without real Supabase secrets, so
       # this gate also works for PRs opened from forks (which can't read secrets).
       - run: npm run build
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx playwright install --with-deps chromium
+
+      # Uses the committed .env.test (see playwright.config.ts) — no secrets
+      # needed, no real backend is ever hit. Discord's OAuth exchange itself
+      # isn't exercised (see e2e/post-login-redirect.spec.ts) — only the
+      # app's own stash/resume/redirect logic is.
+      - run: npm run test:e2e

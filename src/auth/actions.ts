@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { setPostLoginRedirect, clearPostLoginRedirect } from './postLoginRedirect'
 
 // Auth actions, factored out of the React layer so they can be unit-tested with
 // a mocked client (no DOM). Each takes the client explicitly. Discord is the
@@ -21,9 +22,20 @@ const redirectTo =
 const DISCORD_SCOPES = 'identify email guilds'
 
 export function signInWithDiscord(client: SupabaseClient) {
+  // Remember the page we're on so the app can return here once the OAuth
+  // round trip lands back on the site root (see postLoginRedirect.ts).
+  if (typeof window !== 'undefined') {
+    setPostLoginRedirect(window.location.hash.slice(1) || '/')
+  }
   return client.auth.signInWithOAuth({
     provider: 'discord',
     options: { redirectTo, scopes: DISCORD_SCOPES },
+  }).then((result) => {
+    // The browser only actually navigates away on success. On failure, clear
+    // the stashed redirect so a stale entry doesn't fire on some later,
+    // unrelated reload.
+    if (result.error) clearPostLoginRedirect()
+    return result
   })
 }
 

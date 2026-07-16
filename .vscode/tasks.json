@@ -4,13 +4,11 @@
     {
       "label": "install-if-needed",
       "type": "shell",
-      "command": "if (-not (Test-Path 'node_modules')) { npm install }",
-      "options": {
-        "shell": {
-          "executable": "powershell",
-          "args": ["-Command"]
-        }
-      },
+      "command": "node",
+      "args": [
+        "-e",
+        "require('fs').existsSync('node_modules')||require('child_process').execSync('npm install',{stdio:'inherit'})"
+      ],
       "presentation": {
         "reveal": "silent",
         "panel": "shared"

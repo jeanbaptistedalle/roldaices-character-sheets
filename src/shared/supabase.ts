@@ -20,5 +20,15 @@ function readEnv(): { url: string; key: string } {
 
 // Session persistence and detectSessionInUrl are on by default, so the OAuth /
 // magic-link redirect back to the app is picked up automatically.
+//
+// flowType is explicitly 'pkce' (not the client's default 'implicit') because
+// the app uses HashRouter (required for GitHub Pages, which can't do
+// server-side rewrites for a BrowserRouter). The implicit flow delivers the
+// session as a URL *fragment* (`#access_token=...`) — the exact same part of
+// the URL HashRouter uses for routing, so the two fight over it and the
+// router can strand the user on the wrong page. PKCE delivers it as a query
+// param (`?code=...`) instead, which HashRouter never looks at.
 const { url, key } = readEnv()
-export const supabase: SupabaseClient = createClient(url, key)
+export const supabase: SupabaseClient = createClient(url, key, {
+  auth: { flowType: 'pkce' },
+})

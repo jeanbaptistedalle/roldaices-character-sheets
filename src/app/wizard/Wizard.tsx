@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { isAtLimit, MAX_CHARACTERS_PER_SYSTEM } from '../limits'
 import { getSystemT } from '../system'
 import { ProgressSteps, cn } from './ui'
+import { saveDraft, type StoredDraft } from './draftStorage'
 import {
   makeInitWizardState,
   makeWizardReducer,
@@ -11,17 +12,24 @@ import {
 
 export interface WizardProps<Draft, Action> {
   config: WizardConfig<Draft, Action>
+  /** Stable id for this system, e.g. 'mazes' — namespaces the persisted draft. */
+  systemId: string
   onExit: () => void
   onSaved: () => void
   editing?: { id: string; draft: Draft }
+  /** A draft restored from session storage (see draftStorage) — takes priority
+   *  over `editing`, resuming at the step the user was on rather than recap. */
+  resume?: StoredDraft<Draft>
   characterCount: number
 }
 
 export function Wizard<Draft, Action>({
   config,
+  systemId,
   onExit,
   onSaved,
   editing,
+  resume,
   characterCount,
 }: WizardProps<Draft, Action>) {
   const { t, i18n } = useTranslation('common')
@@ -32,10 +40,18 @@ export function Wizard<Draft, Action>({
   // rather than position so a config with a non-last terminal step still works.
   const terminalIndex = config.steps.findIndex((s) => s.terminal)
   const recapIndex = terminalIndex === -1 ? config.steps.length - 1 : terminalIndex
-  const [state, dispatch] = useReducer(reducer, undefined, () =>
-    editing ? init(editing.draft, recapIndex) : init(),
-  )
+  const [state, dispatch] = useReducer(reducer, undefined, () => {
+    if (resume) return init(resume.draft, resume.stepIndex)
+    return editing ? init(editing.draft, recapIndex) : init()
+  })
+  const editId = resume?.editId ?? editing?.id
   const step = config.steps[state.stepIndex]
+
+  // Persist on every change so a full-page reload (notably the Discord OAuth
+  // round trip triggered from the recap step's login prompt) can resume here.
+  useEffect(() => {
+    saveDraft(systemId, { draft: state.draft, stepIndex: state.stepIndex, editId })
+  }, [systemId, state, editId])
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
@@ -85,7 +101,7 @@ export function Wizard<Draft, Action>({
           </div>
         )}
 
-        {step.render({ draft: state.draft, dispatch, atLimit, onSaved, editId: editing?.id })}
+        {step.render({ draft: state.draft, dispatch, atLimit, onSaved, editId })}
 
         {!isTerminal && (
           <div className="mt-10 flex items-center justify-between">

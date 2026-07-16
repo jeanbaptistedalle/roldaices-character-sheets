@@ -1,10 +1,10 @@
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { SystemPicker } from './SystemPicker'
 import { Header } from './Header'
 import { ProfilePage } from './ProfilePage'
 import { SYSTEMS } from './registry'
-import { AuthProvider } from '../auth'
+import { AuthProvider, consumePostLoginRedirect } from '../auth'
 
 /** Resolves the :systemId param to a system and mounts its Entry, or redirects
  *  home for an unknown id. */
@@ -23,6 +23,15 @@ function SystemRoute() {
 
 function App() {
   const navigate = useNavigate()
+
+  // Send the user back to the page they triggered Discord sign-in from,
+  // instead of stranding them on the site root the OAuth redirect lands on.
+  // A no-op unless a sign-in was just completed (see auth/postLoginRedirect).
+  useEffect(() => {
+    const path = consumePostLoginRedirect()
+    if (path) navigate(path, { replace: true })
+  }, [navigate])
+
   return (
     <AuthProvider>
       <div className="flex min-h-screen flex-col bg-stone-950 text-stone-100">

@@ -43,6 +43,7 @@ function renderWizard(overrides: Partial<WizardProps<Draft, Action>> = {}) {
   return renderWithI18n(
     <Wizard
       config={config}
+      systemId="test"
       onExit={vi.fn()}
       onSaved={vi.fn()}
       characterCount={0}

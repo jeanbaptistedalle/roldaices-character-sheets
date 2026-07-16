@@ -15,6 +15,7 @@ export interface RauksData {
   sex?: string
   birthDate?: string
   rauksorg?: string
+  traitsAndTrauma?: string[]
 }
 
 export function draftToData(draft: CharacterDraft): RauksData {
@@ -31,6 +32,8 @@ export function draftToData(draft: CharacterDraft): RauksData {
   if (draft.sex?.trim()) data.sex = draft.sex.trim()
   if (draft.birthDate?.trim()) data.birthDate = draft.birthDate.trim()
   if (draft.rauksorg?.trim()) data.rauksorg = draft.rauksorg.trim()
+  const traitsAndTrauma = draft.traitsAndTrauma.map((v) => v.trim()).filter(Boolean)
+  if (traitsAndTrauma.length > 0) data.traitsAndTrauma = traitsAndTrauma
   return data
 }
 
@@ -45,6 +48,7 @@ export function dataToDraft(record: CharacterRecord): CharacterDraft {
     sex: data.sex,
     birthDate: data.birthDate,
     rauksorg: data.rauksorg,
+    traitsAndTrauma: data.traitsAndTrauma ?? [],
     name: record.name,
     description: record.description ?? undefined,
     imageUri: record.imageUri ?? undefined,

@@ -54,6 +54,16 @@ export const rauksFr: typeof rauksEn = {
       rauksorgPlaceholder: 'ex. Lille',
       descriptionLabel: 'Description',
       descriptionPlaceholder: 'Une courte description, un passé, ou un trait particulier…',
+      traitsAndTrauma: {
+        label: 'Traits/trauma',
+        hint: 'Les cicatrices, habitudes et marques que votre personnage accumule en jouant — une courte expression de deux ou trois mots. Un Rauks gagne en général un nouveau trait/trauma après chaque séance.',
+        placeholder0: 'ex. Artisan potier émérite',
+        placeholder1: 'ex. Mains tremblantes',
+        placeholder2: 'ex. Héros populaire',
+        placeholder3: 'ex. Terreur nocturne',
+        add: 'Ajouter un trait/trauma',
+        removeAria: 'Supprimer ce trait/trauma',
+      },
     },
     recap: {
       label: 'Récapitulatif',

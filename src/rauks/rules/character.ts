@@ -4,6 +4,9 @@
 import { TRAITS, emptyTraits, getTrait, traitsComplete, type TraitInfo, type Traits } from './traits'
 import { getSkill, type Skill } from './skills'
 
+/** A character may hold at most 4 "traits & trauma" entries — see rules/character.ts. */
+export const MAX_TRAITS_AND_TRAUMA = 4
+
 export interface CharacterDraft {
   traits: Traits
   skillIds: string[]
@@ -16,6 +19,8 @@ export interface CharacterDraft {
   rauksorg?: string
   description?: string
   imageUri?: string
+  // Free-text marks earned during play, one gained per session (0-4).
+  traitsAndTrauma: string[]
 }
 
 export type WizardStep = 'traits' | 'skills' | 'identity' | 'recap'
@@ -36,10 +41,11 @@ export interface BuiltCharacter {
   rauksorg?: string
   description?: string
   imageUri?: string
+  traitsAndTrauma: string[]
 }
 
 export function emptyDraft(): CharacterDraft {
-  return { traits: emptyTraits(), skillIds: [] }
+  return { traits: emptyTraits(), skillIds: [], traitsAndTrauma: [] }
 }
 
 /** Exactly `competence`-many skills chosen. */
@@ -83,5 +89,6 @@ export function buildCharacter(draft: CharacterDraft): BuiltCharacter {
     rauksorg: draft.rauksorg,
     description: draft.description,
     imageUri: draft.imageUri,
+    traitsAndTrauma: draft.traitsAndTrauma.map((v) => v.trim()).filter(Boolean),
   }
 }

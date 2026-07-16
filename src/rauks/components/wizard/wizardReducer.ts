@@ -3,7 +3,7 @@
 // the Competence trait trims over-budget skills.
 
 import type { TraitKey } from '../../rules/traits'
-import type { CharacterDraft } from '../../rules/character'
+import { MAX_TRAITS_AND_TRAUMA, type CharacterDraft } from '../../rules/character'
 
 export type WizardAction =
   | { type: 'setTrait'; key: TraitKey; value: number }
@@ -16,6 +16,9 @@ export type WizardAction =
   | { type: 'setRauksorg'; rauksorg: string }
   | { type: 'setDescription'; description: string }
   | { type: 'setImage'; imageUri: string }
+  | { type: 'addTraitAndTrauma' }
+  | { type: 'setTraitAndTrauma'; index: number; value: string }
+  | { type: 'removeTraitAndTrauma'; index: number }
 
 export function draftReducer(draft: CharacterDraft, action: WizardAction): CharacterDraft {
   switch (action.type) {
@@ -55,5 +58,20 @@ export function draftReducer(draft: CharacterDraft, action: WizardAction): Chara
       return { ...draft, description: action.description }
     case 'setImage':
       return { ...draft, imageUri: action.imageUri }
+
+    case 'addTraitAndTrauma': {
+      if (draft.traitsAndTrauma.length >= MAX_TRAITS_AND_TRAUMA) return draft
+      return { ...draft, traitsAndTrauma: [...draft.traitsAndTrauma, ''] }
+    }
+    case 'setTraitAndTrauma': {
+      const traitsAndTrauma = draft.traitsAndTrauma.map((v, i) =>
+        i === action.index ? action.value : v,
+      )
+      return { ...draft, traitsAndTrauma }
+    }
+    case 'removeTraitAndTrauma': {
+      const traitsAndTrauma = draft.traitsAndTrauma.filter((_, i) => i !== action.index)
+      return { ...draft, traitsAndTrauma }
+    }
   }
 }

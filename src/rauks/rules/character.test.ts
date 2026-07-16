@@ -10,6 +10,7 @@ function completeDraft(): CharacterDraft {
     traits: { physical: 4, perception: 3, mental: 3, charisma: 3, competence: 3, rerolls: 2 },
     skillIds: ['gorilla', 'shadow', 'lawyer'],
     name: 'Arakel',
+    traitsAndTrauma: [],
   }
 }
 
@@ -60,5 +61,10 @@ describe('character', () => {
 
   it('buildCharacter throws on an incomplete draft', () => {
     expect(() => buildCharacter(emptyDraft())).toThrow()
+  })
+
+  it('buildCharacter trims and drops blank traitsAndTrauma entries', () => {
+    const d = { ...completeDraft(), traitsAndTrauma: [' A limp from Vhalto ', '  ', 'Distrust of officials'] }
+    expect(buildCharacter(d).traitsAndTrauma).toEqual(['A limp from Vhalto', 'Distrust of officials'])
   })
 })

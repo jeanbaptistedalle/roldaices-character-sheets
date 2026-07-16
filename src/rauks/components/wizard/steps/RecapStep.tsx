@@ -199,6 +199,22 @@ export function RecapStep({
           </ul>
         </div>
 
+        {/* Traits/trauma */}
+        {character.traitsAndTrauma.length > 0 && (
+          <div className="rounded-xl border border-border bg-surface/60 p-5">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-ink-muted">
+              {t('steps.identity.traitsAndTrauma.label')}
+            </h3>
+            <ul className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
+              {character.traitsAndTrauma.map((value, index) => (
+                <li key={index} className="text-ink">
+                  {value}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {/* Standard equipment */}
         <div className="rounded-xl border border-border bg-surface/40 p-5 text-sm text-ink-muted">
           <p>

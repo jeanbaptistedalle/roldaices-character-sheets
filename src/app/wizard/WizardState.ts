@@ -86,8 +86,12 @@ export function makeWizardReducer<Draft, Action>(
 }
 
 export function makeInitWizardState<Draft>(emptyDraft: () => Draft) {
-  return (draft: Draft = emptyDraft(), stepIndex = 0): WizardState<Draft> => ({
-    draft,
+  // Merge over `emptyDraft()` rather than using `draft` as-is: a resumed
+  // (sessionStorage) or edited (persisted record) draft may predate a field
+  // added to the shape since it was written, and would otherwise reach a step
+  // component as `undefined` and crash the render.
+  return (draft?: Draft, stepIndex = 0): WizardState<Draft> => ({
+    draft: { ...emptyDraft(), ...draft },
     stepIndex,
   })
 }

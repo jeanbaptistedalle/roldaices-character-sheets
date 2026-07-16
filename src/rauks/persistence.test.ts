@@ -41,6 +41,12 @@ describe('persistence', () => {
     expect('name' in data).toBe(false)
   })
 
+  it('draftToData trims traitsAndTrauma and omits the key when empty', () => {
+    expect(draftToData(completeDraft()).traitsAndTrauma).toBeUndefined()
+    const withTraits = { ...completeDraft(), traitsAndTrauma: [' A limp from Vhalto ', '  '] }
+    expect(draftToData(withTraits).traitsAndTrauma).toEqual(['A limp from Vhalto'])
+  })
+
   it('draftToData throws on an incomplete draft', () => {
     expect(() => draftToData(emptyDraft())).toThrow()
   })
@@ -55,6 +61,7 @@ describe('persistence', () => {
     expect(restored.origin).toBe('Vhalto')
     expect(restored.description).toBe('A weary investigator.')
     expect(restored.imageUri).toBe('https://example.test/p.svg')
+    expect(restored.traitsAndTrauma).toEqual([])
   })
 
   it('summarize lists the chosen skill names', () => {

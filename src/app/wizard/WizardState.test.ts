@@ -68,4 +68,10 @@ describe('makeInitWizardState', () => {
   it('seeds a supplied draft at a given step', () => {
     expect(init({ name: 'Zed' }, 1)).toEqual({ draft: { name: 'Zed' }, stepIndex: 1 })
   })
+
+  it('backfills fields missing from a draft seeded from an older shape', () => {
+    // Simulates a resumed/edited draft persisted before a new field existed.
+    const stale = {} as Draft
+    expect(init(stale, 1)).toEqual({ draft: { name: '' }, stepIndex: 1 })
+  })
 })

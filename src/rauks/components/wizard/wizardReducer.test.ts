@@ -71,4 +71,17 @@ describe('draftReducer', () => {
       rauksorg: 'Orsk-7',
     })
   })
+
+  it('adds, edits, and removes traits & trauma entries, capped at 4', () => {
+    let d = emptyDraft()
+    d = reduce(d, { type: 'addTraitAndTrauma' })
+    d = reduce(d, { type: 'setTraitAndTrauma', index: 0, value: 'A limp from Vhalto' })
+    expect(d.traitsAndTrauma).toEqual(['A limp from Vhalto'])
+
+    for (let i = 0; i < 5; i++) d = reduce(d, { type: 'addTraitAndTrauma' })
+    expect(d.traitsAndTrauma).toHaveLength(4)
+
+    d = reduce(d, { type: 'removeTraitAndTrauma', index: 0 })
+    expect(d.traitsAndTrauma).toEqual(['', '', ''])
+  })
 })

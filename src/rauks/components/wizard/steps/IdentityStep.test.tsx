@@ -20,4 +20,33 @@ describe('IdentityStep', () => {
     rerender(<IdentityStep draft={{ ...emptyDraft(), imperial: true }} dispatch={dispatch} />)
     expect(screen.getByLabelText(/Origin/)).toBeDisabled()
   })
+
+  it('adds, edits, and removes traits & trauma entries', () => {
+    const dispatch = vi.fn()
+    const { rerender } = renderWithI18n(<IdentityStep draft={emptyDraft()} dispatch={dispatch} />)
+    fireEvent.click(screen.getByText('Add a trait/trauma'))
+    expect(dispatch).toHaveBeenCalledWith({ type: 'addTraitAndTrauma' })
+
+    const draft = { ...emptyDraft(), traitsAndTrauma: ['A limp from Vhalto'] }
+    rerender(<IdentityStep draft={draft} dispatch={dispatch} />)
+    fireEvent.change(screen.getByDisplayValue('A limp from Vhalto'), {
+      target: { value: 'A limp from Vhalto (worse in the cold)' },
+    })
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'setTraitAndTrauma',
+      index: 0,
+      value: 'A limp from Vhalto (worse in the cold)',
+    })
+
+    fireEvent.click(screen.getByLabelText('Remove this trait/trauma'))
+    expect(dispatch).toHaveBeenCalledWith({ type: 'removeTraitAndTrauma', index: 0 })
+
+    rerender(
+      <IdentityStep
+        draft={{ ...emptyDraft(), traitsAndTrauma: ['a', 'b', 'c', 'd'] }}
+        dispatch={dispatch}
+      />,
+    )
+    expect(screen.queryByText('Add a trait/trauma')).not.toBeInTheDocument()
+  })
 })

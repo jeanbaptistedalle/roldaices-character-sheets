@@ -114,6 +114,45 @@ export function IdentityStep({
           />
         </label>
 
+        <div>
+          <span className="text-sm font-semibold text-ink-secondary">
+            {t('steps.identity.traitsAndTrauma.label')}
+          </span>
+          <p className="mt-1 text-xs text-ink-muted">{t('steps.identity.traitsAndTrauma.hint')}</p>
+          <div className="mt-3 space-y-2">
+            {draft.traitsAndTrauma.map((value, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={value}
+                  onChange={(e) =>
+                    dispatch({ type: 'setTraitAndTrauma', index, value: e.target.value })
+                  }
+                  placeholder={t(`steps.identity.traitsAndTrauma.placeholder${index}` as any)}
+                  className={inputClass + ' flex-1'}
+                />
+                <button
+                  type="button"
+                  onClick={() => dispatch({ type: 'removeTraitAndTrauma', index })}
+                  aria-label={t('steps.identity.traitsAndTrauma.removeAria')}
+                  className="shrink-0 rounded-lg border border-border px-3 py-2 text-ink-secondary hover:border-accent/50"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+          {draft.traitsAndTrauma.length < 4 && (
+            <button
+              type="button"
+              onClick={() => dispatch({ type: 'addTraitAndTrauma' })}
+              className="mt-3 rounded-lg border border-dashed border-border px-3 py-1.5 text-sm text-ink-secondary hover:border-accent/50"
+            >
+              {t('steps.identity.traitsAndTrauma.add')}
+            </button>
+          )}
+        </div>
+
         <PortraitPicker
           value={draft.imageUri ?? ''}
           onChange={(imageUri) => dispatch({ type: 'setImage', imageUri })}

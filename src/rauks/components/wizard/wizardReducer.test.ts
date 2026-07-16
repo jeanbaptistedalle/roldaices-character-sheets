@@ -72,6 +72,22 @@ describe('draftReducer', () => {
     })
   })
 
+  it('sets remainingRerolls, clamped between 0 and the pool from the rerolls trait', () => {
+    const start = draftWith({ traits: { ...emptyDraft().traits, rerolls: 2 } }) // pool = 5
+    expect(reduce(start, { type: 'setRemainingRerolls', value: 3 }).remainingRerolls).toBe(3)
+    expect(reduce(start, { type: 'setRemainingRerolls', value: -1 }).remainingRerolls).toBe(0)
+    expect(reduce(start, { type: 'setRemainingRerolls', value: 9 }).remainingRerolls).toBe(5)
+  })
+
+  it('shrinks a saved remainingRerolls if lowering the rerolls trait drops it below the pool', () => {
+    const start = draftWith({
+      traits: { ...emptyDraft().traits, rerolls: 2 }, // pool = 5
+      remainingRerolls: 5,
+    })
+    const d = reduce(start, { type: 'setTrait', key: 'rerolls', value: 1 }) // pool = 3
+    expect(d.remainingRerolls).toBe(3)
+  })
+
   it('adds, edits, and removes traits & trauma entries, capped at 4', () => {
     let d = emptyDraft()
     d = reduce(d, { type: 'addTraitAndTrauma' })

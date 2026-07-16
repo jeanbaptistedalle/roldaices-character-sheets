@@ -16,6 +16,7 @@ export interface RauksData {
   birthDate?: string
   rauksorg?: string
   traitsAndTrauma?: string[]
+  remainingRerolls?: number
 }
 
 export function draftToData(draft: CharacterDraft): RauksData {
@@ -34,6 +35,7 @@ export function draftToData(draft: CharacterDraft): RauksData {
   if (draft.rauksorg?.trim()) data.rauksorg = draft.rauksorg.trim()
   const traitsAndTrauma = draft.traitsAndTrauma.map((v) => v.trim()).filter(Boolean)
   if (traitsAndTrauma.length > 0) data.traitsAndTrauma = traitsAndTrauma
+  if (draft.remainingRerolls !== undefined) data.remainingRerolls = draft.remainingRerolls
   return data
 }
 
@@ -49,6 +51,7 @@ export function dataToDraft(record: CharacterRecord): CharacterDraft {
     birthDate: data.birthDate,
     rauksorg: data.rauksorg,
     traitsAndTrauma: data.traitsAndTrauma ?? [],
+    remainingRerolls: data.remainingRerolls,
     name: record.name,
     description: record.description ?? undefined,
     imageUri: record.imageUri ?? undefined,

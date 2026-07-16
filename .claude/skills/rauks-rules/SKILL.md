@@ -283,7 +283,11 @@ used to roll them.
   **at most one** characteristic drop to `1` (specialist build); enforce the
   range, the at-most-one-at-1 rule, and the 18-point total at creation. (The
   implemented English identifiers are `physical | perception | mental |
-  charisma | competence | rerolls`.)
+  charisma | competence | rerolls`.) The recap step separately tracks a
+  `remainingRerolls` counter (default: the full pool, `1 + 2 × relances`) that
+  the player can hand-adjust up/down as they spend or recover tokens during
+  play — recovery rate isn't modeled, so this is a manual counter, not a rule
+  engine.
 - **Competency** → id + `characteristic` category (`Physique | Perception |
   Mental | Social | Karma`) + description + optional bundled gear. Keep the list
   **data-driven**. A character holds up to `competences` of them. Note the roll

@@ -64,6 +64,14 @@ describe('persistence', () => {
     expect(restored.traitsAndTrauma).toEqual([])
   })
 
+  it('round-trips remainingRerolls, and omits it from data when unset', () => {
+    expect(draftToData(completeDraft()).remainingRerolls).toBeUndefined()
+    const draft = { ...completeDraft(), remainingRerolls: 3 }
+    const data = draftToData(draft)
+    expect(data.remainingRerolls).toBe(3)
+    expect(dataToDraft(recordFrom(draft, data)).remainingRerolls).toBe(3)
+  })
+
   it('summarize lists the chosen skill names', () => {
     expect(summarize(draftToData(completeDraft()))).toBe('Gorilla · Shadow · Lawyer')
     const one: RauksData = {

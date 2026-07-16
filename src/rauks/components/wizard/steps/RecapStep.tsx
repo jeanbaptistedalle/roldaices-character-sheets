@@ -4,7 +4,8 @@ import { buildCharacter, type CharacterDraft } from '../../../rules/character'
 import { rerollTokens } from '../../../rules/traits'
 import { draftToData } from '../../../persistence'
 import type { NavAction } from '../../../../app/wizard/WizardState'
-import { StepShell } from '../ui'
+import type { WizardAction } from '../wizardReducer'
+import { StepShell, cn } from '../ui'
 import { useAuth } from '../../../../auth'
 import {
   saveCharacter,
@@ -24,7 +25,7 @@ export function RecapStep({
   atLimit,
 }: {
   draft: CharacterDraft
-  dispatch: Dispatch<NavAction>
+  dispatch: Dispatch<WizardAction | NavAction>
   onSaved: () => void
   editId?: string
   atLimit: boolean
@@ -137,11 +138,11 @@ export function RecapStep({
         </div>
 
         {/* Traits */}
-        <div className="grid grid-cols-3 gap-4 sm:grid-cols-6">
+        <div className="grid grid-cols-3 gap-4">
           {character.traits.map(({ info, value }) => (
             <div
               key={info.key}
-              className="rounded-xl border border-border bg-surface/60 p-4 text-center"
+              className="flex h-32 flex-col items-center justify-center rounded-xl border border-border bg-surface/60 p-4 text-center"
             >
               <div className="text-2xl font-bold text-accent-hover">{value}</div>
               <div
@@ -153,10 +154,43 @@ export function RecapStep({
               {info.key === 'rerolls' && (
                 <div
                   data-testid="recap-reroll-total"
-                  className="mt-2 border-t border-border pt-2 text-[0.65rem] text-ink-muted"
+                  className="mt-2 flex flex-col items-center gap-1 border-t border-border pt-2"
                 >
-                  <span className="font-semibold text-accent-hover">{rerollTokens(value)}</span>{' '}
-                  {t('rerollSuffix', { count: rerollTokens(value) })}
+                  <div className="flex items-center gap-2">
+                    <RerollStepButton
+                      label={t('steps.recap.decreaseRerollsAria')}
+                      disabled={character.remainingRerolls <= 0}
+                      onClick={() =>
+                        dispatch({
+                          type: 'setRemainingRerolls',
+                          value: character.remainingRerolls - 1,
+                        })
+                      }
+                    >
+                      −
+                    </RerollStepButton>
+                    <span
+                      data-testid="recap-reroll-remaining"
+                      className="w-4 text-center text-sm font-semibold text-accent-hover"
+                    >
+                      {character.remainingRerolls}
+                    </span>
+                    <RerollStepButton
+                      label={t('steps.recap.increaseRerollsAria')}
+                      disabled={character.remainingRerolls >= rerollTokens(value)}
+                      onClick={() =>
+                        dispatch({
+                          type: 'setRemainingRerolls',
+                          value: character.remainingRerolls + 1,
+                        })
+                      }
+                    >
+                      +
+                    </RerollStepButton>
+                  </div>
+                  <div className="text-[0.65rem] text-ink-muted">
+                    {t('steps.recap.rerollsOfMax', { max: rerollTokens(value) })}
+                  </div>
                 </div>
               )}
             </div>
@@ -260,5 +294,34 @@ export function RecapStep({
 
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
     </StepShell>
+  )
+}
+
+function RerollStepButton({
+  label,
+  disabled,
+  onClick,
+  children,
+}: {
+  label: string
+  disabled: boolean
+  onClick: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      disabled={disabled}
+      onClick={onClick}
+      className={cn(
+        'flex h-6 w-6 items-center justify-center rounded-md border text-sm font-bold transition-colors',
+        disabled
+          ? 'cursor-not-allowed border-border text-ink-faint'
+          : 'border-border text-ink hover:border-accent/50 hover:text-accent-hover',
+      )}
+    >
+      {children}
+    </button>
   )
 }

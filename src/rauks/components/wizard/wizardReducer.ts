@@ -2,12 +2,13 @@
 // step ordering live generically (src/app/wizard) and in config.tsx. Lowering
 // the Competence trait trims over-budget skills.
 
-import type { TraitKey } from '../../rules/traits'
+import { rerollTokens, type TraitKey } from '../../rules/traits'
 import { MAX_TRAITS_AND_TRAUMA, type CharacterDraft } from '../../rules/character'
 
 export type WizardAction =
   | { type: 'setTrait'; key: TraitKey; value: number }
   | { type: 'toggleSkill'; id: string }
+  | { type: 'setRemainingRerolls'; value: number }
   | { type: 'setName'; name: string }
   | { type: 'setOrigin'; origin: string }
   | { type: 'setImperial'; value: boolean }
@@ -29,7 +30,17 @@ export function draftReducer(draft: CharacterDraft, action: WizardAction): Chara
       if (action.key === 'competence' && skillIds.length > action.value) {
         skillIds = skillIds.slice(0, action.value)
       }
-      return { ...draft, traits, skillIds }
+      // Lowering Rerolls shrinks the pool a saved remaining count may exceed.
+      let remainingRerolls = draft.remainingRerolls
+      if (action.key === 'rerolls' && remainingRerolls !== undefined) {
+        remainingRerolls = Math.min(remainingRerolls, rerollTokens(action.value))
+      }
+      return { ...draft, traits, skillIds, remainingRerolls }
+    }
+
+    case 'setRemainingRerolls': {
+      const max = rerollTokens(draft.traits.rerolls)
+      return { ...draft, remainingRerolls: Math.max(0, Math.min(action.value, max)) }
     }
 
     case 'toggleSkill': {

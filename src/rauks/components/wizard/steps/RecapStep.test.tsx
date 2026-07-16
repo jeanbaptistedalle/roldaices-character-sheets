@@ -44,8 +44,18 @@ describe('RecapStep', () => {
     renderWithI18n(
       <RecapStep draft={completeDraft()} dispatch={vi.fn()} onSaved={vi.fn()} atLimit={false} />,
     )
-    // rerolls = 2 => 1 + 2 × 2 = 5
-    expect(screen.getByTestId('recap-reroll-total')).toHaveTextContent('5 rerolls')
+    // rerolls = 2 => 1 + 2 × 2 = 5, and no remainingRerolls saved yet => full pool.
+    expect(screen.getByTestId('recap-reroll-remaining')).toHaveTextContent('5')
+    expect(screen.getByTestId('recap-reroll-total')).toHaveTextContent('of 5 remaining')
+  })
+
+  it('lets the player adjust the number of remaining rerolls', () => {
+    const dispatch = vi.fn()
+    renderWithI18n(
+      <RecapStep draft={completeDraft()} dispatch={dispatch} onSaved={vi.fn()} atLimit={false} />,
+    )
+    screen.getByRole('button', { name: 'Use a reroll' }).click()
+    expect(dispatch).toHaveBeenCalledWith({ type: 'setRemainingRerolls', value: 4 })
   })
 
   it('labels the competence trait via the localized characteristics term (not a hardcoded "Skill")', () => {

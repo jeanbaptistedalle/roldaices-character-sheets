@@ -1,7 +1,9 @@
 // The Rauks character draft the wizard builds, plus validation and the recap
 // view. See .claude/skills/rauks-rules/SKILL.md and the design spec.
 
-import { TRAITS, emptyTraits, getTrait, traitsComplete, type TraitInfo, type Traits } from './traits'
+import {
+  TRAITS, emptyTraits, getTrait, rerollTokens, traitsComplete, type TraitInfo, type Traits,
+} from './traits'
 import { getSkill, type Skill } from './skills'
 
 /** A character may hold at most 4 "traits & trauma" entries — see rules/character.ts. */
@@ -21,6 +23,10 @@ export interface CharacterDraft {
   imageUri?: string
   // Free-text marks earned during play, one gained per session (0-4).
   traitsAndTrauma: string[]
+  // Reroll tokens left to spend, tracked during play. Undefined means "full
+  // pool" (rerollTokens(traits.rerolls)) — only set once the player spends
+  // or recovers one on the recap step.
+  remainingRerolls?: number
 }
 
 export type WizardStep = 'traits' | 'skills' | 'identity' | 'recap'
@@ -42,6 +48,7 @@ export interface BuiltCharacter {
   description?: string
   imageUri?: string
   traitsAndTrauma: string[]
+  remainingRerolls: number
 }
 
 export function emptyDraft(): CharacterDraft {
@@ -90,5 +97,6 @@ export function buildCharacter(draft: CharacterDraft): BuiltCharacter {
     description: draft.description,
     imageUri: draft.imageUri,
     traitsAndTrauma: draft.traitsAndTrauma.map((v) => v.trim()).filter(Boolean),
+    remainingRerolls: draft.remainingRerolls ?? rerollTokens(draft.traits.rerolls),
   }
 }

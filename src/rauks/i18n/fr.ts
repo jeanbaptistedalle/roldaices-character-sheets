@@ -3,11 +3,11 @@ import { rauksEn } from './en'
 export const rauksFr: typeof rauksEn = {
   name: 'Rauks',
   publisher: 'Thibaut & Quentin Constant',
-  tagline: 'Incarnez un chevalier-enquêteur d’élite de l’Empire du Monde.',
+  tagline: 'Incarnez un chevalier-enquêteur d’élite de l’Empire mondial.',
   home: {
     title: 'Feuilles de personnage Rauks',
     subtitle:
-      'Créez un Rauks : un chevalier-enquêteur d’élite de l’Empire du Monde. Répartissez vos caractéristiques, choisissez vos compétences, et acceptez le contrat.',
+      'Créez un Rauks : un chevalier-enquêteur d’élite de l’Empire mondial. Répartissez vos caractéristiques, choisissez vos compétences, et acceptez le contrat.',
     noSkills: 'Aucune compétence',
   },
   rerollSuffix_one: 'relance',

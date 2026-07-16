@@ -24,15 +24,15 @@ export function SelectableCard({
       className={cn(
         'flex h-full w-full flex-col rounded-xl border p-5 text-left transition-colors',
         selected
-          ? 'border-amber-500 bg-amber-950/20 ring-1 ring-amber-500/40'
-          : 'border-stone-800 bg-stone-900/60 hover:border-amber-600/50',
+          ? 'border-accent-hover bg-accent/10 ring-1 ring-accent/40'
+          : 'border-border bg-surface/60 hover:border-accent/50',
       )}
     >
       <div className="flex items-baseline justify-between gap-2">
-        <span className="text-lg font-semibold text-stone-100">{title}</span>
-        {badge && <span className="text-2xl font-bold text-amber-400">{badge}</span>}
+        <span className="text-lg font-semibold text-ink">{title}</span>
+        {badge && <span className="text-2xl font-bold text-accent-hover">{badge}</span>}
       </div>
-      {children && <div className="mt-2 text-sm text-stone-400">{children}</div>}
+      {children && <div className="mt-2 text-sm text-ink-muted">{children}</div>}
     </button>
   )
 }
@@ -55,8 +55,8 @@ export function OptionChip({
       className={cn(
         'rounded-lg border px-4 py-2 text-sm font-medium transition-colors',
         selected
-          ? 'border-amber-500 bg-amber-600 text-stone-950'
-          : 'border-stone-800 bg-stone-900 text-stone-200 hover:border-amber-600/50',
+          ? 'border-accent-hover bg-accent text-accent-on'
+          : 'border-border bg-surface text-ink-secondary hover:border-accent/50',
       )}
     >
       {children}

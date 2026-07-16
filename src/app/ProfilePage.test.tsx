@@ -59,8 +59,8 @@ describe('ProfilePage', () => {
     // Every registered system shows "0 / 5" when the user has no characters.
     await waitFor(() => expect(screen.getAllByText('0 / 5').length).toBeGreaterThan(0))
     const countEl = screen.getAllByText('0 / 5')[0]
-    expect(countEl.className).not.toContain('amber')
-    expect(countEl.className).toContain('stone-400')
+    expect(countEl.className).not.toContain('accent-hover')
+    expect(countEl.className).toContain('ink-muted')
   })
 
   it('links each system row to its game route', async () => {

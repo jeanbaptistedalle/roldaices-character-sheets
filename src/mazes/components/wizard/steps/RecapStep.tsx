@@ -18,9 +18,9 @@ import { isAtLimit, MAX_CHARACTERS_PER_SYSTEM } from '../../../../app/limits'
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="rounded-xl border border-stone-800 bg-stone-900/60 p-5 text-center">
-      <div className="text-3xl font-bold text-amber-400">{value}</div>
-      <div className="mt-1 text-xs font-semibold uppercase tracking-widest text-stone-400">
+    <div className="rounded-xl border border-border bg-surface/60 p-5 text-center">
+      <div className="text-3xl font-bold text-accent-hover">{value}</div>
+      <div className="mt-1 text-xs font-semibold uppercase tracking-widest text-ink-muted">
         {label}
       </div>
     </div>
@@ -128,11 +128,11 @@ export function RecapStep({
               <img
                 src={character.imageUri}
                 alt={`Portrait of ${character.name || 'the character'}`}
-                className="h-28 w-28 shrink-0 rounded-xl border border-stone-800 bg-stone-900 object-cover"
+                className="h-28 w-28 shrink-0 rounded-xl border border-border bg-surface object-cover"
               />
             )}
             {character.description && (
-              <p className="text-center text-stone-300 sm:text-left">{character.description}</p>
+              <p className="text-center text-ink-secondary sm:text-left">{character.description}</p>
             )}
           </div>
         )}
@@ -144,24 +144,24 @@ export function RecapStep({
         </div>
 
         {/* Edges */}
-        <div className="rounded-xl border border-stone-800 bg-stone-900/60 p-5">
-          <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-stone-500">
+        <div className="rounded-xl border border-border bg-surface/60 p-5">
+          <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-ink-muted">
             {t('terms.edgesHeading')}
           </h3>
           <ul className="space-y-2">
             {character.edges.map((e) => (
               <li key={e.slot} className="flex items-baseline justify-between gap-3">
-                <span className="font-semibold text-stone-100">
+                <span className="font-semibold text-ink">
                   {e.flavorKey
                     ? t(`terms.classFlavor.${e.flavorKey}` as any)
                     : t(`terms.edges.${e.edge.id}` as any)}
                   {/* A class preset is already conveyed by the flavor label, so
                       only show a parenthetical for player-supplied sub-choices. */}
                   {!e.presetSubChoice && e.subChoice && (
-                    <span className="text-amber-300"> ({e.subChoice})</span>
+                    <span className="text-accent-selected-text"> ({e.subChoice})</span>
                   )}
                 </span>
-                <span className="text-xs uppercase tracking-widest text-stone-600">
+                <span className="text-xs uppercase tracking-widest text-ink-faint">
                   {t(`terms.edgeTypes.${e.edge.type}`)}
                 </span>
               </li>
@@ -170,8 +170,8 @@ export function RecapStep({
         </div>
 
         {/* Resolution sheet for this die */}
-        <div className="rounded-xl border border-stone-800 bg-stone-900/60 p-5">
-          <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-stone-500">
+        <div className="rounded-xl border border-border bg-surface/60 p-5">
+          <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-ink-muted">
             {t('steps.recap.whatHits', { die: role.dieLabel })}
           </h3>
           <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-3">
@@ -196,7 +196,7 @@ export function RecapStep({
             type="button"
             onClick={onSave}
             disabled={saveStatus === 'saving' || blocked || isGuest}
-            className="rounded-lg bg-amber-600 px-6 py-2.5 font-semibold text-stone-950 transition-colors hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-lg bg-accent px-6 py-2.5 font-semibold text-accent-on transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isGuest
               ? t('steps.recap.awaitingValidation')
@@ -213,7 +213,7 @@ export function RecapStep({
           <button
             type="button"
             onClick={() => dispatch({ type: 'reset' })}
-            className="rounded-lg border border-stone-700 px-6 py-2.5 font-semibold text-stone-200 hover:border-amber-600/50"
+            className="rounded-lg border border-border px-6 py-2.5 font-semibold text-ink-secondary hover:border-accent/50"
           >
             {t('steps.recap.startOver')}
           </button>
@@ -222,7 +222,7 @@ export function RecapStep({
           <p className="text-center text-sm text-red-400">{t('steps.recap.saveError')}</p>
         )}
         {isGuest && (
-          <p className="text-center text-sm text-amber-300/80">
+          <p className="text-center text-sm text-accent-selected-text/80">
             {t('steps.recap.guestMessage')}
           </p>
         )}
@@ -240,9 +240,9 @@ export function RecapStep({
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-baseline justify-between border-b border-stone-800/60 pb-1">
-      <span className="text-stone-400">{label}</span>
-      <span className="font-semibold text-stone-100">{value}</span>
+    <div className="flex items-baseline justify-between border-b border-border/60 pb-1">
+      <span className="text-ink-muted">{label}</span>
+      <span className="font-semibold text-ink">{value}</span>
     </div>
   )
 }

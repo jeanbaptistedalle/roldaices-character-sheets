@@ -34,7 +34,7 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="flex min-h-screen flex-col bg-stone-950 text-stone-100">
+      <div className="flex min-h-screen flex-col bg-page text-ink">
         <Header />
         <Routes>
           <Route path="/" element={<SystemPicker onSelect={(id) => navigate(`/${id}`)} />} />

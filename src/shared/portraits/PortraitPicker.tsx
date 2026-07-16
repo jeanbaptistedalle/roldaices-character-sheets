@@ -42,16 +42,16 @@ export function PortraitPicker({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <p className="text-sm font-semibold text-stone-200">Portrait</p>
+        <p className="text-sm font-semibold text-ink-secondary">Portrait</p>
         <button
           type="button"
           onClick={drawNewPortraits}
-          className="rounded-lg border border-stone-700 px-3 py-1 text-xs font-semibold text-stone-300 transition-colors hover:border-amber-600/50 hover:text-amber-400"
+          className="rounded-lg border border-border px-3 py-1 text-xs font-semibold text-ink-secondary transition-colors hover:border-accent/50 hover:text-accent-hover"
         >
           New portraits
         </button>
       </div>
-      <p className="mb-3 text-xs text-stone-500">Pick a portrait, or leave it blank.</p>
+      <p className="mb-3 text-xs text-ink-muted">Pick a portrait, or leave it blank.</p>
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
         {gallery.map((portrait) => {
           const selected = value === portrait.url
@@ -63,10 +63,10 @@ export function PortraitPicker({
               aria-label={`Portrait ${portrait.seed}`}
               onClick={() => onChange(selected ? '' : portrait.url)}
               className={cn(
-                'aspect-square overflow-hidden rounded-xl border bg-stone-900 transition-colors',
+                'aspect-square overflow-hidden rounded-xl border bg-surface transition-colors',
                 selected
-                  ? 'border-amber-500 ring-2 ring-amber-500/50'
-                  : 'border-stone-800 hover:border-amber-600/50',
+                  ? 'border-accent-hover ring-2 ring-accent/50'
+                  : 'border-border hover:border-accent/50',
               )}
             >
               <img

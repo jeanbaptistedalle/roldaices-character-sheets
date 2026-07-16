@@ -17,11 +17,11 @@ export function Header() {
   const avatarUrl = avatarUrlOf(user)
 
   return (
-    <header className="sticky top-0 z-40 border-b border-stone-800 bg-stone-950/80 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-border bg-page/80 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
         <Link
           to="/"
-          className="flex items-center gap-2 text-amber-500/80 transition-colors hover:text-amber-400"
+          className="flex items-center gap-2 text-accent/80 transition-colors hover:text-accent-hover"
         >
           <Icon
             icon={rpgDiceIcon}
@@ -40,7 +40,7 @@ export function Header() {
             rel="noopener noreferrer"
             aria-label={t('header.github')}
             title={t('header.github')}
-            className="text-stone-400 transition-colors hover:text-stone-100"
+            className="text-ink-muted transition-colors hover:text-ink"
           >
             <svg
               viewBox="0 0 16 16"
@@ -56,13 +56,13 @@ export function Header() {
             <>
               <Link
                 to="/profile"
-                className="flex items-center gap-2 rounded-lg px-1 text-sm text-stone-300 transition-colors hover:text-stone-100"
+                className="flex items-center gap-2 rounded-lg px-1 text-sm text-ink-secondary transition-colors hover:text-ink"
               >
                 {avatarUrl && (
                   <img
                     src={avatarUrl}
                     alt=""
-                    className="h-7 w-7 rounded-full border border-stone-700"
+                    className="h-7 w-7 rounded-full border border-border"
                   />
                 )}
                 <span className="max-w-[12rem] truncate">{displayName}</span>
@@ -70,7 +70,7 @@ export function Header() {
               <button
                 type="button"
                 onClick={() => signOut()}
-                className="rounded-lg border border-stone-700 px-3 py-1.5 text-sm text-stone-300 transition-colors hover:border-stone-500 hover:text-stone-100"
+                className="rounded-lg border border-border px-3 py-1.5 text-sm text-ink-secondary transition-colors hover:border-ink-muted hover:text-ink"
               >
                 {t('header.logOut')}
               </button>
@@ -79,7 +79,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setModalOpen(true)}
-              className="rounded-lg border border-amber-600/50 bg-amber-600/10 px-4 py-1.5 text-sm font-semibold text-amber-300 transition-colors hover:bg-amber-600/20"
+              className="rounded-lg border border-accent/50 bg-accent/10 px-4 py-1.5 text-sm font-semibold text-accent-selected-text transition-colors hover:bg-accent/20"
             >
               {t('header.logIn')}
             </button>

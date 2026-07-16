@@ -9,7 +9,7 @@ export function LanguageToggle() {
     <div
       role="group"
       aria-label={t('lang.toggleAria')}
-      className="flex items-center rounded-lg border border-stone-700 text-xs font-semibold"
+      className="flex items-center rounded-lg border border-border text-xs font-semibold"
     >
       {SUPPORTED_LNGS.map((lng) => (
         <button
@@ -20,8 +20,8 @@ export function LanguageToggle() {
           className={cn(
             'px-2.5 py-1 uppercase transition-colors',
             current === lng
-              ? 'bg-amber-600/20 text-amber-300'
-              : 'text-stone-400 hover:text-stone-200',
+              ? 'bg-accent/20 text-accent-selected-text'
+              : 'text-ink-muted hover:text-ink-secondary',
           )}
         >
           {t(`lang.${lng}`)}

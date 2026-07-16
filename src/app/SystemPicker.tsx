@@ -31,12 +31,12 @@ export function SystemPicker({ onSelect }: { onSelect: (id: string) => void }) {
   }, [authLoading, user?.id])
 
   return (
-    <div className="flex-1 bg-stone-950 text-stone-100">
+    <div className="flex-1 bg-page text-ink">
       <main className="mx-auto flex max-w-3xl flex-col items-center px-6 py-20 text-center">
         <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
           {t('brand')}
         </h1>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-stone-400">
+        <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-muted">
           {t('picker.subtitle')}
         </p>
 
@@ -49,17 +49,17 @@ export function SystemPicker({ onSelect }: { onSelect: (id: string) => void }) {
                 key={system.id}
                 type="button"
                 onClick={() => onSelect(system.id)}
-                className="rounded-xl border border-stone-800 bg-stone-900/60 p-6 text-left transition-colors hover:border-amber-600/50"
+                className="rounded-xl border border-border bg-surface/60 p-6 text-left transition-colors hover:border-accent/50"
               >
-                <div className="text-xs font-semibold uppercase tracking-widest text-amber-500/80">
+                <div className="text-xs font-semibold uppercase tracking-widest text-accent/80">
                   {tSystem('publisher')}
                 </div>
-                <div className="mt-2 text-2xl font-bold text-stone-100">
+                <div className="mt-2 text-2xl font-bold text-ink">
                   {tSystem('name')}
                 </div>
-                <div className="mt-2 text-sm text-stone-400">{tSystem('tagline')}</div>
+                <div className="mt-2 text-sm text-ink-muted">{tSystem('tagline')}</div>
                 {counts && (
-                  <div className="mt-4 text-xs font-semibold uppercase tracking-widest text-stone-500">
+                  <div className="mt-4 text-xs font-semibold uppercase tracking-widest text-ink-faint">
                     {t('picker.characterCount', { count })}
                   </div>
                 )}

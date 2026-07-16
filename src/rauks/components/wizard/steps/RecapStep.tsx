@@ -117,21 +117,21 @@ export function RecapStep({
               <img
                 src={character.imageUri}
                 alt={`Portrait of ${character.name || 'the character'}`}
-                className="h-28 w-28 shrink-0 rounded-xl border border-stone-800 bg-stone-900 object-cover"
+                className="h-28 w-28 shrink-0 rounded-xl border border-border bg-surface object-cover"
               />
             )}
             {character.description && (
-              <p className="text-center text-stone-300 sm:text-left">{character.description}</p>
+              <p className="text-center text-ink-secondary sm:text-left">{character.description}</p>
             )}
           </div>
         )}
 
         {/* Identity */}
-        <div className="grid grid-cols-2 gap-x-6 gap-y-2 rounded-xl border border-stone-800 bg-stone-900/60 p-5 text-sm sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-2 rounded-xl border border-border bg-surface/60 p-5 text-sm sm:grid-cols-3">
           {identityRows.map(([label, value]) => (
             <div key={label}>
-              <div className="text-xs uppercase tracking-widest text-stone-500">{label}</div>
-              <div className="font-semibold text-stone-100">{value || '—'}</div>
+              <div className="text-xs uppercase tracking-widest text-ink-muted">{label}</div>
+              <div className="font-semibold text-ink">{value || '—'}</div>
             </div>
           ))}
         </div>
@@ -141,21 +141,21 @@ export function RecapStep({
           {character.traits.map(({ info, value }) => (
             <div
               key={info.key}
-              className="rounded-xl border border-stone-800 bg-stone-900/60 p-4 text-center"
+              className="rounded-xl border border-border bg-surface/60 p-4 text-center"
             >
-              <div className="text-2xl font-bold text-amber-400">{value}</div>
+              <div className="text-2xl font-bold text-accent-hover">{value}</div>
               <div
                 data-testid={`recap-trait-label-${info.key}`}
-                className="mt-1 text-[0.65rem] font-semibold uppercase tracking-widest text-stone-400"
+                className="mt-1 text-[0.65rem] font-semibold uppercase tracking-widest text-ink-muted"
               >
                 {t(`terms.characteristics.${info.key}`)}
               </div>
               {info.key === 'rerolls' && (
                 <div
                   data-testid="recap-reroll-total"
-                  className="mt-2 border-t border-stone-800 pt-2 text-[0.65rem] text-stone-500"
+                  className="mt-2 border-t border-border pt-2 text-[0.65rem] text-ink-muted"
                 >
-                  <span className="font-semibold text-amber-400">{rerollTokens(value)}</span>{' '}
+                  <span className="font-semibold text-accent-hover">{rerollTokens(value)}</span>{' '}
                   {t('rerollSuffix', { count: rerollTokens(value) })}
                 </div>
               )}
@@ -166,32 +166,32 @@ export function RecapStep({
         {/* Rauksorg — the character's city, surfaced prominently ahead of the skills. */}
         <div
           data-testid="recap-rauksorg"
-          className="flex items-baseline justify-between gap-3 rounded-xl border border-amber-800/40 bg-stone-900/60 px-5 py-4"
+          className="flex items-baseline justify-between gap-3 rounded-xl border border-accent/40 bg-surface/60 px-5 py-4"
         >
-          <span className="text-xs font-semibold uppercase tracking-widest text-stone-500">
+          <span className="text-xs font-semibold uppercase tracking-widest text-ink-muted">
             {t('steps.identity.rauksorgLabel')}
           </span>
-          <span className="text-lg font-semibold text-amber-300">{character.rauksorg || '—'}</span>
+          <span className="text-lg font-semibold text-accent-selected-text">{character.rauksorg || '—'}</span>
         </div>
 
         {/* Skills */}
-        <div className="rounded-xl border border-stone-800 bg-stone-900/60 p-5">
-          <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-stone-500">
+        <div className="rounded-xl border border-border bg-surface/60 p-5">
+          <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-ink-muted">
             {t('steps.recap.skillsHeading')}
           </h3>
           <ul className="space-y-2">
             {character.skills.map((skill) => (
               <li key={skill.id} className="flex items-baseline justify-between gap-3">
-                <span className="font-semibold text-stone-100">
+                <span className="font-semibold text-ink">
                   {t(`terms.skills.${skill.id}` as any)}
                   {skill.gear && (
-                    <span className="text-amber-300">
+                    <span className="text-accent-selected-text">
                       {' '}
                       — {t(`terms.skillGear.${skill.id}` as any)}
                     </span>
                   )}
                 </span>
-                <span className="text-xs uppercase tracking-widest text-stone-600">
+                <span className="text-xs uppercase tracking-widest text-ink-faint">
                   {t(`terms.skillCategories.${skill.category}`)}
                 </span>
               </li>
@@ -200,9 +200,9 @@ export function RecapStep({
         </div>
 
         {/* Standard equipment */}
-        <div className="rounded-xl border border-stone-800 bg-stone-900/40 p-5 text-sm text-stone-400">
+        <div className="rounded-xl border border-border bg-surface/40 p-5 text-sm text-ink-muted">
           <p>
-            <span className="font-semibold text-stone-300">{t('steps.recap.equipmentLabel')}</span>{' '}
+            <span className="font-semibold text-ink-secondary">{t('steps.recap.equipmentLabel')}</span>{' '}
             {t('steps.recap.standardEquipment')}
           </p>
         </div>
@@ -213,7 +213,7 @@ export function RecapStep({
             type="button"
             onClick={onSave}
             disabled={saveStatus === 'saving' || blocked || isGuest}
-            className="rounded-lg bg-amber-600 px-6 py-2.5 font-semibold text-stone-950 transition-colors hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-lg bg-accent px-6 py-2.5 font-semibold text-accent-on transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isGuest
               ? t('steps.recap.awaitingValidation')
@@ -230,7 +230,7 @@ export function RecapStep({
           <button
             type="button"
             onClick={() => dispatch({ type: 'reset' })}
-            className="rounded-lg border border-stone-700 px-6 py-2.5 font-semibold text-stone-200 hover:border-amber-600/50"
+            className="rounded-lg border border-border px-6 py-2.5 font-semibold text-ink-secondary hover:border-accent/50"
           >
             {t('steps.recap.startOver')}
           </button>
@@ -239,7 +239,7 @@ export function RecapStep({
           <p className="text-center text-sm text-red-400">{t('steps.recap.saveError')}</p>
         )}
         {isGuest && (
-          <p className="text-center text-sm text-amber-300/80">
+          <p className="text-center text-sm text-accent-selected-text/80">
             {t('steps.recap.guestMessage')}
           </p>
         )}

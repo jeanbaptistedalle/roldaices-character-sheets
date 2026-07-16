@@ -34,9 +34,9 @@ export function ClassStep({
             // key can't be narrowed to a known `terms.classes.*` literal.
             title={t(`terms.classes.${cls.id}` as any)}
           >
-            <p className="text-stone-400">
+            <p className="text-ink-muted">
               {t('terms.always')}{' '}
-              <span className="font-semibold text-amber-300">
+              <span className="font-semibold text-accent-selected-text">
                 {cls.always.flavorKey
                   ? t(`terms.classFlavor.${cls.always.flavorKey}` as any)
                   : t(`terms.edges.${cls.always.edgeId}` as any)}

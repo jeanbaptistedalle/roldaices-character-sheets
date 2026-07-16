@@ -63,17 +63,17 @@ export function Wizard<Draft, Action>({
   const atLimit = isAtLimit(characterCount, Boolean(editing))
 
   return (
-    <div className="flex-1 bg-stone-950 text-stone-100">
+    <div className="flex-1 bg-page text-ink">
       <div className="mx-auto max-w-3xl px-6 py-12">
         <div className="mb-8 flex items-center justify-between">
           <button
             type="button"
             onClick={onExit}
-            className="text-sm text-stone-500 transition-colors hover:text-amber-400"
+            className="text-sm text-ink-muted transition-colors hover:text-accent-hover"
           >
             {t('wizard.home')}
           </button>
-          <span className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-500/70">
+          <span className="text-sm font-semibold uppercase tracking-[0.3em] text-accent/70">
             {t('wizard.heading')}
           </span>
           <span className="w-12" />
@@ -113,7 +113,7 @@ export function Wizard<Draft, Action>({
                 'rounded-lg border px-6 py-2.5 font-semibold transition-colors',
                 isFirst
                   ? 'invisible'
-                  : 'border-stone-700 text-stone-200 hover:border-amber-600/50',
+                  : 'border-border text-ink-secondary hover:border-accent/50',
               )}
             >
               {t('wizard.back')}
@@ -125,8 +125,8 @@ export function Wizard<Draft, Action>({
               className={cn(
                 'rounded-lg px-8 py-2.5 font-semibold transition-colors',
                 canNext
-                  ? 'bg-amber-600 text-stone-950 hover:bg-amber-500'
-                  : 'cursor-not-allowed bg-stone-800 text-stone-600',
+                  ? 'bg-accent text-accent-on hover:bg-accent-hover'
+                  : 'cursor-not-allowed bg-surface-hover text-ink-faint',
               )}
             >
               {t('wizard.next')}
@@ -138,7 +138,7 @@ export function Wizard<Draft, Action>({
             <button
               type="button"
               onClick={() => dispatch({ type: 'back' })}
-              className="rounded-lg border border-stone-700 px-6 py-2.5 font-semibold text-stone-200 hover:border-amber-600/50"
+              className="rounded-lg border border-border px-6 py-2.5 font-semibold text-ink-secondary hover:border-accent/50"
             >
               {t('wizard.back')}
             </button>

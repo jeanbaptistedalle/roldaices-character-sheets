@@ -20,7 +20,7 @@ export function PortraitPicker(props: {
   onChange: (imageUri: string) => void
 }) {
   return (
-    <Suspense fallback={<div className="h-48 animate-pulse rounded-xl bg-stone-900" />}>
+    <Suspense fallback={<div className="h-48 animate-pulse rounded-xl bg-surface" />}>
       <LazyPortraitPicker {...props} />
     </Suspense>
   )

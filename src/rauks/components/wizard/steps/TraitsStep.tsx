@@ -34,7 +34,7 @@ export function TraitsStep({
             'rounded-lg border px-4 py-3 text-center text-sm font-semibold',
             remaining === 0
               ? 'border-emerald-800/60 bg-emerald-950/30 text-emerald-300'
-              : 'border-amber-800/60 bg-amber-950/20 text-amber-300',
+              : 'border-amber-800/60 bg-amber-950/20 text-amber-300', // status color, not accent — leave literal
           )}
         >
           {t('steps.traits.pointsRemaining', { count: remaining })}
@@ -42,7 +42,7 @@ export function TraitsStep({
 
         {groups.map(({ group, title }) => (
           <div key={group}>
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-stone-500">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-ink-muted">
               {title}
             </h3>
             <div className="space-y-3">
@@ -83,10 +83,10 @@ function Stepper({
   const { t } = useTranslation('rauks')
   const label = t(`terms.characteristics.${info.key}`)
   return (
-    <div className="flex items-center gap-4 rounded-xl border border-stone-800 bg-stone-900/60 p-4">
+    <div className="flex items-center gap-4 rounded-xl border border-border bg-surface/60 p-4">
       <div className="min-w-0 flex-1">
-        <div className="font-semibold text-stone-100">{label}</div>
-        <div className="text-sm text-stone-500">{t(`terms.traitDescriptions.${info.key}`)}</div>
+        <div className="font-semibold text-ink">{label}</div>
+        <div className="text-sm text-ink-muted">{t(`terms.traitDescriptions.${info.key}`)}</div>
       </div>
       <div className="flex shrink-0 flex-col items-end gap-1">
         <div className="flex items-center gap-3">
@@ -97,7 +97,7 @@ function Stepper({
           >
             −
           </StepButton>
-          <span className="w-6 text-center text-2xl font-bold text-amber-400">{value}</span>
+          <span className="w-6 text-center text-2xl font-bold text-accent-hover">{value}</span>
           <StepButton
             label={t('steps.traits.increaseAria', { trait: label })}
             disabled={!canInc}
@@ -109,9 +109,9 @@ function Stepper({
         {info.key === 'rerolls' && (
           <div
             data-testid="reroll-total"
-            className="text-xs text-stone-500"
+            className="text-xs text-ink-muted"
           >
-            <span className="font-semibold text-amber-400">{rerollTokens(value)}</span>{' '}
+            <span className="font-semibold text-accent-hover">{rerollTokens(value)}</span>{' '}
             {t('rerollSuffix', { count: rerollTokens(value) })}
           </div>
         )}
@@ -140,8 +140,8 @@ function StepButton({
       className={cn(
         'flex h-9 w-9 items-center justify-center rounded-lg border text-xl font-bold transition-colors',
         disabled
-          ? 'cursor-not-allowed border-stone-800 text-stone-700'
-          : 'border-stone-700 text-stone-100 hover:border-amber-600/50 hover:text-amber-400',
+          ? 'cursor-not-allowed border-border text-ink-faint'
+          : 'border-border text-ink hover:border-accent/50 hover:text-accent-hover',
       )}
     >
       {children}

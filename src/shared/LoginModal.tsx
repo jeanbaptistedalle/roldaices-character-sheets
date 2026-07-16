@@ -36,19 +36,19 @@ export function LoginModal({ onClose }: { onClose: () => void }) {
       role="presentation"
     >
       <div
-        className="w-full max-w-sm rounded-2xl border border-stone-800 bg-stone-900 p-6 shadow-2xl"
+        className="w-full max-w-sm rounded-2xl border border-border bg-surface p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-label={t('login.title')}
       >
         <div className="mb-6 flex items-start justify-between">
-          <h2 className="text-xl font-bold text-stone-100">{t('login.title')}</h2>
+          <h2 className="text-xl font-bold text-ink">{t('login.title')}</h2>
           <button
             type="button"
             onClick={onClose}
             aria-label={t('login.close')}
-            className="text-stone-500 transition-colors hover:text-stone-200"
+            className="text-ink-muted transition-colors hover:text-ink-secondary"
           >
             ✕
           </button>
@@ -62,7 +62,7 @@ export function LoginModal({ onClose }: { onClose: () => void }) {
           {t('login.discord')}
         </button>
 
-        <p className="mt-4 text-sm leading-relaxed text-stone-400">
+        <p className="mt-4 text-sm leading-relaxed text-ink-muted">
           {t('login.discordHint')}
         </p>
 

@@ -53,7 +53,7 @@ export function ProfilePage() {
 
   return (
     <main className="mx-auto w-full max-w-2xl flex-1 px-6 py-12">
-      <Link to="/" className="text-sm text-stone-400 transition-colors hover:text-stone-200">
+      <Link to="/" className="text-sm text-ink-muted transition-colors hover:text-ink-secondary">
         {t('profile.back')}
       </Link>
 
@@ -62,17 +62,17 @@ export function ProfilePage() {
           <img
             src={avatarUrl}
             alt=""
-            className="h-16 w-16 rounded-full border border-stone-700"
+            className="h-16 w-16 rounded-full border border-border"
           />
         ) : (
-          <div className="flex h-16 w-16 items-center justify-center rounded-full border border-stone-700 bg-stone-800 text-2xl font-bold text-stone-300">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full border border-border bg-surface-hover text-2xl font-bold text-ink-secondary">
             {displayName.charAt(0).toUpperCase()}
           </div>
         )}
         <div>
-          <h1 className="text-2xl font-bold text-stone-100">{displayName}</h1>
+          <h1 className="text-2xl font-bold text-ink">{displayName}</h1>
           {roleLabel && (
-            <span className="mt-1 inline-block rounded-full border border-amber-600/40 bg-amber-600/10 px-3 py-0.5 text-xs font-semibold uppercase tracking-wide text-amber-300">
+            <span className="mt-1 inline-block rounded-full border border-accent/40 bg-accent/10 px-3 py-0.5 text-xs font-semibold uppercase tracking-wide text-accent-selected-text">
               {roleLabel}
             </span>
           )}
@@ -80,17 +80,17 @@ export function ProfilePage() {
       </section>
 
       <section className="mt-10">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-500/80">
+        <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-accent/80">
           {t('profile.charactersHeading')}
         </h2>
-        <p className="mt-1 text-xs text-stone-500">
+        <p className="mt-1 text-xs text-ink-muted">
           {t('profile.limitNote', { max: MAX_CHARACTERS_PER_SYSTEM })}
         </p>
 
         {error ? (
           <p className="mt-4 text-sm text-red-400">{error}</p>
         ) : loading ? (
-          <p className="mt-4 text-sm text-stone-400">{t('profile.loading')}</p>
+          <p className="mt-4 text-sm text-ink-muted">{t('profile.loading')}</p>
         ) : (
           <ul className="mt-4 space-y-2">
             {SYSTEMS.map((system) => {
@@ -101,14 +101,14 @@ export function ProfilePage() {
                 <li key={system.id}>
                   <Link
                     to={`/${system.id}`}
-                    className="flex items-center justify-between rounded-lg border border-stone-800 bg-stone-900/50 px-4 py-3 transition-colors hover:border-stone-600 hover:bg-stone-900"
+                    className="flex items-center justify-between rounded-lg border border-border bg-surface/50 px-4 py-3 transition-colors hover:border-ink-muted hover:bg-surface"
                   >
-                    <span className="text-stone-200">{tSystem('name')}</span>
+                    <span className="text-ink-secondary">{tSystem('name')}</span>
                     <span
                       className={
                         full
-                          ? 'text-sm font-semibold text-amber-400'
-                          : 'text-sm text-stone-400'
+                          ? 'text-sm font-semibold text-accent-hover'
+                          : 'text-sm text-ink-muted'
                       }
                     >
                       {count} / {MAX_CHARACTERS_PER_SYSTEM}

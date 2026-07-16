@@ -25,16 +25,16 @@ export function EdgesStep({
     >
       <div className="mx-auto max-w-xl space-y-6">
         {/* Always edge (locked in) */}
-        <div className="rounded-xl border border-stone-800 bg-stone-900/60 p-5">
-          <p className="text-xs font-semibold uppercase tracking-widest text-stone-500">
+        <div className="rounded-xl border border-border bg-surface/60 p-5">
+          <p className="text-xs font-semibold uppercase tracking-widest text-ink-muted">
             {t('terms.always')}
           </p>
-          <p className="mt-1 text-lg font-semibold text-amber-300">
+          <p className="mt-1 text-lg font-semibold text-accent-selected-text">
             {cls.always.flavorKey
               ? t(`terms.classFlavor.${cls.always.flavorKey}` as any)
               : t(`terms.edges.${cls.always.edgeId}` as any)}
           </p>
-          <p className="mt-1 text-sm text-stone-400">
+          <p className="mt-1 text-sm text-ink-muted">
             {t(`terms.edgeDescriptions.${cls.always.edgeId}` as any)}
           </p>
           <SubChoice slot="always" classEdge={cls.always} draft={draft} dispatch={dispatch} />
@@ -47,8 +47,8 @@ export function EdgesStep({
           const answer = draft.answers[index]
           const chosen = answer !== undefined ? question.options[answer] : undefined
           return (
-            <div key={slot} className="rounded-xl border border-stone-800 bg-stone-900/60 p-5">
-              <p className="mb-3 text-stone-200">
+            <div key={slot} className="rounded-xl border border-border bg-surface/60 p-5">
+              <p className="mb-3 text-ink-secondary">
                 {t(`terms.classQuestions.${cls.id}.${index}` as any)}
               </p>
               <div className="flex flex-wrap gap-2">
@@ -66,7 +66,7 @@ export function EdgesStep({
               </div>
               {chosen && (
                 <>
-                  <p className="mt-3 text-sm text-stone-400">
+                  <p className="mt-3 text-sm text-ink-muted">
                     {t(`terms.edgeDescriptions.${chosen.edgeId}` as any)}
                   </p>
                   <SubChoice slot={slot} classEdge={chosen} draft={draft} dispatch={dispatch} />
@@ -101,9 +101,9 @@ function SubChoice({
   // falling back to the stored preset value if no key is defined).
   if (classEdge.presetSubChoice) {
     return (
-      <p className="mt-3 text-sm text-stone-400">
-        <span className="text-stone-500">{t('steps.edges.setLabel')}</span>{' '}
-        <span className="text-amber-300">
+      <p className="mt-3 text-sm text-ink-muted">
+        <span className="text-ink-muted">{t('steps.edges.setLabel')}</span>{' '}
+        <span className="text-accent-selected-text">
           {classEdge.flavorKey
             ? t(`terms.classFlavor.${classEdge.flavorKey}` as any)
             : classEdge.presetSubChoice}
@@ -118,7 +118,7 @@ function SubChoice({
   if (kind === 'name') {
     return (
       <label className="mt-3 block text-sm">
-        <span className="text-stone-500">{t('steps.edges.nameOptional')}</span>
+        <span className="text-ink-muted">{t('steps.edges.nameOptional')}</span>
         <input
           type="text"
           value={value ?? ''}
@@ -126,7 +126,7 @@ function SubChoice({
           placeholder={t('steps.edges.namePlaceholder', {
             edge: t(`terms.edges.${edge.id}` as any).toLowerCase(),
           })}
-          className="mt-1 w-full rounded-lg border border-stone-700 bg-stone-950 px-3 py-2 text-stone-100 placeholder:text-stone-600 focus:border-amber-500 focus:outline-none"
+          className="mt-1 w-full rounded-lg border border-border bg-surface-inset px-3 py-2 text-ink placeholder:text-ink-faint focus:border-accent focus:outline-none"
         />
       </label>
     )
@@ -135,9 +135,9 @@ function SubChoice({
   const choices = kind === 'place' ? FRIENDS_PLACES : DOMAINS
   return (
     <div className="mt-3">
-      <p className="text-sm text-stone-500">
+      <p className="text-sm text-ink-muted">
         {kind === 'place' ? t('steps.edges.choosePlace') : t('steps.edges.chooseDomain')}
-        <span className="ml-1 text-amber-500/80">{t('steps.edges.required')}</span>
+        <span className="ml-1 text-accent/80">{t('steps.edges.required')}</span>
       </p>
       <div className="mt-2 flex flex-wrap gap-2">
         {choices.map((choice) => (
@@ -148,8 +148,8 @@ function SubChoice({
             className={cn(
               'rounded-lg border px-3 py-1.5 text-sm transition-colors',
               value === choice
-                ? 'border-amber-500 bg-amber-600 text-stone-950'
-                : 'border-stone-700 bg-stone-950 text-stone-200 hover:border-amber-600/50',
+                ? 'border-accent-hover bg-accent text-accent-on'
+                : 'border-border bg-surface-inset text-ink-secondary hover:border-accent/50',
             )}
           >
             {kind === 'place'
@@ -159,14 +159,14 @@ function SubChoice({
         ))}
       </div>
       {kind === 'school-or-domain' && (
-        <label className="mt-2 block text-xs text-stone-500">
+        <label className="mt-2 block text-xs text-ink-muted">
           {t('steps.edges.orNameSchool')}
           <input
             type="text"
             value={value && !DOMAINS.includes(value as (typeof DOMAINS)[number]) ? value : ''}
             onChange={(e) => set(e.target.value)}
             placeholder={t('steps.edges.schoolPlaceholder')}
-            className="mt-1 w-full rounded-lg border border-stone-700 bg-stone-950 px-3 py-2 text-stone-100 placeholder:text-stone-600 focus:border-amber-500 focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-border bg-surface-inset px-3 py-2 text-ink placeholder:text-ink-faint focus:border-accent focus:outline-none"
           />
         </label>
       )}

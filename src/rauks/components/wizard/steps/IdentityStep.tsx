@@ -6,7 +6,7 @@ import type { WizardAction } from '../wizardReducer'
 import { StepShell } from '../ui'
 
 const inputClass =
-  'mt-1 w-full rounded-lg border border-stone-700 bg-stone-950 px-3 py-2 text-stone-100 placeholder:text-stone-600 focus:border-amber-500 focus:outline-none disabled:opacity-50'
+  'mt-1 w-full rounded-lg border border-border bg-surface-inset px-3 py-2 text-ink placeholder:text-ink-faint focus:border-accent focus:outline-none disabled:opacity-50'
 
 export function IdentityStep({
   draft,
@@ -24,8 +24,8 @@ export function IdentityStep({
     >
       <div className="mx-auto max-w-xl space-y-6">
         <label className="block">
-          <span className="text-sm font-semibold text-stone-200">
-            {t('steps.identity.nameLabel')} <span className="text-amber-500">*</span>
+          <span className="text-sm font-semibold text-ink-secondary">
+            {t('steps.identity.nameLabel')} <span className="text-accent">*</span>
           </span>
           <input
             type="text"
@@ -38,7 +38,7 @@ export function IdentityStep({
         </label>
 
         <label className="block">
-          <span className="text-sm font-semibold text-stone-200">
+          <span className="text-sm font-semibold text-ink-secondary">
             {t('steps.identity.originLabel')}
           </span>
           <input
@@ -56,14 +56,14 @@ export function IdentityStep({
             type="checkbox"
             checked={Boolean(draft.imperial)}
             onChange={(e) => dispatch({ type: 'setImperial', value: e.target.checked })}
-            className="h-4 w-4 rounded border-stone-700 bg-stone-950 accent-amber-600"
+            className="h-4 w-4 rounded border-border bg-surface-inset accent-accent"
           />
-          <span className="text-sm text-stone-300">{t('steps.identity.imperialLabel')}</span>
+          <span className="text-sm text-ink-secondary">{t('steps.identity.imperialLabel')}</span>
         </label>
 
         <div className="grid gap-6 sm:grid-cols-2">
           <label className="block">
-            <span className="text-sm font-semibold text-stone-200">
+            <span className="text-sm font-semibold text-ink-secondary">
               {t('steps.identity.sexLabel')}
             </span>
             <input
@@ -75,7 +75,7 @@ export function IdentityStep({
             />
           </label>
           <label className="block">
-            <span className="text-sm font-semibold text-stone-200">
+            <span className="text-sm font-semibold text-ink-secondary">
               {t('steps.identity.birthDateLabel')}
             </span>
             <input
@@ -89,7 +89,7 @@ export function IdentityStep({
         </div>
 
         <label className="block">
-          <span className="text-sm font-semibold text-stone-200">
+          <span className="text-sm font-semibold text-ink-secondary">
             {t('steps.identity.rauksorgLabel')}
           </span>
           <input
@@ -102,7 +102,7 @@ export function IdentityStep({
         </label>
 
         <label className="block">
-          <span className="text-sm font-semibold text-stone-200">
+          <span className="text-sm font-semibold text-ink-secondary">
             {t('steps.identity.descriptionLabel')}
           </span>
           <textarea

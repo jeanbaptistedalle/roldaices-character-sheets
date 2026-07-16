@@ -66,6 +66,12 @@ export const appEn = {
     en: 'EN',
     fr: 'FR',
   },
+  theme: {
+    toggleAria: 'Switch theme',
+    light: 'Light',
+    dark: 'Dark',
+    system: 'System',
+  },
 }
 
 export default appEn

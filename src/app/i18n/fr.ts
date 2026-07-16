@@ -69,6 +69,12 @@ export const appFr: typeof appEn = {
     en: 'EN',
     fr: 'FR',
   },
+  theme: {
+    toggleAria: 'Changer de thème',
+    light: 'Clair',
+    dark: 'Sombre',
+    system: 'Système',
+  },
 } as const
 
 export default appFr

@@ -29,7 +29,10 @@ export function signInWithDiscord(client: SupabaseClient) {
   }
   return client.auth.signInWithOAuth({
     provider: 'discord',
-    options: { redirectTo, scopes: DISCORD_SCOPES },
+    // Discord re-prompts for consent on every login by default; prompt=none
+    // skips the screen for users who already authorized these scopes, and
+    // is a no-op (normal screen) for anyone who hasn't.
+    options: { redirectTo, scopes: DISCORD_SCOPES, queryParams: { prompt: 'none' } },
   }).then((result) => {
     // The browser only actually navigates away on success. On failure, clear
     // the stashed redirect so a stale entry doesn't fire on some later,

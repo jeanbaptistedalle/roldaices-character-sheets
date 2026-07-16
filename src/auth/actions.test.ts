@@ -27,6 +27,13 @@ describe('auth actions', () => {
     expect(options.scopes).toContain('guilds')
   })
 
+  it('signInWithDiscord requests prompt=none to skip re-authorization for returning users', () => {
+    const client = mockClient()
+    signInWithDiscord(client)
+    const options = client.auth.signInWithOAuth.mock.calls[0][0].options
+    expect(options.queryParams).toEqual({ prompt: 'none' })
+  })
+
   it('signOut calls the client sign-out', () => {
     const client = mockClient()
     signOut(client)

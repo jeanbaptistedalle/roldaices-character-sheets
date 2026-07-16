@@ -1,5 +1,6 @@
 /// <reference types="vitest/config" />
 import { defineConfig, loadEnv, type Plugin } from 'vite'
+import { configDefaults } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -57,5 +58,10 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
+    // Vitest's default include glob also matches Playwright's *.spec.ts
+    // convention, so it was picking up e2e/ and trying to run those files
+    // itself — colliding with @playwright/test's own runtime. Those specs
+    // only ever run via `npm run test:e2e` (playwright test).
+    exclude: [...configDefaults.exclude, 'e2e/**'],
   },
 })

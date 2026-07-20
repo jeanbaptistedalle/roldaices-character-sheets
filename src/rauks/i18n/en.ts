@@ -51,14 +51,14 @@ export const rauksEn = {
       descriptionLabel: 'Description',
       descriptionPlaceholder: 'A short description, backstory, or notable quirk…',
       traitsAndTrauma: {
-        label: 'Traits/trauma',
-        hint: 'Scars, habits, and marks your character picks up during play — a short two-to-three-word phrase. A Rauks typically gains one new trait/trauma after each session.',
+        label: 'Features/trauma',
+        hint: 'Scars, habits, and marks your character picks up during play — a short two-to-three-word phrase. A Rauks typically gains one new feature/trauma after each session.',
         placeholder0: 'e.g. Master potter craftsman',
         placeholder1: 'e.g. Trembling hands',
         placeholder2: 'e.g. Folk hero',
         placeholder3: 'e.g. Night terror',
-        add: 'Add a trait/trauma',
-        removeAria: 'Remove this trait/trauma',
+        add: 'Add a feature/trauma',
+        removeAria: 'Remove this feature/trauma',
       },
     },
     recap: {

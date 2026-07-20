@@ -40,13 +40,13 @@ describe('RecapStep', () => {
     expect(screen.getByRole('button', { name: /Log in to save/ })).toBeInTheDocument()
   })
 
-  it('shows the calculated reroll total under the rerolls trait (1 + 2 × value)', () => {
+  it('shows the calculated reroll total under the rerolls trait (2 × value − 1)', () => {
     renderWithI18n(
       <RecapStep draft={completeDraft()} dispatch={vi.fn()} onSaved={vi.fn()} atLimit={false} />,
     )
-    // rerolls = 2 => 1 + 2 × 2 = 5, and no remainingRerolls saved yet => full pool.
-    expect(screen.getByTestId('recap-reroll-remaining')).toHaveTextContent('5')
-    expect(screen.getByTestId('recap-reroll-total')).toHaveTextContent('of 5 remaining')
+    // rerolls = 2 => 2 × 2 − 1 = 3, and no remainingRerolls saved yet => full pool.
+    expect(screen.getByTestId('recap-reroll-remaining')).toHaveTextContent('3')
+    expect(screen.getByTestId('recap-reroll-total')).toHaveTextContent('of 3 remaining')
   })
 
   it('lets the player adjust the number of remaining rerolls', () => {
@@ -55,7 +55,7 @@ describe('RecapStep', () => {
       <RecapStep draft={completeDraft()} dispatch={dispatch} onSaved={vi.fn()} atLimit={false} />,
     )
     screen.getByRole('button', { name: 'Use a reroll' }).click()
-    expect(dispatch).toHaveBeenCalledWith({ type: 'setRemainingRerolls', value: 4 })
+    expect(dispatch).toHaveBeenCalledWith({ type: 'setRemainingRerolls', value: 2 })
   })
 
   it('labels the competence trait via the localized characteristics term (not a hardcoded "Skill")', () => {

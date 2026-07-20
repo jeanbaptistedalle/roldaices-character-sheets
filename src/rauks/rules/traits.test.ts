@@ -65,10 +65,10 @@ describe('traits', () => {
     expect(canDecrement(T({ physical: 3, perception: 1 }), 'physical')).toBe(true)
   })
 
-  it('computes reroll tokens as 1 + 2 × the rerolls value', () => {
-    expect(rerollTokens(1)).toBe(3)
-    expect(rerollTokens(2)).toBe(5)
-    expect(rerollTokens(3)).toBe(7)
-    expect(rerollTokens(4)).toBe(9)
+  it('computes reroll tokens as 2 × the rerolls value − 1', () => {
+    expect(rerollTokens(1)).toBe(1)
+    expect(rerollTokens(2)).toBe(3)
+    expect(rerollTokens(3)).toBe(5)
+    expect(rerollTokens(4)).toBe(7)
   })
 })
